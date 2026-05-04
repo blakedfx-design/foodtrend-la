@@ -636,6 +636,19 @@ a:hover {
   color: var(--ft-ink);
 }
 
+.ft-callouts {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ft-splurge,
+.ft-entry {
+  font-size: 14px;
+  opacity: 0.85;
+}
+
 .ft-rank-cell {
   display: flex;
   flex-direction: column;

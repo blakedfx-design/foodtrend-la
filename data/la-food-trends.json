@@ -1,0 +1,149 @@
+{
+  "right_now_section_title": "Top 5 LA Food Trends Right Now",
+  "about_to_hit_section_title": "Top 3 About to Hit",
+  "right_now": [
+    {
+      "rank": 1,
+      "trend_name": "Thick Burgers",
+      "definition": "Burgers featuring thick, juicy patties, often with gourmet toppings.",
+      "representative_restaurants": [
+        "Dunsmoor",
+        "The Benjamin",
+        "Bar Sinizki",
+        "Camélia"
+      ],
+      "evidence_of_spread": "Multiple establishments across Los Angeles are offering variations of thick burgers, indicating a city-wide trend.",
+      "why_hot": "The shift from thin to thick burgers offers a richer, more satisfying flavor profile, appealing to burger enthusiasts seeking a hearty experience.",
+      "trend_score": 10,
+      "trend_stage": "Peak",
+      "go_now_recommendation": "Visit Dunsmoor's back bar for a standout thick burger experience.",
+      "sources": [
+        "https://www.theinfatuation.com/los-angeles/features/los-angeles-restaurant-trends-2024"
+      ]
+    },
+    {
+      "rank": 2,
+      "trend_name": "Izakayas Everywhere",
+      "definition": "Japanese-style pubs offering a variety of small, shareable dishes alongside drinks.",
+      "representative_restaurants": [
+        "Bar Sinizki",
+        "Camélia",
+        "Holy Basil Atwater",
+        "McCall's"
+      ],
+      "evidence_of_spread": "The proliferation of izakayas in Los Angeles, including new openings in Atwater Village and McCall's expansion, showcases the trend's growth.",
+      "why_hot": "Izakayas provide a casual dining experience with diverse menu options, catering to the growing demand for communal and relaxed dining settings.",
+      "trend_score": 9,
+      "trend_stage": "Peak",
+      "go_now_recommendation": "Explore the new izakayas in Atwater Village for an authentic Japanese pub experience.",
+      "sources": [
+        "https://www.theinfatuation.com/los-angeles/features/los-angeles-restaurant-trends-2024"
+      ]
+    },
+    {
+      "rank": 3,
+      "trend_name": "Reimagined Bagels",
+      "definition": "Innovative takes on traditional bagels, incorporating unique flavors and fillings.",
+      "representative_restaurants": [
+        "Smögen",
+        "Red Room"
+      ],
+      "evidence_of_spread": "Chefs at Smögen and Red Room are offering creative bagel options, indicating a broader trend of bagel innovation.",
+      "why_hot": "The fusion of traditional bagels with modern flavors appeals to diners seeking new culinary experiences.",
+      "trend_score": 9,
+      "trend_stage": "Rising",
+      "go_now_recommendation": "Try the reimagined bagels at Smögen for a fresh twist on a classic favorite.",
+      "sources": [
+        "https://www.forbes.com/sites/andywang/2024/03/26/los-angeles-chefs-reimagine-bagels-pasta-tacos-and-asian-food/"
+      ]
+    },
+    {
+      "rank": 4,
+      "trend_name": "Chili Crisp Breakfast Burritos",
+      "definition": "Breakfast burritos finished with chili crisp or chili oil for heat and crunch, showing up beyond traditional Mexican spots.",
+      "representative_restaurants": [
+        "Eastside breakfast counters",
+        "Westside brunch cafes"
+      ],
+      "evidence_of_spread": "Seen across multiple LA spots: Eastside breakfast counters, Westside brunch cafes",
+      "why_hot": "Chili crisp crossed into breakfast as diners want savory heat early in the day.",
+      "trend_score": 72,
+      "trend_stage": "Rising",
+      "go_now_recommendation": "",
+      "sources": [
+        "https://la.eater.com/"
+      ]
+    },
+    {
+      "rank": 5,
+      "trend_name": "Slow-Fermented Bagels",
+      "definition": "Long-ferment dough bagels with chew and blister—often sourdough or hybrid—sold at specialty bakeries and weekend pop-ups.",
+      "representative_restaurants": [
+        "Neighborhood bakehouses",
+        "Farmers market bagel stalls"
+      ],
+      "evidence_of_spread": "Seen across multiple LA spots: Neighborhood bakehouses, Farmers market bagel stalls",
+      "why_hot": "LA’s bakery wave pushed craft bagels with serious fermentation and texture.",
+      "trend_score": 78,
+      "trend_stage": "Peak",
+      "go_now_recommendation": "",
+      "sources": [
+        "https://la.eater.com/"
+      ]
+    }
+  ],
+  "about_to_hit": [
+    {
+      "rank": 1,
+      "trend_name": "Thick Burgers",
+      "emerging_dish_or_item": "Thick, juicy burgers with gourmet toppings",
+      "why_it_could_pop": "The shift from thin to thick burgers offers a richer, more satisfying flavor profile, appealing to burger enthusiasts seeking a hearty experience.",
+      "early_places_to_watch": [
+        "Dunsmoor",
+        "The Benjamin",
+        "Bar Sinizki",
+        "Camélia"
+      ],
+      "watch_signal": "Multiple establishments across Los Angeles are offering variations of thick burgers, indicating a city-wide trend.",
+      "trend_score": 10,
+      "trend_stage": "Emerging",
+      "sources": [
+        "https://www.theinfatuation.com/los-angeles/features/los-angeles-restaurant-trends-2024"
+      ]
+    },
+    {
+      "rank": 2,
+      "trend_name": "Izakayas Everywhere",
+      "emerging_dish_or_item": "Japanese-style pub dishes and drinks",
+      "why_it_could_pop": "Izakayas provide a casual dining experience with diverse menu options, catering to the growing demand for communal and relaxed dining settings.",
+      "early_places_to_watch": [
+        "Bar Sinizki",
+        "Camélia",
+        "Holy Basil Atwater",
+        "McCall's"
+      ],
+      "watch_signal": "The proliferation of izakayas in Los Angeles, including new openings in Atwater Village and McCall's expansion, showcases the trend's growth.",
+      "trend_score": 9,
+      "trend_stage": "Emerging",
+      "sources": [
+        "https://www.theinfatuation.com/los-angeles/features/los-angeles-restaurant-trends-2024"
+      ]
+    },
+    {
+      "rank": 3,
+      "trend_name": "Reimagined Bagels",
+      "emerging_dish_or_item": "Innovative bagel flavors and fillings",
+      "why_it_could_pop": "The fusion of traditional bagels with modern flavors appeals to diners seeking new culinary experiences.",
+      "early_places_to_watch": [
+        "Smögen",
+        "Red Room"
+      ],
+      "watch_signal": "Chefs at Smögen and Red Room are offering creative bagel options, indicating a broader trend of bagel innovation.",
+      "trend_score": 9,
+      "trend_stage": "Emerging",
+      "sources": [
+        "https://www.forbes.com/sites/andywang/2024/03/26/los-angeles-chefs-reimagine-bagels-pasta-tacos-and-asian-food/"
+      ]
+    }
+  ]
+}

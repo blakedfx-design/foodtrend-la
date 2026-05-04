@@ -14,7 +14,12 @@ import { pctToBarTen, SignalBars } from "@/components/foodtrend/SignalBars";
 import TrendRow from "@/components/foodtrend/TrendRow";
 import type { FtTrendRowProps } from "@/components/foodtrend/TrendRow";
 import { HeaderAtmosphere } from "@/components/HeaderAtmosphere";
-import { WHERE_SHOWING_PICKS, getMostSpottedRestLine } from "@/lib/whereShowing";
+import {
+  WHERE_SHOWING_PICKS,
+  getMostSpottedRestLine,
+  getSplurgeRestLine,
+  getEntryRestLine,
+} from "@/lib/whereShowing";
 
 function barFilled(pct: number): number {
   return Math.min(10, Math.max(0, Math.round(pct / 10)));
@@ -30,6 +35,8 @@ const REPORT_ROWS: FtTrendRowProps[] = [
     why: ["Indulgence over minimalism", "Strong visual and social appeal", "Late-night comfort overlap"],
     whereItems: [...WHERE_SHOWING_PICKS["Thick Burgers"]],
     mostSpottedRest: getMostSpottedRestLine("Thick Burgers"),
+    worthSplurgeRest: getSplurgeRestLine("Thick Burgers", [...WHERE_SHOWING_PICKS["Thick Burgers"]]),
+    easyEntryRest: getEntryRestLine("Thick Burgers", [...WHERE_SHOWING_PICKS["Thick Burgers"]]),
     signal: 10,
     stage: "↑ PEAK",
     bars: { menu: 9, search: 8, social: 7 },
@@ -43,6 +50,10 @@ const REPORT_ROWS: FtTrendRowProps[] = [
     why: ["Social format that stretches checks without stiffness", "Menus rotate nightly without new concepts", "Guests learn the rhythm fast"],
     whereItems: [...WHERE_SHOWING_PICKS["Izakayas Everywhere"]],
     mostSpottedRest: getMostSpottedRestLine("Izakayas Everywhere"),
+    worthSplurgeRest: getSplurgeRestLine("Izakayas Everywhere", [
+      ...WHERE_SHOWING_PICKS["Izakayas Everywhere"],
+    ]),
+    easyEntryRest: getEntryRestLine("Izakayas Everywhere", [...WHERE_SHOWING_PICKS["Izakayas Everywhere"]]),
     signal: 9,
     stage: "↑ PEAK",
     bars: { menu: barFilled(90), search: barFilled(82), social: barFilled(86) },
@@ -56,6 +67,12 @@ const REPORT_ROWS: FtTrendRowProps[] = [
     why: ["Savory shift away from sweet brunch", "Pantry ingredients crossing dayparts", "Handheld builds that read on camera"],
     whereItems: [...WHERE_SHOWING_PICKS["Chili Crisp Breakfasts"]],
     mostSpottedRest: getMostSpottedRestLine("Chili Crisp Breakfasts"),
+    worthSplurgeRest: getSplurgeRestLine("Chili Crisp Breakfasts", [
+      ...WHERE_SHOWING_PICKS["Chili Crisp Breakfasts"],
+    ]),
+    easyEntryRest: getEntryRestLine("Chili Crisp Breakfasts", [
+      ...WHERE_SHOWING_PICKS["Chili Crisp Breakfasts"],
+    ]),
     signal: 8,
     stage: "↑ HIGH",
     bars: { menu: barFilled(82), search: barFilled(78), social: barFilled(84) },
@@ -69,6 +86,12 @@ const REPORT_ROWS: FtTrendRowProps[] = [
     why: ["Premium veg narrative still sells", "Depth without heavier fats", "Shorter programs than bread"],
     whereItems: [...WHERE_SHOWING_PICKS["Fermented Everything"]],
     mostSpottedRest: getMostSpottedRestLine("Fermented Everything"),
+    worthSplurgeRest: getSplurgeRestLine("Fermented Everything", [
+      ...WHERE_SHOWING_PICKS["Fermented Everything"],
+    ]),
+    easyEntryRest: getEntryRestLine("Fermented Everything", [
+      ...WHERE_SHOWING_PICKS["Fermented Everything"],
+    ]),
     signal: 7,
     stage: "↑ HIGH",
     bars: { menu: barFilled(76), search: barFilled(72), social: barFilled(74) },
@@ -82,6 +105,12 @@ const REPORT_ROWS: FtTrendRowProps[] = [
     why: ["Variety without appetizer pricing", "Shorter attention spans", "Social trays"],
     whereItems: [...WHERE_SHOWING_PICKS["Snacks Are the New Starters"]],
     mostSpottedRest: getMostSpottedRestLine("Snacks Are the New Starters"),
+    worthSplurgeRest: getSplurgeRestLine("Snacks Are the New Starters", [
+      ...WHERE_SHOWING_PICKS["Snacks Are the New Starters"],
+    ]),
+    easyEntryRest: getEntryRestLine("Snacks Are the New Starters", [
+      ...WHERE_SHOWING_PICKS["Snacks Are the New Starters"],
+    ]),
     signal: 7,
     stage: "↑ HIGH",
     bars: { menu: barFilled(74), search: barFilled(68), social: barFilled(76) },

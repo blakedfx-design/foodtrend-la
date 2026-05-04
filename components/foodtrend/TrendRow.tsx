@@ -11,6 +11,8 @@ export type FtTrendRowProps = {
   why: string[];
   whereItems: WherePick[];
   mostSpottedRest: string;
+  worthSplurgeRest: string;
+  easyEntryRest: string;
   signal: number;
   stage: string;
   bars: { menu: number; search: number; social: number };
@@ -35,6 +37,8 @@ export default function TrendRow({
   why,
   whereItems,
   mostSpottedRest,
+  worthSplurgeRest,
+  easyEntryRest,
   signal,
   stage,
   bars,
@@ -83,6 +87,14 @@ export default function TrendRow({
             <h4 className="ft-trend-label ft-trend-label--where">WHERE TO GET IT</h4>
             <div className="ft-most-spotted">
               Most spotted: {mostSpottedRest}
+            </div>
+            <div className="ft-callouts">
+              <div className="ft-splurge">
+                Worth the splurge: {worthSplurgeRest}
+              </div>
+              <div className="ft-entry">
+                Easy entry: {easyEntryRest}
+              </div>
             </div>
             <WherePickList picks={whereItems} />
           </div>
