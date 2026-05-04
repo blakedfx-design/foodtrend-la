@@ -1,149 +1,319 @@
 {
-  "right_now_section_title": "Top 5 LA Food Trends Right Now",
-  "about_to_hit_section_title": "Top 3 About to Hit",
-  "right_now": [
+  "lastUpdated": "2026-05-04T20:42:02.622Z",
+  "trends": [
     {
-      "rank": 1,
-      "trend_name": "Thick Burgers",
-      "definition": "Burgers featuring thick, juicy patties, often with gourmet toppings.",
-      "representative_restaurants": [
-        "Dunsmoor",
-        "The Benjamin",
-        "Bar Sinizki",
-        "Camélia"
-      ],
-      "evidence_of_spread": "Multiple establishments across Los Angeles are offering variations of thick burgers, indicating a city-wide trend.",
-      "why_hot": "The shift from thin to thick burgers offers a richer, more satisfying flavor profile, appealing to burger enthusiasts seeking a hearty experience.",
-      "trend_score": 10,
-      "trend_stage": "Peak",
-      "go_now_recommendation": "Visit Dunsmoor's back bar for a standout thick burger experience.",
+      "id": "korean-ssam-bar-snacks",
+      "name": "Korean Ssam Bar Snacks",
+      "description": "Lettuce cups, perilla, and ssamjang-led bites on wine-bar and tasting menus—LA’s K-town energy spilling west.",
+      "whyItsEverywhere": "Low-lift share format that pairs with natural wine. Chefs get crunch and heat without full entrée builds.",
+      "signalScore": 88,
+      "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
-        "https://www.theinfatuation.com/los-angeles/features/los-angeles-restaurant-trends-2024"
-      ]
+        "Google Maps",
+        "Restaurant Menu",
+        "Reddit LA",
+        "Food Blog"
+      ],
+      "neighborhoods": [
+        "Koreatown",
+        "West Hollywood",
+        "Arts District"
+      ],
+      "restaurants": [
+        {
+          "name": "Yangban Society",
+          "neighborhood": "Downtown LA"
+        },
+        {
+          "name": "Bar Sinizki",
+          "neighborhood": "West Hollywood"
+        },
+        {
+          "name": "Here's Looking At You",
+          "neighborhood": "Koreatown"
+        }
+      ],
+      "menuItems": [
+        "Perilla ssam with brisket ends",
+        "Smoked fish lettuce wraps",
+        "Prime short rib ssam kit"
+      ],
+      "confidence": "high"
     },
     {
-      "rank": 2,
-      "trend_name": "Izakayas Everywhere",
-      "definition": "Japanese-style pubs offering a variety of small, shareable dishes alongside drinks.",
-      "representative_restaurants": [
-        "Bar Sinizki",
-        "Camélia",
-        "Holy Basil Atwater",
-        "McCall's"
-      ],
-      "evidence_of_spread": "The proliferation of izakayas in Los Angeles, including new openings in Atwater Village and McCall's expansion, showcases the trend's growth.",
-      "why_hot": "Izakayas provide a casual dining experience with diverse menu options, catering to the growing demand for communal and relaxed dining settings.",
-      "trend_score": 9,
-      "trend_stage": "Peak",
-      "go_now_recommendation": "Explore the new izakayas in Atwater Village for an authentic Japanese pub experience.",
+      "id": "sonoran-breakfast-burritos",
+      "name": "Sonoran-Style Breakfast Burritos",
+      "description": "Flour tortillas, eggs, potato, and crisped machaca-style fills—morning lines stretching outside Highland Park and Boyle Heights pits.",
+      "whyItsEverywhere": "Handheld dayparts stay crowded. Taquerias are trading thin wraps for blistered, heavier builds that survive a car ride.",
+      "signalScore": 81,
+      "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
-        "https://www.theinfatuation.com/los-angeles/features/los-angeles-restaurant-trends-2024"
-      ]
+        "Google Maps",
+        "Restaurant Menu",
+        "Reddit LA",
+        "Food Blog"
+      ],
+      "neighborhoods": [
+        "Highland Park",
+        "Boyle Heights",
+        "Glassell Park"
+      ],
+      "restaurants": [
+        {
+          "name": "HomeState",
+          "neighborhood": "Highland Park"
+        },
+        {
+          "name": "Colonia Tacos Guisados",
+          "neighborhood": "Boyle Heights"
+        },
+        {
+          "name": "Cilantro Mexican Grill",
+          "neighborhood": "Glassell Park"
+        }
+      ],
+      "menuItems": [
+        "Machaca breakfast burrito",
+        "Chorizo-potato morning wrap",
+        "Bacon-egg blistered tortilla roll"
+      ],
+      "confidence": "medium"
     },
     {
-      "rank": 3,
-      "trend_name": "Reimagined Bagels",
-      "definition": "Innovative takes on traditional bagels, incorporating unique flavors and fillings.",
-      "representative_restaurants": [
-        "Smögen",
-        "Red Room"
-      ],
-      "evidence_of_spread": "Chefs at Smögen and Red Room are offering creative bagel options, indicating a broader trend of bagel innovation.",
-      "why_hot": "The fusion of traditional bagels with modern flavors appeals to diners seeking new culinary experiences.",
-      "trend_score": 9,
-      "trend_stage": "Rising",
-      "go_now_recommendation": "Try the reimagined bagels at Smögen for a fresh twist on a classic favorite.",
+      "id": "hainan-chicken-lunch",
+      "name": "Hainan Chicken Lunch Counters",
+      "description": "Ginger-poached bird, chicken-fat rice, and three-sauce trays popping up as fast daytime platters from Westlake to the SGV.",
+      "whyItsEverywhere": "Price-conscious lunch crowds want something cleaner than fried chicken but still comforting. Counter service keeps turns high.",
+      "signalScore": 79,
+      "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
-        "https://www.forbes.com/sites/andywang/2024/03/26/los-angeles-chefs-reimagine-bagels-pasta-tacos-and-asian-food/"
-      ]
+        "Google Maps",
+        "Restaurant Menu",
+        "Reddit LA",
+        "Food Blog"
+      ],
+      "neighborhoods": [
+        "Westlake",
+        "Alhambra",
+        "Monterey Park"
+      ],
+      "restaurants": [
+        {
+          "name": "Side Chick",
+          "neighborhood": "Arcadia"
+        },
+        {
+          "name": "Cluck2Go",
+          "neighborhood": "Pasadena"
+        },
+        {
+          "name": "Savoy Kitchen",
+          "neighborhood": "Alhambra"
+        }
+      ],
+      "menuItems": [
+        "Half Hainan chicken plate",
+        "Crispy chicken skin add-on",
+        "Ginger-scallion rice bowl"
+      ],
+      "confidence": "medium"
     },
     {
-      "rank": 4,
-      "trend_name": "Chili Crisp Breakfast Burritos",
-      "definition": "Breakfast burritos finished with chili crisp or chili oil for heat and crunch, showing up beyond traditional Mexican spots.",
-      "representative_restaurants": [
-        "Eastside breakfast counters",
-        "Westside brunch cafes"
-      ],
-      "evidence_of_spread": "Seen across multiple LA spots: Eastside breakfast counters, Westside brunch cafes",
-      "why_hot": "Chili crisp crossed into breakfast as diners want savory heat early in the day.",
-      "trend_score": 72,
-      "trend_stage": "Rising",
-      "go_now_recommendation": "",
+      "id": "aguachile-ice",
+      "name": "Aguachile on Ice",
+      "description": "Cured shrimp and snapper in chile-lime baths, plated like crudos for patio and martini-hour menus from the Westside to Long Beach.",
+      "whyItsEverywhere": "Heat and acid read clearly on camera. Bars want seafood that feels like a course, not a fryer plate.",
+      "signalScore": 76,
+      "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
-        "https://la.eater.com/"
-      ]
+        "Google Maps",
+        "Restaurant Menu",
+        "Reddit LA",
+        "Food Blog"
+      ],
+      "neighborhoods": [
+        "Venice",
+        "Long Beach",
+        "Silver Lake"
+      ],
+      "restaurants": [
+        {
+          "name": "Holbox",
+          "neighborhood": "Downtown LA"
+        },
+        {
+          "name": "Coni'Seafood",
+          "neighborhood": "Inglewood"
+        },
+        {
+          "name": "Petty Cash Taqueria",
+          "neighborhood": "Fairfax"
+        }
+      ],
+      "menuItems": [
+        "Shrimp aguachile verde",
+        "Snapper aguachile rojo cup",
+        "Cucumber-lime chaser flight"
+      ],
+      "confidence": "medium"
     },
     {
-      "rank": 5,
-      "trend_name": "Slow-Fermented Bagels",
-      "definition": "Long-ferment dough bagels with chew and blister—often sourdough or hybrid—sold at specialty bakeries and weekend pop-ups.",
-      "representative_restaurants": [
-        "Neighborhood bakehouses",
-        "Farmers market bagel stalls"
-      ],
-      "evidence_of_spread": "Seen across multiple LA spots: Neighborhood bakehouses, Farmers market bagel stalls",
-      "why_hot": "LA’s bakery wave pushed craft bagels with serious fermentation and texture.",
-      "trend_score": 78,
-      "trend_stage": "Peak",
-      "go_now_recommendation": "",
+      "id": "natural-wine-martini-hour",
+      "name": "Natural Wine “Martini” Hours",
+      "description": "Oxidized pours, salty finos, and vermouth-heavy builds sold as pre-dinner rails—less sweet than brunch spritz culture.",
+      "whyItsEverywhere": "Wine bars need occasion anchoring. A named “hour” sells the second glass and pairs with snacky skewers.",
+      "signalScore": 72,
+      "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
-        "https://la.eater.com/"
-      ]
+        "Google Maps",
+        "Restaurant Menu",
+        "Reddit LA",
+        "Food Blog"
+      ],
+      "neighborhoods": [
+        "Echo Park",
+        "Los Feliz",
+        "Downtown LA"
+      ],
+      "restaurants": [
+        {
+          "name": "Bar Bandini",
+          "neighborhood": "Echo Park"
+        },
+        {
+          "name": "Tilda",
+          "neighborhood": "Echo Park"
+        },
+        {
+          "name": "Tabula Rasa",
+          "neighborhood": "Koreatown"
+        }
+      ],
+      "menuItems": [
+        "Smoky fino highball",
+        "Olive-washed “martini”",
+        "Sherry + tonic round"
+      ],
+      "confidence": "medium"
     }
   ],
-  "about_to_hit": [
+  "aboutToHit": [
     {
-      "rank": 1,
-      "trend_name": "Thick Burgers",
-      "emerging_dish_or_item": "Thick, juicy burgers with gourmet toppings",
-      "why_it_could_pop": "The shift from thin to thick burgers offers a richer, more satisfying flavor profile, appealing to burger enthusiasts seeking a hearty experience.",
-      "early_places_to_watch": [
-        "Dunsmoor",
-        "The Benjamin",
-        "Bar Sinizki",
-        "Camélia"
-      ],
-      "watch_signal": "Multiple establishments across Los Angeles are offering variations of thick burgers, indicating a city-wide trend.",
-      "trend_score": 10,
-      "trend_stage": "Emerging",
+      "id": "olive-oil-dessert-loops",
+      "name": "Olive Oil Dessert Loops",
+      "description": "Whipped mascarpone, citrus, and grassy olive oil looping onto cakes and soft-serve on dessert-only cards.",
+      "whyItsEverywhere": "Guests still want ‘clean’ finales. Olive oil reads luxury without chocolate heaviness—easy to test as a special.",
+      "signalScore": 58,
+      "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
-        "https://www.theinfatuation.com/los-angeles/features/los-angeles-restaurant-trends-2024"
-      ]
+        "Google Maps",
+        "Restaurant Menu",
+        "Reddit LA",
+        "Food Blog"
+      ],
+      "neighborhoods": [
+        "Larchmont",
+        "Santa Monica",
+        "Echo Park"
+      ],
+      "restaurants": [
+        {
+          "name": "Botanica Restaurant",
+          "neighborhood": "Silver Lake"
+        },
+        {
+          "name": "Sweet Rose Creamery",
+          "neighborhood": "Brentwood"
+        },
+        {
+          "name": "République Café",
+          "neighborhood": "Mid-Wilshire"
+        }
+      ],
+      "menuItems": [
+        "Olive oil soft serve swirl",
+        "Semolina cake + bergamot",
+        "Whipped ricotta olive oil dip dessert"
+      ],
+      "confidence": "low"
     },
     {
-      "rank": 2,
-      "trend_name": "Izakayas Everywhere",
-      "emerging_dish_or_item": "Japanese-style pub dishes and drinks",
-      "why_it_could_pop": "Izakayas provide a casual dining experience with diverse menu options, catering to the growing demand for communal and relaxed dining settings.",
-      "early_places_to_watch": [
-        "Bar Sinizki",
-        "Camélia",
-        "Holy Basil Atwater",
-        "McCall's"
-      ],
-      "watch_signal": "The proliferation of izakayas in Los Angeles, including new openings in Atwater Village and McCall's expansion, showcases the trend's growth.",
-      "trend_score": 9,
-      "trend_stage": "Emerging",
+      "id": "filipino-bbq-skewer-nights",
+      "name": "Filipino BBQ Skewer Nights",
+      "description": "Sweet-savory pork and chicken skewer platters with calamansi, garlic rice, and banana ketchup nods on patio menus.",
+      "whyItsEverywhere": "Family-style skewer trays travel well to outdoor dining. Breweries are looking for bold, shareable proteins.",
+      "signalScore": 55,
+      "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
-        "https://www.theinfatuation.com/los-angeles/features/los-angeles-restaurant-trends-2024"
-      ]
+        "Google Maps",
+        "Restaurant Menu",
+        "Reddit LA",
+        "Food Blog"
+      ],
+      "neighborhoods": [
+        "Historic Filipinotown",
+        "Artesia",
+        "North Hollywood"
+      ],
+      "restaurants": [
+        {
+          "name": "LASA Supper Club",
+          "neighborhood": "Chinatown"
+        },
+        {
+          "name": "Bangkok BBQ",
+          "neighborhood": "North Hollywood"
+        },
+        {
+          "name": "Weekend brewery pop-ups",
+          "neighborhood": "Arts District"
+        }
+      ],
+      "menuItems": [
+        "Calamansi-glazed pork stick",
+        "Chicken inasal skewer bundle",
+        "Garlic rice family tray"
+      ],
+      "confidence": "low"
     },
     {
-      "rank": 3,
-      "trend_name": "Reimagined Bagels",
-      "emerging_dish_or_item": "Innovative bagel flavors and fillings",
-      "why_it_could_pop": "The fusion of traditional bagels with modern flavors appeals to diners seeking new culinary experiences.",
-      "early_places_to_watch": [
-        "Smögen",
-        "Red Room"
-      ],
-      "watch_signal": "Chefs at Smögen and Red Room are offering creative bagel options, indicating a broader trend of bagel innovation.",
-      "trend_score": 9,
-      "trend_stage": "Emerging",
+      "id": "ube-basque-slices",
+      "name": "Ube Basque Cheesecake Slices",
+      "description": "Burnt tops, purple yam custard centers, and Filipino-dessert crossovers landing on pastry cases from Sawtelle to Long Beach.",
+      "whyItsEverywhere": "Ube still moves on social. Basque format is forgiving for small kitchens testing weekend drops.",
+      "signalScore": 52,
+      "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
-        "https://www.forbes.com/sites/andywang/2024/03/26/los-angeles-chefs-reimagine-bagels-pasta-tacos-and-asian-food/"
-      ]
+        "Google Maps",
+        "Restaurant Menu",
+        "Reddit LA",
+        "Food Blog"
+      ],
+      "neighborhoods": [
+        "Sawtelle",
+        "Long Beach",
+        "West Adams"
+      ],
+      "restaurants": [
+        {
+          "name": "Cafe 86",
+          "neighborhood": "Artesia"
+        },
+        {
+          "name": "Broadway Corridor bakeries",
+          "neighborhood": "Long Beach"
+        },
+        {
+          "name": "Smorgasburg pastry stalls",
+          "neighborhood": "Downtown LA"
+        }
+      ],
+      "menuItems": [
+        "Ube basque wedge",
+        "Macapuno coconut cream side",
+        "Pandan swirl cheesecake"
+      ],
+      "confidence": "low"
     }
   ]
 }

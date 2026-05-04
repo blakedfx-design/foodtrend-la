@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "scout": "tsx scripts/scout-la-food.ts"
+    "scout": "tsx scripts/scout-la-food.ts",
+    "update-trends": "tsx scripts/update-trends.ts"
   },
   "private": true,
   "dependencies": {

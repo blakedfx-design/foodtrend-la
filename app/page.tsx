@@ -1,52 +1,26 @@
 import Link from "next/link";
-import fs from "node:fs/promises";
-import path from "node:path";
-import {
-  BurgerIcon,
-  ChiliJarIcon,
-  FermentJarIcon,
-  IzakayaIcon,
-  SnackBowlIcon,
-  BagelIcon,
-  SourceDatabaseIcon,
-} from "@/components/foodtrend/FoodTrendIcons";
+import { SourceDatabaseIcon } from "@/components/foodtrend/FoodTrendIcons";
+import { TrendIconForName } from "@/components/foodtrend/TrendIconForName";
 import { pctToBarTen, SignalBars } from "@/components/foodtrend/SignalBars";
 import { WherePickList } from "@/components/foodtrend/WherePickList";
 import {
-  getWherePicks,
   getMostSpottedRestLine,
   getSplurgeRestLine,
   getEntryRestLine,
 } from "@/lib/whereShowing";
+import {
+  barsFromSignalScore,
+  getDataFreshnessSummary,
+  getDisplayAboutToHit,
+  getDisplayPrimaryTrends,
+  mapTrendToWherePicks,
+  readLaFoodTrendsDataFile,
+  stageArrowFromConfidence,
+} from "@/lib/laFoodTrendsData";
+import { splitWhy } from "@/lib/trendText";
+import type { LaFoodTrendsDataFile } from "@/types/laFoodTrend";
 
 export const dynamic = "force-dynamic";
-
-type RightNowCard = {
-  rank: number;
-  trend_name: string;
-  definition?: string;
-  representative_restaurants?: string[];
-  why_hot?: string;
-  trend_score: number;
-  trend_stage?: string;
-};
-
-type AboutCard = {
-  rank: number;
-  trend_name: string;
-  emerging_dish_or_item?: string;
-  early_places_to_watch?: string[];
-  why_it_could_pop?: string;
-  trend_score: number;
-  trend_stage?: string;
-};
-
-type TrendsPayload = {
-  right_now_section_title?: string;
-  about_to_hit_section_title?: string;
-  right_now?: RightNowCard[];
-  about_to_hit?: AboutCard[];
-};
 
 const HOME_DISPATCH_CSS = `
 .ft-home-dispatch {
@@ -605,45 +579,8 @@ const SAMPLE_RAIL_SIGNAL = {
   staying: 76,
 } as const;
 
-async function getPayload() {
-  const dataPath = path.join(process.cwd(), "data", "la-food-trends.json");
-  const raw = await fs.readFile(dataPath, "utf-8");
-  return JSON.parse(raw) as TrendsPayload;
-}
-
-function splitWhy(text: string, max = 3): string[] {
-  const t = text.trim();
-  if (!t) return ["—"];
-  const chunks = t
-    .split(/\.\s+/)
-    .map((s) => s.trim())
-    .filter(Boolean)
-    .map((s) => (s.endsWith(".") ? s : `${s}.`));
-  return chunks.slice(0, max).length ? chunks.slice(0, max) : [t];
-}
-
-function barTriplet(score: number) {
-  const s = Math.min(10, Math.max(0, Math.round(score)));
-  return {
-    menu: s,
-    search: Math.min(10, Math.max(0, s - 1)),
-    social: Math.min(10, Math.max(0, s - 2)),
-  };
-}
-
-function stageArrow(stage?: string) {
-  if (!stage?.trim()) return "↑ ACTIVE";
-  return `↑ ${stage.trim().toUpperCase()}`;
-}
-
-function trendIcon(name: string) {
-  const n = name.toLowerCase();
-  if (n.includes("burger")) return <BurgerIcon />;
-  if (n.includes("izakaya")) return <IzakayaIcon />;
-  if (n.includes("bagel")) return <BagelIcon />;
-  if (n.includes("chili")) return <ChiliJarIcon />;
-  if (n.includes("ferment")) return <FermentJarIcon />;
-  return <SnackBowlIcon />;
+async function getPayload(): Promise<LaFoodTrendsDataFile> {
+  return readLaFoodTrendsDataFile();
 }
 
 function BlockBar({ filled }: { filled: number }) {
@@ -659,13 +596,12 @@ function BlockBar({ filled }: { filled: number }) {
 
 export default async function HomePage() {
   const payload = await getPayload();
-  const rightNow = Array.isArray(payload.right_now) ? payload.right_now : [];
-  const aboutToHit = Array.isArray(payload.about_to_hit) ? payload.about_to_hit : [];
-  const useAbout = rightNow.length === 0;
-  const rows = useAbout ? aboutToHit : rightNow;
+  const rows = getDisplayPrimaryTrends(payload);
+  const hasTrends = rows.length > 0;
   const shareUrl = "https://foodtrend.la/la-food";
-  const earlyThree = !useAbout ? aboutToHit.slice(0, 3) : [];
-  const aboutHitTitle = payload.about_to_hit_section_title ?? "Top 3 About to Hit";
+  const earlyThree = getDisplayAboutToHit(payload);
+  const aboutHitTitle = "Top 3 About to Hit";
+  const freshness = getDataFreshnessSummary(payload);
 
   return (
     <main className="ft-page ft-home-dispatch">
@@ -691,61 +627,34 @@ export default async function HomePage() {
           <section aria-labelledby="preview-heading">
             <p className="ft-section-label">Snapshot</p>
             <h2 id="preview-heading" className="ft-section-title">
-              {useAbout ? "Signals we're watching" : "What's trending on menus right now"}
+              {!hasTrends ? "Signals we're watching" : "What's trending on menus right now"}
             </h2>
             <p className="ft-section-support">
-              {useAbout
+              {freshness ? `${freshness}. ` : ""}
+              {!hasTrends
                 ? "Full engine output—see the complete dispatch on the report page."
                 : "Food, drinks, desserts—a snapshot of what's gaining traction on menus. Methodology and sources on the report."}
             </p>
 
             <div className="ft-home-report-rows">
-              {rows.map((trend) => {
-                const rankStr = String(trend.rank).padStart(2, "0");
-                const title = trend.trend_name;
-                const venues = (
-                  useAbout
-                    ? (trend as AboutCard).early_places_to_watch ?? []
-                    : (trend as RightNowCard).representative_restaurants ?? []
-                )
-                  .map((s) => s.trim())
-                  .filter(Boolean);
-
-                const wherePicks = getWherePicks(title, venues, {
-                  definition: useAbout ? undefined : (trend as RightNowCard).definition,
-                  emergingDish: useAbout ? (trend as AboutCard).emerging_dish_or_item : undefined,
-                });
-
-                const description = useAbout
-                  ? (trend as AboutCard).emerging_dish_or_item?.trim() ||
-                    (trend as AboutCard).why_it_could_pop ||
-                    ""
-                  : (trend as RightNowCard).definition ||
-                    (trend as RightNowCard).why_hot ||
-                    "";
-
+              {rows.map((trend, idx) => {
+                const rank = idx + 1;
+                const rankStr = String(rank).padStart(2, "0");
+                const title = trend.name;
+                const wherePicks = mapTrendToWherePicks(trend);
+                const description = trend.description.trim() || trend.whyItsEverywhere;
                 const mostSpottedRest = getMostSpottedRestLine(title, wherePicks[0]);
                 const worthSplurgeRest = getSplurgeRestLine(title, wherePicks);
                 const easyEntryRest = getEntryRestLine(title, wherePicks);
-
-                const whySource = useAbout
-                  ? (trend as AboutCard).why_it_could_pop || ""
-                  : (trend as RightNowCard).why_hot ||
-                    (trend as RightNowCard).definition ||
-                    "";
-                const whyBullets = splitWhy(whySource);
-
-                const score = trend.trend_score;
-                const bars = barTriplet(score);
-                const stage = useAbout
-                  ? (trend as AboutCard).trend_stage
-                  : (trend as RightNowCard).trend_stage;
-
-                const headingId = `snapshot-trend-${trend.rank}`;
+                const whyBullets = splitWhy(trend.whyItsEverywhere);
+                const score = trend.signalScore;
+                const bars = barsFromSignalScore(score);
+                const stage = stageArrowFromConfidence(trend.confidence);
+                const headingId = `snapshot-trend-${rank}`;
 
                 return (
                   <article
-                    key={`${useAbout ? "ath" : "rn"}-${trend.rank}-${trend.trend_name}`}
+                    key={trend.id}
                     className="ft-trend-row"
                     aria-labelledby={headingId}
                   >
@@ -753,7 +662,7 @@ export default async function HomePage() {
                       <div className="ft-rank-cell">
                         <div className="ft-row-kicker">NO. {rankStr}</div>
                         <div className="ft-rank-number">{rankStr}</div>
-                        {trendIcon(title)}
+                        <TrendIconForName name={title} />
                       </div>
 
                       <div className="ft-story-cell ft-story-cell--lead">
@@ -764,7 +673,7 @@ export default async function HomePage() {
                       <div className="ft-signal-cell">
                         <div className="ft-signal-head">
                           <strong>SIGNAL {score}</strong>
-                          <span>{stageArrow(stage)}</span>
+                          <span>{stage}</span>
                         </div>
                         <div className="ft-bar-row">
                           <span>Menu Spread</span>
@@ -977,24 +886,24 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {!useAbout && earlyThree.length > 0 ? (
+      {earlyThree.length > 0 ? (
         <section className="ft-home-early-strip" aria-labelledby="early-hit-heading">
           <p className="ft-home-early-strip__label">Early signals</p>
           <h2 id="early-hit-heading" className="ft-home-early-strip__title">
             {aboutHitTitle}
           </h2>
           <div className="ft-home-early-strip__grid">
-            {earlyThree.map((item) => {
-              const rnk = String(item.rank).padStart(2, "0");
+            {earlyThree.map((item, earlyIdx) => {
+              const rnk = String(earlyIdx + 1).padStart(2, "0");
               return (
-                <article key={`early-${item.rank}-${item.trend_name}`} className="ft-home-early-card">
+                <article key={item.id} className="ft-home-early-card">
                   <span className="ft-home-early-card__rank">{rnk}</span>
-                  <h3 className="ft-home-early-card__name">{item.trend_name}</h3>
+                  <h3 className="ft-home-early-card__name">{item.name}</h3>
                   <p className="ft-home-early-card__dish">
-                    {item.emerging_dish_or_item?.trim() || item.why_it_could_pop || "—"}
+                    {item.menuItems[0]?.trim() || item.description || "—"}
                   </p>
                   <p className="ft-home-early-card__signal">
-                    Signal <span>{item.trend_score}</span> · {stageArrow(item.trend_stage)}
+                    Signal <span>{item.signalScore}</span> · {stageArrowFromConfidence(item.confidence)}
                   </p>
                 </article>
               );

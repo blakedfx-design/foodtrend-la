@@ -1,121 +1,46 @@
-import type { ReactElement } from "react";
 import Link from "next/link";
-import {
-  BurgerIcon,
-  IzakayaIcon,
-  ChiliJarIcon,
-  BagelIcon,
-  FermentJarIcon,
-  SnackBowlIcon,
-  SoftServeIcon,
-  SourceDatabaseIcon,
-} from "@/components/foodtrend/FoodTrendIcons";
+import { SourceDatabaseIcon } from "@/components/foodtrend/FoodTrendIcons";
+import { TrendIconForName } from "@/components/foodtrend/TrendIconForName";
 import { pctToBarTen, SignalBars } from "@/components/foodtrend/SignalBars";
 import TrendRow from "@/components/foodtrend/TrendRow";
 import type { FtTrendRowProps } from "@/components/foodtrend/TrendRow";
 import { HeaderAtmosphere } from "@/components/HeaderAtmosphere";
 import {
-  WHERE_SHOWING_PICKS,
   getMostSpottedRestLine,
   getSplurgeRestLine,
   getEntryRestLine,
 } from "@/lib/whereShowing";
+import {
+  barsFromSignalScore,
+  getDataFreshnessSummary,
+  getDisplayAboutToHit,
+  getDisplayPrimaryTrends,
+  mapTrendToWherePicks,
+  readLaFoodTrendsDataFile,
+  stageArrowFromConfidence,
+} from "@/lib/laFoodTrendsData";
+import { splitWhy } from "@/lib/trendText";
+import type { Trend } from "@/types/laFoodTrend";
 
-function barFilled(pct: number): number {
-  return Math.min(10, Math.max(0, Math.round(pct / 10)));
+function trendToFtRow(trend: Trend, rank: number): FtTrendRowProps {
+  const rankNum = String(rank).padStart(2, "0");
+  const whereItems = mapTrendToWherePicks(trend);
+  return {
+    rankKicker: `NO. ${rankNum}`,
+    rankNum,
+    icon: <TrendIconForName name={trend.name} />,
+    title: trend.name,
+    description: trend.description,
+    why: splitWhy(trend.whyItsEverywhere),
+    whereItems,
+    mostSpottedRest: getMostSpottedRestLine(trend.name, whereItems[0]),
+    worthSplurgeRest: getSplurgeRestLine(trend.name, whereItems),
+    easyEntryRest: getEntryRestLine(trend.name, whereItems),
+    signal: trend.signalScore,
+    stage: stageArrowFromConfidence(trend.confidence),
+    bars: barsFromSignalScore(trend.signalScore),
+  };
 }
-
-const REPORT_ROWS: FtTrendRowProps[] = [
-  {
-    rankKicker: "NO. 01",
-    rankNum: "01",
-    icon: <BurgerIcon />,
-    title: "Thick Burgers",
-    description: "Thick, stacked patties. Premium builds. Heavier profiles.",
-    why: ["Indulgence over minimalism", "Strong visual and social appeal", "Late-night comfort overlap"],
-    whereItems: [...WHERE_SHOWING_PICKS["Thick Burgers"]],
-    mostSpottedRest: getMostSpottedRestLine("Thick Burgers"),
-    worthSplurgeRest: getSplurgeRestLine("Thick Burgers", [...WHERE_SHOWING_PICKS["Thick Burgers"]]),
-    easyEntryRest: getEntryRestLine("Thick Burgers", [...WHERE_SHOWING_PICKS["Thick Burgers"]]),
-    signal: 10,
-    stage: "↑ PEAK",
-    bars: { menu: 9, search: 8, social: 7 },
-  },
-  {
-    rankKicker: "NO. 02",
-    rankNum: "02",
-    icon: <IzakayaIcon />,
-    title: "Izakayas Everywhere",
-    description: "Skewers, sake pacing, and small plates spreading beyond Little Tokyo into tasting menus and wine bars.",
-    why: ["Social format that stretches checks without stiffness", "Menus rotate nightly without new concepts", "Guests learn the rhythm fast"],
-    whereItems: [...WHERE_SHOWING_PICKS["Izakayas Everywhere"]],
-    mostSpottedRest: getMostSpottedRestLine("Izakayas Everywhere"),
-    worthSplurgeRest: getSplurgeRestLine("Izakayas Everywhere", [
-      ...WHERE_SHOWING_PICKS["Izakayas Everywhere"],
-    ]),
-    easyEntryRest: getEntryRestLine("Izakayas Everywhere", [...WHERE_SHOWING_PICKS["Izakayas Everywhere"]]),
-    signal: 9,
-    stage: "↑ PEAK",
-    bars: { menu: barFilled(90), search: barFilled(82), social: barFilled(86) },
-  },
-  {
-    rankKicker: "NO. 03",
-    rankNum: "03",
-    icon: <ChiliJarIcon />,
-    title: "Chili Crisp Breakfasts",
-    description: "Morning menus borrowing savory heat—eggs, burritos, hashes finished with crisp or oil.",
-    why: ["Savory shift away from sweet brunch", "Pantry ingredients crossing dayparts", "Handheld builds that read on camera"],
-    whereItems: [...WHERE_SHOWING_PICKS["Chili Crisp Breakfasts"]],
-    mostSpottedRest: getMostSpottedRestLine("Chili Crisp Breakfasts"),
-    worthSplurgeRest: getSplurgeRestLine("Chili Crisp Breakfasts", [
-      ...WHERE_SHOWING_PICKS["Chili Crisp Breakfasts"],
-    ]),
-    easyEntryRest: getEntryRestLine("Chili Crisp Breakfasts", [
-      ...WHERE_SHOWING_PICKS["Chili Crisp Breakfasts"],
-    ]),
-    signal: 8,
-    stage: "↑ HIGH",
-    bars: { menu: barFilled(82), search: barFilled(78), social: barFilled(84) },
-  },
-  {
-    rankKicker: "NO. 04",
-    rankNum: "04",
-    icon: <FermentJarIcon />,
-    title: "Fermented Everything",
-    description: "Miso, koji, pickles, and lacto ferments as core flavor in mains—not garnish.",
-    why: ["Premium veg narrative still sells", "Depth without heavier fats", "Shorter programs than bread"],
-    whereItems: [...WHERE_SHOWING_PICKS["Fermented Everything"]],
-    mostSpottedRest: getMostSpottedRestLine("Fermented Everything"),
-    worthSplurgeRest: getSplurgeRestLine("Fermented Everything", [
-      ...WHERE_SHOWING_PICKS["Fermented Everything"],
-    ]),
-    easyEntryRest: getEntryRestLine("Fermented Everything", [
-      ...WHERE_SHOWING_PICKS["Fermented Everything"],
-    ]),
-    signal: 7,
-    stage: "↑ HIGH",
-    bars: { menu: barFilled(76), search: barFilled(72), social: barFilled(74) },
-  },
-  {
-    rankKicker: "NO. 05",
-    rankNum: "05",
-    icon: <SnackBowlIcon />,
-    title: "Snacks Are the New Starters",
-    description: "Compact first bites replacing composed appetizers—built for grazing and passing mid-table.",
-    why: ["Variety without appetizer pricing", "Shorter attention spans", "Social trays"],
-    whereItems: [...WHERE_SHOWING_PICKS["Snacks Are the New Starters"]],
-    mostSpottedRest: getMostSpottedRestLine("Snacks Are the New Starters"),
-    worthSplurgeRest: getSplurgeRestLine("Snacks Are the New Starters", [
-      ...WHERE_SHOWING_PICKS["Snacks Are the New Starters"],
-    ]),
-    easyEntryRest: getEntryRestLine("Snacks Are the New Starters", [
-      ...WHERE_SHOWING_PICKS["Snacks Are the New Starters"],
-    ]),
-    signal: 7,
-    stage: "↑ HIGH",
-    bars: { menu: barFilled(74), search: barFilled(68), social: barFilled(76) },
-  },
-];
 
 const SAMPLE_RAIL_SIGNAL = {
   velocity: 83,
@@ -124,43 +49,14 @@ const SAMPLE_RAIL_SIGNAL = {
   staying: 76,
 } as const;
 
-type EarlyCard = {
-  title: string;
-  stage: string;
-  signalDisplay: string;
-  bullets: [string, string];
-  menuLine: string;
-  icon: ReactElement;
-};
+export const dynamic = "force-dynamic";
 
-const SAMPLE_EARLY: EarlyCard[] = [
-  {
-    title: "Fermented Bagels",
-    stage: "↑ RISING",
-    signalDisplay: "7.8",
-    bullets: ["Long-ferment drops selling out by noon.", "Schmears leaning savory and seeded."],
-    menuLine: "Courtyard — Weekend sourdough bagel",
-    icon: <BagelIcon />,
-  },
-  {
-    title: "Chili Crisp Breakfast",
-    stage: "↑ EMERGING",
-    signalDisplay: "7.2",
-    bullets: ["Eastside brunch lines testing chili-on-egg builds.", "Retail chili crisps landing on cafés."],
-    menuLine: "Smorgasburg LA — Crispy chili egg wrap",
-    icon: <ChiliJarIcon />,
-  },
-  {
-    title: "Soft Serve Collisions",
-    stage: "↑ EARLY",
-    signalDisplay: "6.9",
-    bullets: ["Two-flavor swirls with savory crumbs.", "Night-window dessert-only queues."],
-    menuLine: "Gjelina — Olive oil & flake hybrid cone",
-    icon: <SoftServeIcon />,
-  },
-];
+export default async function LaFoodPage() {
+  const trendsDoc = await readLaFoodTrendsDataFile();
+  const freshness = getDataFreshnessSummary(trendsDoc);
+  const reportTrends = getDisplayPrimaryTrends(trendsDoc);
+  const aboutRows = getDisplayAboutToHit(trendsDoc);
 
-export default function LaFoodPage() {
   const shareUrl = "https://foodtrend.la/la-food";
 
   return (
@@ -171,6 +67,7 @@ export default function LaFoodPage() {
             <h1 className="ft-hero__title">Foodtrend LA</h1>
             <p className="ft-hero__subtitle">
               The dishes, drinks, and desserts taking over LA menus right now.
+              {freshness ? ` ${freshness}.` : ""}
             </p>
             <p className="ft-hero__nav">
               <Link href="/">← Front page</Link>
@@ -195,8 +92,8 @@ export default function LaFoodPage() {
           </header>
 
           <div className="ft-report-trends">
-            {REPORT_ROWS.map((row) => (
-              <TrendRow key={row.rankNum} {...row} />
+            {reportTrends.map((trend, i) => (
+              <TrendRow key={trend.id} {...trendToFtRow(trend, i + 1)} />
             ))}
           </div>
 
@@ -212,27 +109,41 @@ export default function LaFoodPage() {
                 </p>
               </header>
               <div className="ft-early__cards">
-                {SAMPLE_EARLY.map((item) => (
-                  <div key={item.title} className="ft-early__card">
-                    <div className="ft-early__card-head">
-                      <span className="ft-early__card-icon" aria-hidden>
-                        {item.icon}
-                      </span>
-                      <div className="ft-early__card-main">
-                        <p className="ft-early__card-status">{item.stage}</p>
-                        <h3 className="ft-early__card-name">{item.title}</h3>
+                {aboutRows.map((trend) => {
+                  const bullets = splitWhy(trend.whyItsEverywhere);
+                  const b0 = bullets[0] ?? "—";
+                  const b1 = bullets[1] ?? b0;
+                  const foot =
+                    trend.restaurants[0] && trend.menuItems[0]
+                      ? `${trend.restaurants[0].name} — ${trend.menuItems[0]}`
+                      : (trend.menuItems[0] ?? trend.description);
+                  return (
+                    <div key={trend.id} className="ft-early__card">
+                      <div className="ft-early__card-head">
+                        <span className="ft-early__card-icon" aria-hidden>
+                          <TrendIconForName name={trend.name} />
+                        </span>
+                        <div className="ft-early__card-main">
+                          <p className="ft-early__card-status">
+                            {stageArrowFromConfidence(trend.confidence)}
+                          </p>
+                          <h3 className="ft-early__card-name">{trend.name}</h3>
+                        </div>
+                        <span
+                          className="ft-early__card-score"
+                          aria-label={`Signal ${trend.signalScore}`}
+                        >
+                          Signal {trend.signalScore}
+                        </span>
                       </div>
-                      <span className="ft-early__card-score" aria-label={`Signal ${item.signalDisplay}`}>
-                        Signal {item.signalDisplay}
-                      </span>
+                      <ul className="ft-early__card-bullets">
+                        <li>{b0}</li>
+                        <li>{b1}</li>
+                      </ul>
+                      <p className="ft-early__card-foot">{foot}</p>
                     </div>
-                    <ul className="ft-early__card-bullets">
-                      <li>{item.bullets[0]}</li>
-                      <li>{item.bullets[1]}</li>
-                    </ul>
-                    <p className="ft-early__card-foot">{item.menuLine}</p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </section>

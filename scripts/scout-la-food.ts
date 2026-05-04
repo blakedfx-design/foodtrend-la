@@ -11,6 +11,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import OpenAI from "openai";
 import { buildFoodTrendsFromCandidates, dedupeOverlappingCandidates } from "../lib/trendEngine";
+import { foodTrendsPayloadToLaFoodTrendsFile } from "../lib/engineToLaFoodTrendsFile";
+import { LA_FOOD_TRENDS_DATA_FILE } from "../lib/laFoodTrendsData";
 import type { AboutToHitTrend, DishTrendCandidate, FoodTrendsPayload } from "../types/trend";
 import {
   DEFAULT_SOURCE,
@@ -23,7 +25,7 @@ import {
 const MODEL = "gpt-4.1-mini";
 const ROOT_DIR = process.cwd();
 const ENV_FILE = path.resolve(ROOT_DIR, ".env.local");
-const OUTPUT_FILE = path.resolve(process.cwd(), "data/la-food-trends.json");
+const OUTPUT_FILE = LA_FOOD_TRENDS_DATA_FILE;
 
 /** Scout output band */
 const SCOUT_MIN = 15;
@@ -604,9 +606,11 @@ async function scoutTrends(): Promise<void> {
   console.log("[4/4] Editorial Agent — dish-first copy pass…");
   payload = await stageEditorialAgent(client, payload);
 
-  await fs.writeFile(OUTPUT_FILE, `${JSON.stringify(payload, null, 2)}\n`, "utf-8");
+  const lastUpdated = new Date().toISOString();
+  const file = foodTrendsPayloadToLaFoodTrendsFile(payload, lastUpdated);
+  await fs.writeFile(OUTPUT_FILE, `${JSON.stringify(file, null, 2)}\n`, "utf-8");
   console.log(
-    `Done — wrote ${payload.right_now.length} right_now, ${payload.about_to_hit.length} about_to_hit → ${OUTPUT_FILE}`,
+    `Done — wrote ${file.trends.length} primary, ${file.aboutToHit.length} about-to-hit → ${OUTPUT_FILE}`,
   );
 }
 
