@@ -36,6 +36,10 @@ export type Trend = {
   confidence: TrendConfidence;
   /** Optional punchy closer (editorial); set when `WHY IT WORKS` is non-empty. */
   whyItWorks?: string;
+  /** One-line summary from automated signal passes (e.g. Google Places). */
+  evidenceSummary?: string;
+  /** Distinct source labels for this trend after refresh. */
+  sourceCount?: number;
 } & TrendEditorialFields;
 
 export type TrendRefreshType = "weekly" | "weekend";

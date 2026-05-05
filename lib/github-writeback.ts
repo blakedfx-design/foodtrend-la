@@ -184,7 +184,7 @@ export type TrendsJsonWriteBackResult = {
  * parsed object, commits the result using the previous file sha. No filesystem IO.
  */
 export async function writeBackLaFoodTrendsJson(
-  updater: (parsed: Record<string, unknown>) => void,
+  updater: (parsed: Record<string, unknown>) => void | Promise<void>,
   commitMessage: string,
 ): Promise<TrendsJsonWriteBackResult> {
   const { text, sha } = await fetchTrendsJsonFromGitHub();
@@ -198,7 +198,7 @@ export async function writeBackLaFoodTrendsJson(
     throw new Error("la-food-trends.json root must be an object");
   }
 
-  updater(parsed);
+  await Promise.resolve(updater(parsed));
   const newText = `${JSON.stringify(parsed, null, 2)}\n`;
   const updatedAt =
     typeof parsed.lastUpdated === "string"

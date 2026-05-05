@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { verifyCronRequest } from "@/lib/cronAuth";
-import {
-  applyWeekendRefreshToParsed,
-  writeBackLaFoodTrendsJson,
-} from "@/lib/github-writeback";
+import { writeBackLaFoodTrendsJson } from "@/lib/github-writeback";
+import { requireGooglePlacesApiKey } from "@/lib/places";
+import { applyWeekendGooglePlacesSignalsToParsed } from "@/lib/weekendPlacesCron";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -14,9 +13,13 @@ export async function GET(request: Request) {
   }
 
   try {
+    requireGooglePlacesApiKey();
+
     const { updatedAt, commitSha } = await writeBackLaFoodTrendsJson(
-      applyWeekendRefreshToParsed,
-      "chore(cron): weekend FoodTrend LA signal refresh",
+      async (parsed) => {
+        await applyWeekendGooglePlacesSignalsToParsed(parsed);
+      },
+      "chore(cron): weekend FoodTrend LA — Google Places signals",
     );
 
     return NextResponse.json({
@@ -28,6 +31,7 @@ export async function GET(request: Request) {
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
+    const missingPlacesKey = msg.includes("GOOGLE_PLACES_API_KEY");
     return NextResponse.json(
       {
         success: false,
@@ -37,7 +41,7 @@ export async function GET(request: Request) {
         commitSha: null,
         error: msg,
       },
-      { status: 500 },
+      { status: missingPlacesKey ? 503 : 500 },
     );
   }
 }

@@ -84,6 +84,16 @@ export function normalizeTrendRow(row: unknown): Trend {
   const easy = String(r[TREND_EASY_ENTRY] ?? "").trim() || getEntryRestLine(name, picks);
   const whatToOrder = menuItems;
 
+  const evidenceSummary =
+    typeof r.evidenceSummary === "string" && r.evidenceSummary.trim() !== ""
+      ? r.evidenceSummary.trim()
+      : undefined;
+
+  const sourceCount =
+    typeof r.sourceCount === "number" && Number.isFinite(r.sourceCount)
+      ? r.sourceCount
+      : undefined;
+
   return {
     id,
     name,
@@ -97,6 +107,8 @@ export function normalizeTrendRow(row: unknown): Trend {
     description: shortDesc,
     whyItsEverywhere: whyAll,
     whyItWorks: worksRaw || undefined,
+    evidenceSummary,
+    sourceCount,
     [TREND_SHORT_DESCRIPTOR]: shortDesc,
     [TREND_WHY_EVERYWHERE]: whyAll,
     [TREND_MOST_SPOTTED]: most,
@@ -125,6 +137,10 @@ export function trendToJsonObject(t: Trend): Record<string, unknown> {
     [TREND_EASY_ENTRY]: t[TREND_EASY_ENTRY],
     [TREND_WHY_WORKS]: t[TREND_WHY_WORKS],
     confidence: t.confidence,
+    ...(t.evidenceSummary != null && t.evidenceSummary !== ""
+      ? { evidenceSummary: t.evidenceSummary }
+      : {}),
+    ...(t.sourceCount != null ? { sourceCount: t.sourceCount } : {}),
   };
 }
 
