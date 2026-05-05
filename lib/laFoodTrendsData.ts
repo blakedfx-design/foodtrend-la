@@ -1,7 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { LaFoodTrendsDataFile, Trend } from "@/types/laFoodTrend";
+import { laFoodTrendsFileToDiskJson, normalizeTrendRow } from "@/lib/normalizeTrend";
 import type { WherePick } from "@/components/foodtrend/wherePick";
+import { WHERE_SHOWING_PICKS } from "@/lib/whereShowing";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -15,7 +17,7 @@ export const DISPLAY_PRIMARY_TREND_COUNT = 5;
 /** Cap for the About to Hit / early-signals strip. */
 export const DISPLAY_ABOUT_TO_HIT_COUNT = 3;
 
-function sortTrendsBySignalDesc(trends: readonly Trend[]): Trend[] {
+export function sortTrendsBySignalDesc(trends: readonly Trend[]): Trend[] {
   return [...trends].sort((a, b) => {
     const da = Number(a.signalScore) || 0;
     const db = Number(b.signalScore) || 0;
@@ -51,13 +53,50 @@ export function parseLaFoodTrendsDataFile(raw: unknown): LaFoodTrendsDataFile {
     throw new Error("LA food trends JSON must include a trends array");
   }
   const aboutRaw = raw.aboutToHit;
-  const aboutToHit = Array.isArray(aboutRaw) ? (aboutRaw as Trend[]) : [];
-  const lastUpdated = typeof raw.lastUpdated === "string" ? raw.lastUpdated : "";
+  const aboutToHitArr = Array.isArray(aboutRaw) ? aboutRaw : [];
+  const normalizedTrends = (trends as unknown[]).map((t) => normalizeTrendRow(t));
+  const normalizedAbout = (aboutToHitArr as unknown[]).map((t) => normalizeTrendRow(t));
+
+  let lastUpdated =
+    typeof raw.lastUpdated === "string" ? raw.lastUpdated.trim() : "";
+  if (!lastUpdated) {
+    const fromRows = [...normalizedTrends, ...normalizedAbout]
+      .map((t) => t.lastUpdated.trim())
+      .filter(Boolean);
+    if (fromRows.length > 0) {
+      fromRows.sort();
+      lastUpdated = fromRows[fromRows.length - 1] ?? "";
+    }
+  }
+
+  const refreshType =
+    raw.refreshType === "weekly" || raw.refreshType === "weekend"
+      ? raw.refreshType
+      : undefined;
+  const weekendNoteRaw = raw.weekendNote;
+  const weekendNote =
+    typeof weekendNoteRaw === "string" && weekendNoteRaw.trim()
+      ? weekendNoteRaw.trim()
+      : undefined;
+  const sourceCountRaw = raw.sourceCount;
+  const sourceCount =
+    typeof sourceCountRaw === "number" && Number.isFinite(sourceCountRaw)
+      ? sourceCountRaw
+      : undefined;
+
   return {
     lastUpdated,
-    trends: trends as Trend[],
-    aboutToHit,
+    refreshType,
+    weekendNote,
+    sourceCount,
+    trends: normalizedTrends,
+    aboutToHit: normalizedAbout,
   };
+}
+
+export async function writeLaFoodTrendsDataFile(data: LaFoodTrendsDataFile): Promise<void> {
+  const json = `${JSON.stringify(laFoodTrendsFileToDiskJson(data), null, 2)}\n`;
+  await fs.writeFile(LA_FOOD_TRENDS_DATA_FILE, json, "utf-8");
 }
 
 export async function readLaFoodTrendsDataFile(): Promise<LaFoodTrendsDataFile> {
@@ -94,10 +133,23 @@ export function countUniqueSourcesInFile(data: LaFoodTrendsDataFile): number {
   return set.size;
 }
 
-export function getDataFreshnessSummary(data: LaFoodTrendsDataFile): string | null {
+/** Subtle one-line label for the snapshot date (Pacific). */
+export function formatUpdatedLabel(data: LaFoodTrendsDataFile): string | null {
+  const lu = data.lastUpdated?.trim();
+  if (!lu) {
+    return null;
+  }
+  return `Updated ${formatSnapshotDate(lu)}`;
+}
+
+export function getDataFreshnessSummary(
+  data: LaFoodTrendsDataFile,
+  opts?: { includeDate?: boolean },
+): string | null {
+  const includeDate = opts?.includeDate !== false;
   const parts: string[] = [];
   const lu = data.lastUpdated?.trim();
-  if (lu) {
+  if (includeDate && lu) {
     parts.push(`Last updated ${formatSnapshotDate(lu)}`);
   }
   const n = countUniqueSourcesInFile(data);
@@ -111,6 +163,10 @@ export function getDataFreshnessSummary(data: LaFoodTrendsDataFile): string | nu
 }
 
 export function mapTrendToWherePicks(trend: Trend): WherePick[] {
+  const curated = WHERE_SHOWING_PICKS[trend.name];
+  if (curated?.length) {
+    return [...curated];
+  }
   if (!trend.restaurants.length) {
     return [
       {

@@ -487,6 +487,13 @@ a:hover {
   color: var(--ft-muted);
 }
 
+.ft-data-updated {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--ft-muted);
+}
+
 .ft-hero__art {
   position: relative;
   min-height: clamp(168px, 28vw, 240px);
@@ -773,6 +780,14 @@ a:hover {
 
 .ft-why-row .ft-why-list li:last-child {
   margin-bottom: 0;
+}
+
+.ft-why-works {
+  margin: 0.65rem 0 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--ft-ink) 76%, var(--ft-muted));
 }
 
 .ft-signal-cell {

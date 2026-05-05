@@ -40,6 +40,57 @@ export const WHERE_SHOWING_PICKS: Record<string, readonly WherePick[]> = {
     { restaurant: "Republique", neighborhood: "Mid-Wilshire", dish: "Focaccia + Dip" },
     { restaurant: "Courage Bagels", neighborhood: "Silver Lake", dish: "Market Pickles" },
   ],
+  "Korean Ssam Bar Snacks": [
+    {
+      restaurant: "Yangban Society",
+      neighborhood: "Downtown LA",
+      dish: "Pork belly ssam with perilla leaf, rice, and ssamjang — build it yourself, eat it in one bite",
+    },
+    {
+      restaurant: "Here's Looking At You",
+      neighborhood: "Koreatown",
+      dish: "Pork belly ssam with perilla leaf, rice, and ssamjang — build it yourself, eat it in one bite",
+    },
+    {
+      restaurant: "Bar Sinizki",
+      neighborhood: "West Hollywood",
+      dish: "Pork belly ssam with perilla leaf, rice, and ssamjang — build it yourself, eat it in one bite",
+    },
+  ],
+  "Aguachile on Ice": [
+    {
+      restaurant: "Holbox",
+      neighborhood: "Downtown LA",
+      dish: "Shrimp aguachile verde — heavy lime, serrano heat, sliced cucumber, served ice-cold with tostadas.",
+    },
+    {
+      restaurant: "Coni'Seafood",
+      neighborhood: "Inglewood",
+      dish: "Shrimp aguachile negro, fresh-milled tostadas, lime wedges you squeeze until your fingers sting",
+    },
+    {
+      restaurant: "Petty Cash Taqueria",
+      neighborhood: "Fairfax",
+      dish: "Snapper in clear chile-lime, cool cucumber, chili oil pooled at the edge of the cup",
+    },
+  ],
+  "Natural Wine \u201cMartini\u201d Hour": [
+    {
+      restaurant: "Bar Bandini",
+      neighborhood: "Echo Park",
+      dish: "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
+    },
+    {
+      restaurant: "Tabula Rasa",
+      neighborhood: "Silver Lake",
+      dish: "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
+    },
+    {
+      restaurant: "Melody",
+      neighborhood: "Virgil Village",
+      dish: "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
+    },
+  ],
 };
 
 /** Copy shown after exactly “Most spotted: ” (leading phrase fixed in UI). */
@@ -52,6 +103,12 @@ const MOST_SPOTTED_REST: Record<string, string> = {
   "Slow-Fermented Bagels": "Farmers market bagel stalls (Weekends) — Blistered sesame bagel",
   "Fermented Everything": "Bestia (Arts District) — Fermented Carrot",
   "Snacks Are the New Starters": "Courage Bagels (Silver Lake) — Market Pickles",
+  "Korean Ssam Bar Snacks":
+    "Yangban Society (Downtown LA)\nHere's Looking At You (Koreatown)\nBar Sinizki (West Hollywood)",
+  "Aguachile on Ice":
+    "Holbox (Downtown LA) — Shrimp aguachile verde — heavy lime, serrano heat, sliced cucumber, served ice-cold with tostadas.",
+  "Natural Wine \u201cMartini\u201d Hour":
+    "Bar Bandini (Echo Park); Tabula Rasa (Silver Lake); Melody (Virgil Village)",
 };
 
 /** Copy after exactly “Worth the splurge: ” */
@@ -64,6 +121,10 @@ const WORTH_SPLURGE_REST: Record<string, string> = {
   "Slow-Fermented Bagels": "Neighborhood bakehouses (Across LA) — Long-ferment sourdough ring",
   "Fermented Everything": "Mother Wolf (Hollywood) — Fermented Garlic Dip",
   "Snacks Are the New Starters": "Petit Trois (Hollywood) — Gougères",
+  "Korean Ssam Bar Snacks": "Yangban Society — bigger spread, more composed plates",
+  "Aguachile on Ice": "Holbox — pristine seafood, deeper citrus, cleaner heat.",
+  "Natural Wine \u201cMartini\u201d Hour":
+    "Bar Bandini (Echo Park) — deeper list, more interesting pours, slower vibe",
 };
 
 /** Copy after exactly “Easy entry: ” */
@@ -76,6 +137,10 @@ const EASY_ENTRY_REST: Record<string, string> = {
   "Slow-Fermented Bagels": "Farmers market bagel stalls (Weekends) — Blistered sesame bagel",
   "Fermented Everything": "Kismet (Los Feliz) — Koji Butter",
   "Snacks Are the New Starters": "Republique (Mid-Wilshire) — Focaccia + Dip",
+  "Korean Ssam Bar Snacks": "Here's Looking At You — more casual, still hits",
+  "Aguachile on Ice": "Mariscos Jalisco — faster, louder, and just as craveable.",
+  "Natural Wine \u201cMartini\u201d Hour":
+    "Tabula Rasa (Silver Lake) — approachable, louder, easy to slide into",
 };
 
 function pickRestLine(pick: WherePick): string {

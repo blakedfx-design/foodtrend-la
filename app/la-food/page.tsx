@@ -13,6 +13,7 @@ import {
 import {
   barsFromSignalScore,
   getDataFreshnessSummary,
+  formatUpdatedLabel,
   getDisplayAboutToHit,
   getDisplayPrimaryTrends,
   mapTrendToWherePicks,
@@ -39,6 +40,7 @@ function trendToFtRow(trend: Trend, rank: number): FtTrendRowProps {
     signal: trend.signalScore,
     stage: stageArrowFromConfidence(trend.confidence),
     bars: barsFromSignalScore(trend.signalScore),
+    whyItWorks: trend.whyItWorks,
   };
 }
 
@@ -53,7 +55,8 @@ export const dynamic = "force-dynamic";
 
 export default async function LaFoodPage() {
   const trendsDoc = await readLaFoodTrendsDataFile();
-  const freshness = getDataFreshnessSummary(trendsDoc);
+  const freshness = getDataFreshnessSummary(trendsDoc, { includeDate: false });
+  const updatedLabel = formatUpdatedLabel(trendsDoc);
   const reportTrends = getDisplayPrimaryTrends(trendsDoc);
   const aboutRows = getDisplayAboutToHit(trendsDoc);
 
@@ -72,6 +75,7 @@ export default async function LaFoodPage() {
             <p className="ft-hero__nav">
               <Link href="/">← Front page</Link>
             </p>
+            {updatedLabel ? <p className="ft-data-updated">{updatedLabel}</p> : null}
           </div>
           <div className="ft-hero__art" aria-hidden>
             <HeaderAtmosphere variant="hero" />

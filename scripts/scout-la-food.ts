@@ -13,6 +13,7 @@ import OpenAI from "openai";
 import { buildFoodTrendsFromCandidates, dedupeOverlappingCandidates } from "../lib/trendEngine";
 import { foodTrendsPayloadToLaFoodTrendsFile } from "../lib/engineToLaFoodTrendsFile";
 import { LA_FOOD_TRENDS_DATA_FILE } from "../lib/laFoodTrendsData";
+import { laFoodTrendsFileToDiskJson } from "../lib/normalizeTrend";
 import type { AboutToHitTrend, DishTrendCandidate, FoodTrendsPayload } from "../types/trend";
 import {
   DEFAULT_SOURCE,
@@ -608,7 +609,8 @@ async function scoutTrends(): Promise<void> {
 
   const lastUpdated = new Date().toISOString();
   const file = foodTrendsPayloadToLaFoodTrendsFile(payload, lastUpdated);
-  await fs.writeFile(OUTPUT_FILE, `${JSON.stringify(file, null, 2)}\n`, "utf-8");
+  const forDisk = laFoodTrendsFileToDiskJson(file);
+  await fs.writeFile(OUTPUT_FILE, `${JSON.stringify(forDisk, null, 2)}\n`, "utf-8");
   console.log(
     `Done — wrote ${file.trends.length} primary, ${file.aboutToHit.length} about-to-hit → ${OUTPUT_FILE}`,
   );

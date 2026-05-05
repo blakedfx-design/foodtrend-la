@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/weekly-refresh",
+      "schedule": "0 15 * * 1"
+    },
+    {
+      "path": "/api/cron/weekend-refresh",
+      "schedule": "0 15 * * 4"
+    },
+    {
+      "path": "/api/cron/weekend-refresh",
+      "schedule": "0 15 * * 5"
+    }
+  ]
+}

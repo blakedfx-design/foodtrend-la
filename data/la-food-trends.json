@@ -4,8 +4,8 @@
     {
       "id": "korean-ssam-bar-snacks",
       "name": "Korean Ssam Bar Snacks",
-      "description": "Lettuce cups, perilla, and ssamjang-led bites on wine-bar and tasting menus—LA’s K-town energy spilling west.",
-      "whyItsEverywhere": "Low-lift share format that pairs with natural wine. Chefs get crunch and heat without full entrée builds.",
+      "short descriptor": "Grilled meats, banchan, and build-your-own lettuce wraps taking over late dinners.",
+      "WHY IT'S EVERYWHERE": "Dinner turns into something interactive. Tables are ordering everything, passing plates, and building wraps nonstop — it's louder, more social, and people stay way longer.",
       "signalScore": 88,
       "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
@@ -33,18 +33,20 @@
           "neighborhood": "Koreatown"
         }
       ],
-      "menuItems": [
-        "Perilla ssam with brisket ends",
-        "Smoked fish lettuce wraps",
-        "Prime short rib ssam kit"
+      "WHAT TO ORDER": [
+        "Pork belly ssam with perilla leaf, rice, and ssamjang — build it yourself, eat it in one bite"
       ],
+      "MOST SPOTTED": "Yangban Society (Downtown LA)\nHere's Looking At You (Koreatown)\nBar Sinizki (West Hollywood)",
+      "WORTH THE SPLURGE": "Yangban Society — bigger spread, more composed plates",
+      "EASY ENTRY": "Here's Looking At You — more casual, still hits",
+      "WHY IT WORKS": "Hands-on, fast, and built for sharing — the table never slows down.",
       "confidence": "high"
     },
     {
       "id": "sonoran-breakfast-burritos",
       "name": "Sonoran-Style Breakfast Burritos",
-      "description": "Flour tortillas, eggs, potato, and crisped machaca-style fills—morning lines stretching outside Highland Park and Boyle Heights pits.",
-      "whyItsEverywhere": "Handheld dayparts stay crowded. Taquerias are trading thin wraps for blistered, heavier builds that survive a car ride.",
+      "short descriptor": "Flour tortillas, eggs, potato, and crisped machaca-style fills—morning lines stretching outside Highland Park and Boyle Heights pits.",
+      "WHY IT'S EVERYWHERE": "Handheld dayparts stay crowded. Taquerias are trading thin wraps for blistered, heavier builds that survive a car ride.",
       "signalScore": 81,
       "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
@@ -72,18 +74,22 @@
           "neighborhood": "Glassell Park"
         }
       ],
-      "menuItems": [
+      "WHAT TO ORDER": [
         "Machaca breakfast burrito",
         "Chorizo-potato morning wrap",
         "Bacon-egg blistered tortilla roll"
       ],
+      "MOST SPOTTED": "HomeState (Highland Park) — Machaca breakfast burrito",
+      "WORTH THE SPLURGE": "Cilantro Mexican Grill (Glassell Park) — Bacon-egg blistered tortilla roll",
+      "EASY ENTRY": "HomeState (Highland Park) — Machaca breakfast burrito",
+      "WHY IT WORKS": "",
       "confidence": "medium"
     },
     {
       "id": "hainan-chicken-lunch",
       "name": "Hainan Chicken Lunch Counters",
-      "description": "Ginger-poached bird, chicken-fat rice, and three-sauce trays popping up as fast daytime platters from Westlake to the SGV.",
-      "whyItsEverywhere": "Price-conscious lunch crowds want something cleaner than fried chicken but still comforting. Counter service keeps turns high.",
+      "short descriptor": "Ginger-poached bird, chicken-fat rice, and three-sauce trays popping up as fast daytime platters from Westlake to the SGV.",
+      "WHY IT'S EVERYWHERE": "Price-conscious lunch crowds want something cleaner than fried chicken but still comforting. Counter service keeps turns high.",
       "signalScore": 79,
       "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
@@ -111,18 +117,22 @@
           "neighborhood": "Alhambra"
         }
       ],
-      "menuItems": [
+      "WHAT TO ORDER": [
         "Half Hainan chicken plate",
         "Crispy chicken skin add-on",
         "Ginger-scallion rice bowl"
       ],
+      "MOST SPOTTED": "Side Chick (Arcadia) — Half Hainan chicken plate",
+      "WORTH THE SPLURGE": "Savoy Kitchen (Alhambra) — Ginger-scallion rice bowl",
+      "EASY ENTRY": "Side Chick (Arcadia) — Half Hainan chicken plate",
+      "WHY IT WORKS": "",
       "confidence": "medium"
     },
     {
       "id": "aguachile-ice",
       "name": "Aguachile on Ice",
-      "description": "Cured shrimp and snapper in chile-lime baths, plated like crudos for patio and martini-hour menus from the Westside to Long Beach.",
-      "whyItsEverywhere": "Heat and acid read clearly on camera. Bars want seafood that feels like a course, not a fryer plate.",
+      "short descriptor": "Chilled, citrusy aguachile served ice-cold — bright, spicy, and built for warm LA nights.",
+      "WHY IT'S EVERYWHERE": "It's the perfect LA table-starter: cold, sharp, and loud with lime. People are ordering it before the meal even starts, passing chips around, and scraping the last bits of cucumber and chile from the plate.",
       "signalScore": 76,
       "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
@@ -150,18 +160,20 @@
           "neighborhood": "Fairfax"
         }
       ],
-      "menuItems": [
-        "Shrimp aguachile verde",
-        "Snapper aguachile rojo cup",
-        "Cucumber-lime chaser flight"
+      "WHAT TO ORDER": [
+        "Shrimp aguachile verde — heavy lime, serrano heat, sliced cucumber, served ice-cold with tostadas."
       ],
+      "MOST SPOTTED": "Holbox (Downtown LA) — Shrimp aguachile verde — heavy lime, serrano heat, sliced cucumber, served ice-cold with tostadas.",
+      "WORTH THE SPLURGE": "Holbox — pristine seafood, deeper citrus, cleaner heat.",
+      "EASY ENTRY": "Mariscos Jalisco — faster, louder, and just as craveable.",
+      "WHY IT WORKS": "Cold seafood, high acid, and chile heat — it wakes up the whole table.",
       "confidence": "medium"
     },
     {
       "id": "natural-wine-martini-hour",
-      "name": "Natural Wine “Martini” Hours",
-      "description": "Oxidized pours, salty finos, and vermouth-heavy builds sold as pre-dinner rails—less sweet than brunch spritz culture.",
-      "whyItsEverywhere": "Wine bars need occasion anchoring. A named “hour” sells the second glass and pairs with snacky skewers.",
+      "name": "Natural Wine “Martini” Hour",
+      "short descriptor": "Chilled natural wines poured like martinis — early evening, low-key buzz, everywhere right now.",
+      "WHY IT'S EVERYWHERE": "It’s replacing the traditional happy hour. People aren’t doing rounds of cocktails — they’re posting up with a cold glass of something funky and staying for hours. You see it spilling onto sidewalks in Silver Lake and Echo Park right around golden hour.",
       "signalScore": 72,
       "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
@@ -172,8 +184,8 @@
       ],
       "neighborhoods": [
         "Echo Park",
-        "Los Feliz",
-        "Downtown LA"
+        "Silver Lake",
+        "Virgil Village"
       ],
       "restaurants": [
         {
@@ -181,19 +193,23 @@
           "neighborhood": "Echo Park"
         },
         {
-          "name": "Tilda",
-          "neighborhood": "Echo Park"
+          "name": "Tabula Rasa",
+          "neighborhood": "Silver Lake"
         },
         {
-          "name": "Tabula Rasa",
-          "neighborhood": "Koreatown"
+          "name": "Melody",
+          "neighborhood": "Virgil Village"
         }
       ],
-      "menuItems": [
-        "Smoky fino highball",
-        "Olive-washed “martini”",
-        "Sherry + tonic round"
+      "WHAT TO ORDER": [
+        "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
+        "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
+        "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often"
       ],
+      "MOST SPOTTED": "Bar Bandini (Echo Park); Tabula Rasa (Silver Lake); Melody (Virgil Village)",
+      "WORTH THE SPLURGE": "Bar Bandini (Echo Park) — deeper list, more interesting pours, slower vibe",
+      "EASY ENTRY": "Tabula Rasa (Silver Lake) — approachable, louder, easy to slide into",
+      "WHY IT WORKS": "Why it works — lower alcohol, high flavor — you can drink it like a cocktail but stay longer. It turns one drink into the whole night.",
       "confidence": "medium"
     }
   ],
@@ -201,8 +217,8 @@
     {
       "id": "olive-oil-dessert-loops",
       "name": "Olive Oil Dessert Loops",
-      "description": "Whipped mascarpone, citrus, and grassy olive oil looping onto cakes and soft-serve on dessert-only cards.",
-      "whyItsEverywhere": "Guests still want ‘clean’ finales. Olive oil reads luxury without chocolate heaviness—easy to test as a special.",
+      "short descriptor": "Whipped mascarpone, citrus, and grassy olive oil looping onto cakes and soft-serve on dessert-only cards.",
+      "WHY IT'S EVERYWHERE": "Guests still want ‘clean’ finales. Olive oil reads luxury without chocolate heaviness—easy to test as a special.",
       "signalScore": 58,
       "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
@@ -230,18 +246,22 @@
           "neighborhood": "Mid-Wilshire"
         }
       ],
-      "menuItems": [
+      "WHAT TO ORDER": [
         "Olive oil soft serve swirl",
         "Semolina cake + bergamot",
         "Whipped ricotta olive oil dip dessert"
       ],
+      "MOST SPOTTED": "Botanica Restaurant (Silver Lake) — Olive oil soft serve swirl",
+      "WORTH THE SPLURGE": "République Café (Mid-Wilshire) — Whipped ricotta olive oil dip dessert",
+      "EASY ENTRY": "Botanica Restaurant (Silver Lake) — Olive oil soft serve swirl",
+      "WHY IT WORKS": "",
       "confidence": "low"
     },
     {
       "id": "filipino-bbq-skewer-nights",
       "name": "Filipino BBQ Skewer Nights",
-      "description": "Sweet-savory pork and chicken skewer platters with calamansi, garlic rice, and banana ketchup nods on patio menus.",
-      "whyItsEverywhere": "Family-style skewer trays travel well to outdoor dining. Breweries are looking for bold, shareable proteins.",
+      "short descriptor": "Sweet-savory pork and chicken skewer platters with calamansi, garlic rice, and banana ketchup nods on patio menus.",
+      "WHY IT'S EVERYWHERE": "Family-style skewer trays travel well to outdoor dining. Breweries are looking for bold, shareable proteins.",
       "signalScore": 55,
       "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
@@ -269,18 +289,22 @@
           "neighborhood": "Arts District"
         }
       ],
-      "menuItems": [
+      "WHAT TO ORDER": [
         "Calamansi-glazed pork stick",
         "Chicken inasal skewer bundle",
         "Garlic rice family tray"
       ],
+      "MOST SPOTTED": "LASA Supper Club (Chinatown) — Calamansi-glazed pork stick",
+      "WORTH THE SPLURGE": "Weekend brewery pop-ups (Arts District) — Garlic rice family tray",
+      "EASY ENTRY": "LASA Supper Club (Chinatown) — Calamansi-glazed pork stick",
+      "WHY IT WORKS": "",
       "confidence": "low"
     },
     {
       "id": "ube-basque-slices",
       "name": "Ube Basque Cheesecake Slices",
-      "description": "Burnt tops, purple yam custard centers, and Filipino-dessert crossovers landing on pastry cases from Sawtelle to Long Beach.",
-      "whyItsEverywhere": "Ube still moves on social. Basque format is forgiving for small kitchens testing weekend drops.",
+      "short descriptor": "Burnt tops, purple yam custard centers, and Filipino-dessert crossovers landing on pastry cases from Sawtelle to Long Beach.",
+      "WHY IT'S EVERYWHERE": "Ube still moves on social. Basque format is forgiving for small kitchens testing weekend drops.",
       "signalScore": 52,
       "lastUpdated": "2026-05-04T20:42:02.622Z",
       "sources": [
@@ -308,11 +332,15 @@
           "neighborhood": "Downtown LA"
         }
       ],
-      "menuItems": [
+      "WHAT TO ORDER": [
         "Ube basque wedge",
         "Macapuno coconut cream side",
         "Pandan swirl cheesecake"
       ],
+      "MOST SPOTTED": "Cafe 86 (Artesia) — Ube basque wedge",
+      "WORTH THE SPLURGE": "Smorgasburg pastry stalls (Downtown LA) — Pandan swirl cheesecake",
+      "EASY ENTRY": "Cafe 86 (Artesia) — Ube basque wedge",
+      "WHY IT WORKS": "",
       "confidence": "low"
     }
   ]

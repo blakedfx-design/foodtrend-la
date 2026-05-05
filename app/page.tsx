@@ -10,9 +10,9 @@ import {
 } from "@/lib/whereShowing";
 import {
   barsFromSignalScore,
+  formatUpdatedLabel,
   getDataFreshnessSummary,
-  getDisplayAboutToHit,
-  getDisplayPrimaryTrends,
+  sortTrendsBySignalDesc,
   mapTrendToWherePicks,
   readLaFoodTrendsDataFile,
   stageArrowFromConfidence,
@@ -596,12 +596,14 @@ function BlockBar({ filled }: { filled: number }) {
 
 export default async function HomePage() {
   const payload = await getPayload();
-  const rows = getDisplayPrimaryTrends(payload);
+  const rows = sortTrendsBySignalDesc(payload.trends ?? []);
   const hasTrends = rows.length > 0;
   const shareUrl = "https://foodtrend.la/la-food";
-  const earlyThree = getDisplayAboutToHit(payload);
-  const aboutHitTitle = "Top 3 About to Hit";
-  const freshness = getDataFreshnessSummary(payload);
+  const earlyThree = sortTrendsBySignalDesc(payload.aboutToHit ?? []);
+  const aboutHitTitle =
+    earlyThree.length > 0 ? `Top ${earlyThree.length} About to Hit` : "About to Hit";
+  const freshness = getDataFreshnessSummary(payload, { includeDate: false });
+  const updatedLabel = formatUpdatedLabel(payload);
 
   return (
     <main className="ft-page ft-home-dispatch">
@@ -619,6 +621,7 @@ export default async function HomePage() {
           <Link href="/la-food" className="ft-home-link">
             Open the full report →
           </Link>
+          {updatedLabel ? <p className="ft-data-updated">{updatedLabel}</p> : null}
         </div>
       </header>
 
@@ -719,6 +722,9 @@ export default async function HomePage() {
                               <li key={i}>{line}</li>
                             ))}
                           </ul>
+                          {trend.whyItWorks ? (
+                            <p className="ft-why-works">{trend.whyItWorks}</p>
+                          ) : null}
                         </div>
                       </div>
                     </div>

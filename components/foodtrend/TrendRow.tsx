@@ -16,6 +16,7 @@ export type FtTrendRowProps = {
   signal: number;
   stage: string;
   bars: { menu: number; search: number; social: number };
+  whyItWorks?: string;
 };
 
 function FtBlockBar({ filled }: { filled: number }) {
@@ -42,6 +43,7 @@ export default function TrendRow({
   signal,
   stage,
   bars,
+  whyItWorks,
 }: FtTrendRowProps) {
   const titleId = `ft-trend-${rankNum}`;
 
@@ -109,6 +111,7 @@ export default function TrendRow({
                 <li key={i}>{line}</li>
               ))}
             </ul>
+            {whyItWorks ? <p className="ft-why-works">{whyItWorks}</p> : null}
           </div>
         </div>
       </div>

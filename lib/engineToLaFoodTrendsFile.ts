@@ -1,5 +1,6 @@
 import type { FoodTrendsPayload } from "@/types/trend";
 import type { LaFoodTrendsDataFile, Trend, TrendConfidence } from "@/types/laFoodTrend";
+import { normalizeTrendRow } from "@/lib/normalizeTrend";
 
 function slugId(label: string, index: number): string {
   const base = label
@@ -31,10 +32,8 @@ export function foodTrendsPayloadToLaFoodTrendsFile(
   payload: FoodTrendsPayload,
   lastUpdated: string,
 ): LaFoodTrendsDataFile {
-  const trends: Trend[] = [];
-
-  payload.right_now.forEach((row, i) => {
-    trends.push({
+  const trends: Trend[] = payload.right_now.map((row, i) =>
+    normalizeTrendRow({
       id: slugId(row.trend_name, i),
       name: row.trend_name,
       description: row.definition,
@@ -49,25 +48,27 @@ export function foodTrendsPayloadToLaFoodTrendsFile(
       })),
       menuItems: row.representative_restaurants.map(() => row.trend_name),
       confidence: stageToConfidence(row.trend_stage),
-    });
-  });
+    }),
+  );
 
-  const aboutToHit: Trend[] = payload.about_to_hit.map((row, j) => ({
-    id: slugId(row.trend_name, trends.length + j),
-    name: row.trend_name,
-    description: row.emerging_dish_or_item,
-    whyItsEverywhere: row.why_it_could_pop,
-    signalScore: normalizeScore(row.trend_score),
-    lastUpdated,
-    sources: [...row.sources],
-    neighborhoods: [],
-    restaurants: row.early_places_to_watch.map((name) => ({
-      name,
-      neighborhood: "Los Angeles",
-    })),
-    menuItems: [row.emerging_dish_or_item],
-    confidence: "low",
-  }));
+  const aboutToHit: Trend[] = payload.about_to_hit.map((row, j) =>
+    normalizeTrendRow({
+      id: slugId(row.trend_name, trends.length + j),
+      name: row.trend_name,
+      description: row.emerging_dish_or_item,
+      whyItsEverywhere: row.why_it_could_pop,
+      signalScore: normalizeScore(row.trend_score),
+      lastUpdated,
+      sources: [...row.sources],
+      neighborhoods: [],
+      restaurants: row.early_places_to_watch.map((name) => ({
+        name,
+        neighborhood: "Los Angeles",
+      })),
+      menuItems: [row.emerging_dish_or_item],
+      confidence: "low",
+    }),
+  );
 
   return { lastUpdated, trends, aboutToHit };
 }
