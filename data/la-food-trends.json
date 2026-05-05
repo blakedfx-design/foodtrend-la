@@ -1,18 +1,19 @@
 {
-  "lastUpdated": "2026-05-05T06:05:24.145Z",
+  "lastUpdated": "2026-05-05T06:31:18.157Z",
   "trends": [
     {
       "id": "korean-ssam-bar-snacks",
       "name": "Korean Ssam Bar Snacks",
       "short descriptor": "Grilled meats, banchan, and build-your-own lettuce wraps taking over late dinners.",
       "WHY IT'S EVERYWHERE": "Dinner turns into something interactive. Tables are ordering everything, passing plates, and building wraps nonstop — it's louder, more social, and people stay way longer.",
-      "signalScore": 89,
-      "lastUpdated": "2026-05-05T06:05:24.145Z",
+      "signalScore": 100,
+      "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
-        "Food Blog"
+        "Food Blog",
+        "Google Places"
       ],
       "neighborhoods": [
         "Koreatown",
@@ -40,20 +41,23 @@
       "WORTH THE SPLURGE": "Yangban Society — bigger spread, more composed plates",
       "EASY ENTRY": "Here's Looking At You — more casual, still hits",
       "WHY IT WORKS": "Hands-on, fast, and built for sharing — the table never slows down.",
-      "confidence": "high"
+      "confidence": "high",
+      "sourceCount": 5,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Korean Ssam Bar Snacks” (query “Korean Ssam Bar Snacks Los Angeles”) · avg rating 4.5 · ~7407 review rollups."
     },
     {
       "id": "sonoran-breakfast-burritos",
       "name": "Sonoran-Style Breakfast Burritos",
       "short descriptor": "Flour tortillas, eggs, potato, and crisped machaca-style fills—morning lines stretching outside Highland Park and Boyle Heights pits.",
       "WHY IT'S EVERYWHERE": "Handheld dayparts stay crowded. Taquerias are trading thin wraps for blistered, heavier builds that survive a car ride.",
-      "signalScore": 80,
-      "lastUpdated": "2026-05-05T06:05:24.145Z",
+      "signalScore": 100,
+      "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
-        "Food Blog"
+        "Food Blog",
+        "Google Places"
       ],
       "neighborhoods": [
         "Highland Park",
@@ -83,20 +87,23 @@
       "WORTH THE SPLURGE": "Cilantro Mexican Grill (Glassell Park) — Bacon-egg blistered tortilla roll",
       "EASY ENTRY": "HomeState (Highland Park) — Machaca breakfast burrito",
       "WHY IT WORKS": "",
-      "confidence": "medium"
+      "confidence": "medium",
+      "sourceCount": 5,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Sonoran-Style Breakfast Burritos” (query “Sonoran-Style Breakfast Burritos Los Angeles”) · avg rating 4.4 · ~7909 review rollups."
     },
     {
       "id": "hainan-chicken-lunch",
       "name": "Hainan Chicken Lunch Counters",
       "short descriptor": "Ginger-poached bird, chicken-fat rice, and three-sauce trays popping up as fast daytime platters from Westlake to the SGV.",
       "WHY IT'S EVERYWHERE": "Price-conscious lunch crowds want something cleaner than fried chicken but still comforting. Counter service keeps turns high.",
-      "signalScore": 80,
-      "lastUpdated": "2026-05-05T06:05:24.145Z",
+      "signalScore": 100,
+      "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
-        "Food Blog"
+        "Food Blog",
+        "Google Places"
       ],
       "neighborhoods": [
         "Westlake",
@@ -126,20 +133,23 @@
       "WORTH THE SPLURGE": "Savoy Kitchen (Alhambra) — Ginger-scallion rice bowl",
       "EASY ENTRY": "Side Chick (Arcadia) — Half Hainan chicken plate",
       "WHY IT WORKS": "",
-      "confidence": "medium"
+      "confidence": "medium",
+      "sourceCount": 5,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Hainan Chicken Lunch Counters” (query “Hainan Chicken Lunch Counters Los Angeles”) · avg rating 4.3 · ~6117 review rollups."
     },
     {
       "id": "aguachile-ice",
       "name": "Aguachile on Ice",
       "short descriptor": "Chilled, citrusy aguachile served ice-cold — bright, spicy, and built for warm LA nights.",
       "WHY IT'S EVERYWHERE": "It's the perfect LA table-starter: cold, sharp, and loud with lime. People are ordering it before the meal even starts, passing chips around, and scraping the last bits of cucumber and chile from the plate.",
-      "signalScore": 78,
-      "lastUpdated": "2026-05-05T06:05:24.145Z",
+      "signalScore": 100,
+      "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
-        "Food Blog"
+        "Food Blog",
+        "Google Places"
       ],
       "neighborhoods": [
         "Venice",
@@ -167,20 +177,23 @@
       "WORTH THE SPLURGE": "Holbox — pristine seafood, deeper citrus, cleaner heat.",
       "EASY ENTRY": "Mariscos Jalisco — faster, louder, and just as craveable.",
       "WHY IT WORKS": "Cold seafood, high acid, and chile heat — it wakes up the whole table.",
-      "confidence": "medium"
+      "confidence": "medium",
+      "sourceCount": 5,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Aguachile on Ice” (query “Aguachile on Ice Los Angeles”) · avg rating 4.5 · ~20491 review rollups."
     },
     {
       "id": "natural-wine-martini-hour",
       "name": "Natural Wine “Martini” Hour",
       "short descriptor": "Chilled natural wines poured like martinis — early evening, low-key buzz, everywhere right now.",
       "WHY IT'S EVERYWHERE": "It’s replacing the traditional happy hour. People aren’t doing rounds of cocktails — they’re posting up with a cold glass of something funky and staying for hours. You see it spilling onto sidewalks in Silver Lake and Echo Park right around golden hour.",
-      "signalScore": 74,
-      "lastUpdated": "2026-05-05T06:05:24.145Z",
+      "signalScore": 100,
+      "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
-        "Food Blog"
+        "Food Blog",
+        "Google Places"
       ],
       "neighborhoods": [
         "Echo Park",
@@ -210,7 +223,9 @@
       "WORTH THE SPLURGE": "Bar Bandini (Echo Park) — deeper list, more interesting pours, slower vibe",
       "EASY ENTRY": "Tabula Rasa (Silver Lake) — approachable, louder, easy to slide into",
       "WHY IT WORKS": "Why it works — lower alcohol, high flavor — you can drink it like a cocktail but stay longer. It turns one drink into the whole night.",
-      "confidence": "medium"
+      "confidence": "medium",
+      "sourceCount": 5,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Natural Wine “Martini” Hour” (query “Natural Wine “Martini” Hour Los Angeles”) · avg rating 4.6 · ~12170 review rollups."
     }
   ],
   "aboutToHit": [
@@ -219,13 +234,14 @@
       "name": "Olive Oil Dessert Loops",
       "short descriptor": "Whipped mascarpone, citrus, and grassy olive oil looping onto cakes and soft-serve on dessert-only cards.",
       "WHY IT'S EVERYWHERE": "Guests still want ‘clean’ finales. Olive oil reads luxury without chocolate heaviness—easy to test as a special.",
-      "signalScore": 60,
-      "lastUpdated": "2026-05-05T06:05:24.145Z",
+      "signalScore": 100,
+      "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
-        "Food Blog"
+        "Food Blog",
+        "Google Places"
       ],
       "neighborhoods": [
         "Larchmont",
@@ -255,20 +271,23 @@
       "WORTH THE SPLURGE": "République Café (Mid-Wilshire) — Whipped ricotta olive oil dip dessert",
       "EASY ENTRY": "Botanica Restaurant (Silver Lake) — Olive oil soft serve swirl",
       "WHY IT WORKS": "",
-      "confidence": "low"
+      "confidence": "low",
+      "sourceCount": 5,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Olive Oil Dessert Loops” (query “Olive Oil Dessert Loops Los Angeles”) · avg rating 4.4 · ~9121 review rollups."
     },
     {
       "id": "filipino-bbq-skewer-nights",
       "name": "Filipino BBQ Skewer Nights",
       "short descriptor": "Sweet-savory pork and chicken skewer platters with calamansi, garlic rice, and banana ketchup nods on patio menus.",
       "WHY IT'S EVERYWHERE": "Family-style skewer trays travel well to outdoor dining. Breweries are looking for bold, shareable proteins.",
-      "signalScore": 54,
-      "lastUpdated": "2026-05-05T06:05:24.145Z",
+      "signalScore": 100,
+      "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
-        "Food Blog"
+        "Food Blog",
+        "Google Places"
       ],
       "neighborhoods": [
         "Historic Filipinotown",
@@ -298,20 +317,23 @@
       "WORTH THE SPLURGE": "Weekend brewery pop-ups (Arts District) — Garlic rice family tray",
       "EASY ENTRY": "LASA Supper Club (Chinatown) — Calamansi-glazed pork stick",
       "WHY IT WORKS": "",
-      "confidence": "low"
+      "confidence": "low",
+      "sourceCount": 5,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Filipino BBQ Skewer Nights” (query “Filipino BBQ Skewer Nights Los Angeles”) · avg rating 4.4 · ~9368 review rollups."
     },
     {
       "id": "ube-basque-slices",
       "name": "Ube Basque Cheesecake Slices",
       "short descriptor": "Burnt tops, purple yam custard centers, and Filipino-dessert crossovers landing on pastry cases from Sawtelle to Long Beach.",
       "WHY IT'S EVERYWHERE": "Ube still moves on social. Basque format is forgiving for small kitchens testing weekend drops.",
-      "signalScore": 53,
-      "lastUpdated": "2026-05-05T06:05:24.145Z",
+      "signalScore": 78,
+      "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
-        "Food Blog"
+        "Food Blog",
+        "Google Places"
       ],
       "neighborhoods": [
         "Sawtelle",
@@ -341,8 +363,11 @@
       "WORTH THE SPLURGE": "Smorgasburg pastry stalls (Downtown LA) — Pandan swirl cheesecake",
       "EASY ENTRY": "Cafe 86 (Artesia) — Ube basque wedge",
       "WHY IT WORKS": "",
-      "confidence": "low"
+      "confidence": "low",
+      "sourceCount": 5,
+      "evidenceSummary": "Google Places (weekend): 6 result(s) for “Ube Basque Cheesecake Slices” (query “Ube Basque Cheesecake Slices Los Angeles”) · avg rating 4.7 · ~670 review rollups."
     }
   ],
-  "refreshType": "weekend"
+  "refreshType": "weekend",
+  "sourceCount": 5
 }
