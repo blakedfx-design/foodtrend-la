@@ -1,31 +1,25 @@
 import { NextResponse } from "next/server";
-import { verifyCronRequest } from "@/lib/cronAuth";
-import { buildSimulatedTrendsFile } from "@/lib/updateTrendsSimulation";
 
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
-
-function handle(request: Request) {
-  if (!verifyCronRequest(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+function isCronAuthorized(request: Request): boolean {
+  const secret = process.env.CRON_SECRET?.trim();
+  if (!secret) {
+    return false;
   }
-
-  try {
-    const now = new Date().toISOString();
-    buildSimulatedTrendsFile(now);
-    return NextResponse.json({ success: true, type: "weekly" });
-  } catch (e) {
-    return NextResponse.json(
-      { success: false, error: e instanceof Error ? e.message : String(e) },
-      { status: 500 },
-    );
+  const auth = request.headers.get("authorization")?.trim();
+  if (!auth) {
+    return false;
   }
+  return auth === secret || auth === `Bearer ${secret}`;
 }
 
 export function GET(request: Request) {
-  return handle(request);
-}
+  if (!isCronAuthorized(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-export function POST(request: Request) {
-  return handle(request);
+  return NextResponse.json({
+    success: true,
+    type: "weekly",
+    message: "Weekly refresh endpoint is working",
+  });
 }
