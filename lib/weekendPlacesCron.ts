@@ -1,4 +1,6 @@
 import { searchPlaces } from "@/lib/places";
+import { searchReddit } from "@/lib/sources/reddit";
+import type { RedditSearchSignal } from "@/lib/sources/reddit";
 
 function isRecord(x: unknown): x is Record<string, unknown> {
   return typeof x === "object" && x !== null && !Array.isArray(x);
@@ -26,6 +28,34 @@ function scoreFromHits(hits: Awaited<ReturnType<typeof searchPlaces>>): number {
   const n = hits.length;
   const totalReviews = hits.reduce((sum, h) => sum + (h.userRatingCount ?? 0), 0);
   return clampScore(28 + n * 7 + Math.min(34, Math.floor(totalReviews / 80)));
+}
+
+function redditBoostFromMomentum(momentumScore: number, postCount: number): number {
+  if (postCount <= 0 || momentumScore <= 0) {
+    return 0;
+  }
+  return Math.min(24, Math.round(5.5 * Math.log1p(momentumScore)));
+}
+
+function redditEvidenceLine(signal: RedditSearchSignal): string {
+  if (signal.postCount <= 0) {
+    return "";
+  }
+  const phrasePart =
+    signal.topPhrases.length > 0
+      ? `, with repeat mentions of ${signal.topPhrases.slice(0, 4).join(", ")}`
+      : "";
+  return `Picked up across r/FoodLosAngeles, r/LosAngeles, and r/AskLosAngeles (${signal.postCount} post${signal.postCount === 1 ? "" : "s"} in the last 14 days)${phrasePart}.`;
+}
+
+function combinedEvidence(
+  placesLine: string,
+  redditLine: string,
+): string {
+  if (!redditLine) {
+    return placesLine;
+  }
+  return `${placesLine} ${redditLine}`;
 }
 
 function evidenceLine(
@@ -71,9 +101,10 @@ function rootSourceCount(parsed: Record<string, unknown>): number {
 }
 
 /**
- * Weekend cron: for each row in `trends` and `aboutToHit`, run one Places text
- * search (trend name + " Los Angeles"). Updates only signal fields on each row
- * and root `lastUpdated` / `refreshType` / `sourceCount`.
+ * Weekend cron: for each row in `trends` and `aboutToHit`, run Places
+ * (`name` + " Los Angeles") plus Reddit (`name` in LA subs, 14d). Updates only
+ * signal fields on each row and root `lastUpdated` / `refreshType` / `sourceCount`.
+ * Reddit failures are ignored per trend.
  */
 export async function applyWeekendGooglePlacesSignalsToParsed(
   parsed: Record<string, unknown>,
@@ -97,11 +128,23 @@ export async function applyWeekendGooglePlacesSignalsToParsed(
       }
       const query = `${name} Los Angeles`;
       const hits = await searchPlaces(query);
-      el.signalScore = scoreFromHits(hits);
-      el.sources = mergeSources(el.sources, "Google Places");
-      el.sourceCount = Array.isArray(el.sources) ? el.sources.length : 0;
+      const placesScore = scoreFromHits(hits);
+      const placesLine = evidenceLine(name, query, hits);
+
+      const redditSig = await searchReddit(name);
+      let nextSources = mergeSources(el.sources, "Google Places");
+      if (redditSig.postCount > 0) {
+        nextSources = mergeSources(nextSources, "Reddit chatter");
+      }
+
+      el.signalScore = clampScore(
+        placesScore +
+          redditBoostFromMomentum(redditSig.momentumScore, redditSig.postCount),
+      );
+      el.sources = nextSources;
+      el.sourceCount = nextSources.length;
       el.lastUpdated = now;
-      el.evidenceSummary = evidenceLine(name, query, hits);
+      el.evidenceSummary = combinedEvidence(placesLine, redditEvidenceLine(redditSig));
     }
   }
 

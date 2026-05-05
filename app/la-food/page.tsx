@@ -237,6 +237,7 @@ export default async function LaFoodPage() {
                 <ul className="ft-sidebar__list">
                   <li>Menus from 2,400+ restaurants (public listings &amp; PDFs)</li>
                   <li>Instagram, TikTok, X — surface mentions &amp; clips</li>
+                  <li>Reddit chatter — LA food subs (official API; dish &amp; neighborhood signals)</li>
                   <li>Google Trends — relative search lift by menu phrase</li>
                 </ul>
               </div>
