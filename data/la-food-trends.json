@@ -1,13 +1,13 @@
 {
-  "lastUpdated": "2026-05-04T20:42:02.622Z",
+  "lastUpdated": "2026-05-05T06:05:24.145Z",
   "trends": [
     {
       "id": "korean-ssam-bar-snacks",
       "name": "Korean Ssam Bar Snacks",
       "short descriptor": "Grilled meats, banchan, and build-your-own lettuce wraps taking over late dinners.",
       "WHY IT'S EVERYWHERE": "Dinner turns into something interactive. Tables are ordering everything, passing plates, and building wraps nonstop — it's louder, more social, and people stay way longer.",
-      "signalScore": 88,
-      "lastUpdated": "2026-05-04T20:42:02.622Z",
+      "signalScore": 89,
+      "lastUpdated": "2026-05-05T06:05:24.145Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -47,8 +47,8 @@
       "name": "Sonoran-Style Breakfast Burritos",
       "short descriptor": "Flour tortillas, eggs, potato, and crisped machaca-style fills—morning lines stretching outside Highland Park and Boyle Heights pits.",
       "WHY IT'S EVERYWHERE": "Handheld dayparts stay crowded. Taquerias are trading thin wraps for blistered, heavier builds that survive a car ride.",
-      "signalScore": 81,
-      "lastUpdated": "2026-05-04T20:42:02.622Z",
+      "signalScore": 80,
+      "lastUpdated": "2026-05-05T06:05:24.145Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -90,8 +90,8 @@
       "name": "Hainan Chicken Lunch Counters",
       "short descriptor": "Ginger-poached bird, chicken-fat rice, and three-sauce trays popping up as fast daytime platters from Westlake to the SGV.",
       "WHY IT'S EVERYWHERE": "Price-conscious lunch crowds want something cleaner than fried chicken but still comforting. Counter service keeps turns high.",
-      "signalScore": 79,
-      "lastUpdated": "2026-05-04T20:42:02.622Z",
+      "signalScore": 80,
+      "lastUpdated": "2026-05-05T06:05:24.145Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -133,8 +133,8 @@
       "name": "Aguachile on Ice",
       "short descriptor": "Chilled, citrusy aguachile served ice-cold — bright, spicy, and built for warm LA nights.",
       "WHY IT'S EVERYWHERE": "It's the perfect LA table-starter: cold, sharp, and loud with lime. People are ordering it before the meal even starts, passing chips around, and scraping the last bits of cucumber and chile from the plate.",
-      "signalScore": 76,
-      "lastUpdated": "2026-05-04T20:42:02.622Z",
+      "signalScore": 78,
+      "lastUpdated": "2026-05-05T06:05:24.145Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -174,8 +174,8 @@
       "name": "Natural Wine “Martini” Hour",
       "short descriptor": "Chilled natural wines poured like martinis — early evening, low-key buzz, everywhere right now.",
       "WHY IT'S EVERYWHERE": "It’s replacing the traditional happy hour. People aren’t doing rounds of cocktails — they’re posting up with a cold glass of something funky and staying for hours. You see it spilling onto sidewalks in Silver Lake and Echo Park right around golden hour.",
-      "signalScore": 72,
-      "lastUpdated": "2026-05-04T20:42:02.622Z",
+      "signalScore": 74,
+      "lastUpdated": "2026-05-05T06:05:24.145Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -219,8 +219,8 @@
       "name": "Olive Oil Dessert Loops",
       "short descriptor": "Whipped mascarpone, citrus, and grassy olive oil looping onto cakes and soft-serve on dessert-only cards.",
       "WHY IT'S EVERYWHERE": "Guests still want ‘clean’ finales. Olive oil reads luxury without chocolate heaviness—easy to test as a special.",
-      "signalScore": 58,
-      "lastUpdated": "2026-05-04T20:42:02.622Z",
+      "signalScore": 60,
+      "lastUpdated": "2026-05-05T06:05:24.145Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -262,8 +262,8 @@
       "name": "Filipino BBQ Skewer Nights",
       "short descriptor": "Sweet-savory pork and chicken skewer platters with calamansi, garlic rice, and banana ketchup nods on patio menus.",
       "WHY IT'S EVERYWHERE": "Family-style skewer trays travel well to outdoor dining. Breweries are looking for bold, shareable proteins.",
-      "signalScore": 55,
-      "lastUpdated": "2026-05-04T20:42:02.622Z",
+      "signalScore": 54,
+      "lastUpdated": "2026-05-05T06:05:24.145Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -305,8 +305,8 @@
       "name": "Ube Basque Cheesecake Slices",
       "short descriptor": "Burnt tops, purple yam custard centers, and Filipino-dessert crossovers landing on pastry cases from Sawtelle to Long Beach.",
       "WHY IT'S EVERYWHERE": "Ube still moves on social. Basque format is forgiving for small kitchens testing weekend drops.",
-      "signalScore": 52,
-      "lastUpdated": "2026-05-04T20:42:02.622Z",
+      "signalScore": 53,
+      "lastUpdated": "2026-05-05T06:05:24.145Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -343,5 +343,6 @@
       "WHY IT WORKS": "",
       "confidence": "low"
     }
-  ]
+  ],
+  "refreshType": "weekend"
 }
