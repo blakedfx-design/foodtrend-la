@@ -1,6 +1,15 @@
 import { searchPlaces } from "@/lib/places";
 import { searchReddit } from "@/lib/sources/reddit";
 import type { RedditSearchSignal } from "@/lib/sources/reddit";
+import {
+  fetchYelpPipelineTermSignals,
+  selectYelpSignalsForTrend,
+  yelpEvidenceLine,
+  yelpSupplyBoostFromSignals,
+} from "@/lib/sources/yelp";
+
+const SHORT_DESCRIPTOR_KEY = "short descriptor";
+const WHAT_TO_ORDER_KEY = "WHAT TO ORDER";
 
 function isRecord(x: unknown): x is Record<string, unknown> {
   return typeof x === "object" && x !== null && !Array.isArray(x);
@@ -51,11 +60,9 @@ function redditEvidenceLine(signal: RedditSearchSignal): string {
 function combinedEvidence(
   placesLine: string,
   redditLine: string,
+  yelpLine: string,
 ): string {
-  if (!redditLine) {
-    return placesLine;
-  }
-  return `${placesLine} ${redditLine}`;
+  return [placesLine, redditLine, yelpLine].filter(Boolean).join(" ");
 }
 
 function evidenceLine(
@@ -100,11 +107,53 @@ function rootSourceCount(parsed: Record<string, unknown>): number {
   return all.size;
 }
 
+function editorialTrendNamesFromParsed(parsed: Record<string, unknown>): string[] {
+  const names: string[] = [];
+  for (const key of ["trends", "aboutToHit"] as const) {
+    const arr = parsed[key];
+    if (!Array.isArray(arr)) {
+      continue;
+    }
+    for (const el of arr) {
+      if (!isRecord(el)) {
+        continue;
+      }
+      const name = typeof el.name === "string" ? el.name.trim() : "";
+      if (name) {
+        names.push(name);
+      }
+    }
+  }
+  return names;
+}
+
+function trendSupplyContext(el: Record<string, unknown>): {
+  blobLower: string;
+  neighborhoods: string[];
+} {
+  const name = typeof el.name === "string" ? el.name.trim() : "";
+  const shortDesc =
+    typeof el[SHORT_DESCRIPTOR_KEY] === "string" ? el[SHORT_DESCRIPTOR_KEY].trim() : "";
+  const dishLine = Array.isArray(el[WHAT_TO_ORDER_KEY])
+    ? (el[WHAT_TO_ORDER_KEY] as unknown[])
+        .map((x) => (typeof x === "string" ? x.trim() : ""))
+        .filter(Boolean)
+        .join(" ")
+    : "";
+  const blobLower = `${name} ${shortDesc} ${dishLine}`.trim().toLowerCase();
+  const neighborhoods = Array.isArray(el.neighborhoods)
+    ? (el.neighborhoods as unknown[])
+        .map((x) => (typeof x === "string" ? x.trim() : ""))
+        .filter(Boolean)
+    : [];
+  return { blobLower, neighborhoods };
+}
+
 /**
  * Weekend cron: for each row in `trends` and `aboutToHit`, run Places
- * (`name` + " Los Angeles") plus Reddit (`name` in LA subs, 14d). Updates only
- * signal fields on each row and root `lastUpdated` / `refreshType` / `sourceCount`.
- * Reddit failures are ignored per trend.
+ * (`name` + " Los Angeles"), Reddit (`name` in LA subs, 14d), and optional Yelp Fusion
+ * mapped searches (LA supply validation — not a freshness source). Updates signal fields,
+ * `yelpSignals` (term aggregates only), `evidenceSummary`, sources, and root `sourceCount`.
  */
 export async function applyWeekendGooglePlacesSignalsToParsed(
   parsed: Record<string, unknown>,
@@ -112,6 +161,21 @@ export async function applyWeekendGooglePlacesSignalsToParsed(
   const now = new Date().toISOString();
   parsed.lastUpdated = now;
   parsed.refreshType = "weekend";
+
+  const hasYelpKey = Boolean(process.env.YELP_API_KEY?.trim());
+  if (!hasYelpKey) {
+    console.log("Yelp source disabled: credentials not configured.");
+  }
+
+  let yelpTermSignals: Awaited<ReturnType<typeof fetchYelpPipelineTermSignals>> = [];
+  if (hasYelpKey) {
+    try {
+      const editorialTrendNames = editorialTrendNamesFromParsed(parsed);
+      yelpTermSignals = await fetchYelpPipelineTermSignals({ editorialTrendNames });
+    } catch {
+      yelpTermSignals = [];
+    }
+  }
 
   for (const arrKey of ["trends", "aboutToHit"] as const) {
     const arr = parsed[arrKey];
@@ -137,14 +201,40 @@ export async function applyWeekendGooglePlacesSignalsToParsed(
         nextSources = mergeSources(nextSources, "Reddit chatter");
       }
 
+      const { blobLower, neighborhoods } = trendSupplyContext(el);
+      const yelpForTrend =
+        yelpTermSignals.length > 0
+          ? selectYelpSignalsForTrend(yelpTermSignals, {
+              trendBlobLower: blobLower,
+              trendNeighborhoods: neighborhoods,
+              minScore: 30,
+              limit: 8,
+            })
+          : [];
+      if (yelpForTrend.length > 0) {
+        nextSources = mergeSources(nextSources, "Yelp Fusion");
+      }
+      const yelpLine = yelpEvidenceLine(yelpForTrend);
+      const yelpBoost = yelpSupplyBoostFromSignals(yelpForTrend);
+
       el.signalScore = clampScore(
         placesScore +
-          redditBoostFromMomentum(redditSig.momentumScore, redditSig.postCount),
+          redditBoostFromMomentum(redditSig.momentumScore, redditSig.postCount) +
+          yelpBoost,
       );
       el.sources = nextSources;
       el.sourceCount = nextSources.length;
       el.lastUpdated = now;
-      el.evidenceSummary = combinedEvidence(placesLine, redditEvidenceLine(redditSig));
+      el.evidenceSummary = combinedEvidence(
+        placesLine,
+        redditEvidenceLine(redditSig),
+        yelpLine,
+      );
+      if (yelpForTrend.length > 0) {
+        el.yelpSignals = yelpForTrend;
+      } else {
+        delete el.yelpSignals;
+      }
     }
   }
 

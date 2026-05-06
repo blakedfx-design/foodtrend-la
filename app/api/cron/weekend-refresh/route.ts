@@ -19,7 +19,7 @@ export async function GET(request: Request) {
       async (parsed) => {
         await applyWeekendGooglePlacesSignalsToParsed(parsed);
       },
-      "chore(cron): weekend FoodTrend LA — Places + Reddit LA signals",
+      "chore(cron): weekend FoodTrend LA — Places + Reddit LA + Yelp supply signals",
     );
 
     return NextResponse.json({

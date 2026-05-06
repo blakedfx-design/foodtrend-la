@@ -5,7 +5,10 @@
       "id": "korean-ssam-bar-snacks",
       "name": "Korean Ssam Bar Snacks",
       "short descriptor": "Grilled meats, banchan, and build-your-own lettuce wraps taking over late dinners.",
-      "WHY IT'S EVERYWHERE": "Dinner turns into something interactive. Tables are ordering everything, passing plates, and building wraps nonstop — it's louder, more social, and people stay way longer.",
+      "cuisineOrigin": "Korean",
+      "mealType": "Shared Plates",
+      "mealMoment": "Dinner / Late Night",
+      "WHY IT'S EVERYWHERE": "People pass lettuce and ssamjang mid-meal.\nNobody wants the table to quiet down.\nLate dinners stretch without anyone noticing.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -23,15 +26,18 @@
       "restaurants": [
         {
           "name": "Yangban Society",
-          "neighborhood": "Downtown LA"
+          "neighborhood": "Downtown LA",
+          "yelp_url": "https://www.yelp.com/biz/yangban-los-angeles"
         },
         {
           "name": "Bar Sinizki",
-          "neighborhood": "West Hollywood"
+          "neighborhood": "West Hollywood",
+          "yelp_url": "https://www.yelp.com/biz/bar-sinizki-los-angeles"
         },
         {
           "name": "Here's Looking At You",
-          "neighborhood": "Koreatown"
+          "neighborhood": "Koreatown",
+          "yelp_url": "https://www.yelp.com/biz/heres-looking-at-you-los-angeles"
         }
       ],
       "WHAT TO ORDER": [
@@ -40,7 +46,7 @@
       "MOST SPOTTED": "Yangban Society (Downtown LA)\nHere's Looking At You (Koreatown)\nBar Sinizki (West Hollywood)",
       "WORTH THE SPLURGE": "Yangban Society — bigger spread, more composed plates",
       "EASY ENTRY": "Here's Looking At You — more casual, still hits",
-      "WHY IT WORKS": "Hands-on, fast, and built for sharing — the table never slows down.",
+      "WHY IT WORKS": "",
       "confidence": "high",
       "sourceCount": 5,
       "evidenceSummary": "Google Places (weekend): 20 result(s) for “Korean Ssam Bar Snacks” (query “Korean Ssam Bar Snacks Los Angeles”) · avg rating 4.5 · ~7407 review rollups."
@@ -49,7 +55,10 @@
       "id": "sonoran-breakfast-burritos",
       "name": "Sonoran-Style Breakfast Burritos",
       "short descriptor": "Flour tortillas, eggs, potato, and crisped machaca-style fills—morning lines stretching outside Highland Park and Boyle Heights pits.",
-      "WHY IT'S EVERYWHERE": "Handheld dayparts stay crowded. Taquerias are trading thin wraps for blistered, heavier builds that survive a car ride.",
+      "cuisineOrigin": "Northern Mexican (Sonoran)",
+      "mealType": "Breakfast",
+      "mealMoment": "Morning",
+      "WHY IT'S EVERYWHERE": "Morning lines want something heavy to hold.\nIt survives the commute without falling apart.\nTaquerías keep swapping in thicker tortillas.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -67,15 +76,18 @@
       "restaurants": [
         {
           "name": "HomeState",
-          "neighborhood": "Highland Park"
+          "neighborhood": "Highland Park",
+          "yelp_url": "https://www.yelp.com/biz/homestate-los-angeles"
         },
         {
           "name": "Colonia Tacos Guisados",
-          "neighborhood": "Boyle Heights"
+          "neighborhood": "Boyle Heights",
+          "yelp_url": "https://www.yelp.com/biz/guisados-los-angeles"
         },
         {
           "name": "Cilantro Mexican Grill",
-          "neighborhood": "Glassell Park"
+          "neighborhood": "Glassell Park",
+          "yelp_url": "https://www.yelp.com/biz/cilantro-mexican-grill-north-hollywood"
         }
       ],
       "WHAT TO ORDER": [
@@ -95,7 +107,10 @@
       "id": "hainan-chicken-lunch",
       "name": "Hainan Chicken Lunch Counters",
       "short descriptor": "Ginger-poached bird, chicken-fat rice, and three-sauce trays popping up as fast daytime platters from Westlake to the SGV.",
-      "WHY IT'S EVERYWHERE": "Price-conscious lunch crowds want something cleaner than fried chicken but still comforting. Counter service keeps turns high.",
+      "cuisineOrigin": "Southeast Asian (Singaporean)",
+      "mealType": "Rice Plates",
+      "mealMoment": "Lunch",
+      "WHY IT'S EVERYWHERE": "Lighter than fried, still satisfying.\nShows up in quick lunch spots.\nEasy repeat order.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -113,15 +128,18 @@
       "restaurants": [
         {
           "name": "Side Chick",
-          "neighborhood": "Arcadia"
+          "neighborhood": "Arcadia",
+          "yelp_url": "https://www.yelp.com/biz/side-chick-arcadia"
         },
         {
           "name": "Cluck2Go",
-          "neighborhood": "Pasadena"
+          "neighborhood": "Pasadena",
+          "yelp_url": "https://www.yelp.com/biz/cluck2go-pasadena-9"
         },
         {
           "name": "Savoy Kitchen",
-          "neighborhood": "Alhambra"
+          "neighborhood": "Alhambra",
+          "yelp_url": "https://www.yelp.com/biz/savoy-kitchen-alhambra"
         }
       ],
       "WHAT TO ORDER": [
@@ -141,7 +159,10 @@
       "id": "aguachile-ice",
       "name": "Aguachile on Ice",
       "short descriptor": "Chilled, citrusy aguachile served ice-cold — bright, spicy, and built for warm LA nights.",
-      "WHY IT'S EVERYWHERE": "It's the perfect LA table-starter: cold, sharp, and loud with lime. People are ordering it before the meal even starts, passing chips around, and scraping the last bits of cucumber and chile from the plate.",
+      "cuisineOrigin": "Coastal Mexican",
+      "mealType": "Cold Seafood",
+      "mealMoment": "Table Starter",
+      "WHY IT'S EVERYWHERE": "People are ordering it first.\nCold + citrus hits before anything else.\nWorks in LA heat.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -159,15 +180,18 @@
       "restaurants": [
         {
           "name": "Holbox",
-          "neighborhood": "Downtown LA"
+          "neighborhood": "Downtown LA",
+          "yelp_url": "https://www.yelp.com/biz/holbox-los-angeles-2"
         },
         {
           "name": "Coni'Seafood",
-          "neighborhood": "Inglewood"
+          "neighborhood": "Inglewood",
+          "yelp_url": "https://www.yelp.com/biz/coniseafood-inglewood"
         },
         {
           "name": "Petty Cash Taqueria",
-          "neighborhood": "Fairfax"
+          "neighborhood": "Fairfax",
+          "yelp_url": "https://www.yelp.com/biz/petty-cash-taqueria-and-bar-los-angeles"
         }
       ],
       "WHAT TO ORDER": [
@@ -176,7 +200,7 @@
       "MOST SPOTTED": "Holbox (Downtown LA) — Shrimp aguachile verde — heavy lime, serrano heat, sliced cucumber, served ice-cold with tostadas.",
       "WORTH THE SPLURGE": "Holbox — pristine seafood, deeper citrus, cleaner heat.",
       "EASY ENTRY": "Mariscos Jalisco — faster, louder, and just as craveable.",
-      "WHY IT WORKS": "Cold seafood, high acid, and chile heat — it wakes up the whole table.",
+      "WHY IT WORKS": "",
       "confidence": "medium",
       "sourceCount": 5,
       "evidenceSummary": "Google Places (weekend): 20 result(s) for “Aguachile on Ice” (query “Aguachile on Ice Los Angeles”) · avg rating 4.5 · ~20491 review rollups."
@@ -185,7 +209,10 @@
       "id": "natural-wine-martini-hour",
       "name": "Natural Wine “Martini” Hour",
       "short descriptor": "Chilled natural wines poured like martinis — early evening, low-key buzz, everywhere right now.",
-      "WHY IT'S EVERYWHERE": "It’s replacing the traditional happy hour. People aren’t doing rounds of cocktails — they’re posting up with a cold glass of something funky and staying for hours. You see it spilling onto sidewalks in Silver Lake and Echo Park right around golden hour.",
+      "cuisineOrigin": "European / Wine Bar",
+      "mealType": "Drinks",
+      "mealMoment": "Aperitivo",
+      "WHY IT'S EVERYWHERE": "People treat funky pours like cocktails.\nOne glass turns into the whole night.\nSidewalk seats fill around sunset.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -203,15 +230,18 @@
       "restaurants": [
         {
           "name": "Bar Bandini",
-          "neighborhood": "Echo Park"
+          "neighborhood": "Echo Park",
+          "yelp_url": "https://www.yelp.com/biz/bar-bandini-los-angeles"
         },
         {
           "name": "Tabula Rasa",
-          "neighborhood": "Silver Lake"
+          "neighborhood": "Silver Lake",
+          "yelp_url": "https://www.yelp.com/biz/tabula-rasa-bar-los-angeles"
         },
         {
           "name": "Melody",
-          "neighborhood": "Virgil Village"
+          "neighborhood": "Virgil Village",
+          "yelp_url": "https://www.yelp.com/biz/melody-los-angeles-2"
         }
       ],
       "WHAT TO ORDER": [
@@ -222,7 +252,7 @@
       "MOST SPOTTED": "Bar Bandini (Echo Park); Tabula Rasa (Silver Lake); Melody (Virgil Village)",
       "WORTH THE SPLURGE": "Bar Bandini (Echo Park) — deeper list, more interesting pours, slower vibe",
       "EASY ENTRY": "Tabula Rasa (Silver Lake) — approachable, louder, easy to slide into",
-      "WHY IT WORKS": "Why it works — lower alcohol, high flavor — you can drink it like a cocktail but stay longer. It turns one drink into the whole night.",
+      "WHY IT WORKS": "",
       "confidence": "medium",
       "sourceCount": 5,
       "evidenceSummary": "Google Places (weekend): 20 result(s) for “Natural Wine “Martini” Hour” (query “Natural Wine “Martini” Hour Los Angeles”) · avg rating 4.6 · ~12170 review rollups."
@@ -233,7 +263,10 @@
       "id": "olive-oil-dessert-loops",
       "name": "Olive Oil Dessert Loops",
       "short descriptor": "Whipped mascarpone, citrus, and grassy olive oil looping onto cakes and soft-serve on dessert-only cards.",
-      "WHY IT'S EVERYWHERE": "Guests still want ‘clean’ finales. Olive oil reads luxury without chocolate heaviness—easy to test as a special.",
+      "cuisineOrigin": "European / Mediterranean",
+      "mealType": "Dessert",
+      "mealMoment": "Afternoon / Evening",
+      "WHY IT'S EVERYWHERE": "Guests still want that 'clean' dessert shot.\nOlive oil reads fancy without chocolate.\nPastry teams trial it on weekends first.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -251,15 +284,18 @@
       "restaurants": [
         {
           "name": "Botanica Restaurant",
-          "neighborhood": "Silver Lake"
+          "neighborhood": "Silver Lake",
+          "yelp_url": "https://www.yelp.com/biz/botanica-restaurant-los-angeles"
         },
         {
           "name": "Sweet Rose Creamery",
-          "neighborhood": "Brentwood"
+          "neighborhood": "Brentwood",
+          "yelp_url": "https://www.yelp.com/biz/sweet-rose-creamery-los-angeles"
         },
         {
           "name": "République Café",
-          "neighborhood": "Mid-Wilshire"
+          "neighborhood": "Mid-Wilshire",
+          "yelp_url": "https://www.yelp.com/biz/république-los-angeles"
         }
       ],
       "WHAT TO ORDER": [
@@ -279,7 +315,10 @@
       "id": "filipino-bbq-skewer-nights",
       "name": "Filipino BBQ Skewer Nights",
       "short descriptor": "Sweet-savory pork and chicken skewer platters with calamansi, garlic rice, and banana ketchup nods on patio menus.",
-      "WHY IT'S EVERYWHERE": "Family-style skewer trays travel well to outdoor dining. Breweries are looking for bold, shareable proteins.",
+      "cuisineOrigin": "Filipino",
+      "mealType": "Grilled Platters",
+      "mealMoment": "Dinner",
+      "WHY IT'S EVERYWHERE": "Patios want a pile of sticks on the table.\nBreweries like loud, shareable protein.\nTrays slide across outdoor seating.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -297,11 +336,13 @@
       "restaurants": [
         {
           "name": "LASA Supper Club",
-          "neighborhood": "Chinatown"
+          "neighborhood": "Chinatown",
+          "yelp_url": "https://www.yelp.com/biz/lasa-los-angeles"
         },
         {
           "name": "Bangkok BBQ",
-          "neighborhood": "North Hollywood"
+          "neighborhood": "North Hollywood",
+          "yelp_url": "https://www.yelp.com/biz/bangkok-bbq-north-hollywood"
         },
         {
           "name": "Weekend brewery pop-ups",
@@ -325,7 +366,10 @@
       "id": "ube-basque-slices",
       "name": "Ube Basque Cheesecake Slices",
       "short descriptor": "Burnt tops, purple yam custard centers, and Filipino-dessert crossovers landing on pastry cases from Sawtelle to Long Beach.",
-      "WHY IT'S EVERYWHERE": "Ube still moves on social. Basque format is forgiving for small kitchens testing weekend drops.",
+      "cuisineOrigin": "Filipino-American",
+      "mealType": "Pastry / Dessert",
+      "mealMoment": "Afternoon",
+      "WHY IT'S EVERYWHERE": "Purple cakes still crush on the feed.\nTiny kitchens can trial it Saturday only.\nLow stakes before full dessert menus.",
       "signalScore": 78,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -343,7 +387,8 @@
       "restaurants": [
         {
           "name": "Cafe 86",
-          "neighborhood": "Artesia"
+          "neighborhood": "Artesia",
+          "yelp_url": "https://www.yelp.com/biz/cafe-86-artesia"
         },
         {
           "name": "Broadway Corridor bakeries",

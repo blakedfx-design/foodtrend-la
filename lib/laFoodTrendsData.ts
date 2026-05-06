@@ -1,6 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { LaFoodTrendsDataFile, Trend } from "@/types/laFoodTrend";
+import type {
+  LaFoodTrendsDataFile,
+  Trend,
+  TrendRestaurant,
+} from "@/types/laFoodTrend";
 import { laFoodTrendsFileToDiskJson, normalizeTrendRow } from "@/lib/normalizeTrend";
 import type { WherePick } from "@/components/foodtrend/wherePick";
 import { WHERE_SHOWING_PICKS } from "@/lib/whereShowing";
@@ -162,6 +166,39 @@ export function getDataFreshnessSummary(
   return parts.join(" · ");
 }
 
+function wherePickFromRestaurantRow(
+  r: TrendRestaurant,
+  dish: string,
+): WherePick {
+  const pick: WherePick = {
+    restaurant: r.name,
+    neighborhood: r.neighborhood || "Los Angeles",
+    dish,
+  };
+  if (r.url != null) {
+    pick.url = r.url;
+  }
+  if (r.yelp_url != null) {
+    pick.yelp_url = r.yelp_url;
+  }
+  if (r.source_url != null) {
+    pick.source_url = r.source_url;
+  }
+  if (r.link != null) {
+    pick.link = r.link;
+  }
+  if (r.source != null) {
+    pick.source = r.source;
+  }
+  if (r.rating != null) {
+    pick.rating = r.rating;
+  }
+  if (r.review_count != null) {
+    pick.review_count = r.review_count;
+  }
+  return pick;
+}
+
 export function mapTrendToWherePicks(trend: Trend): WherePick[] {
   const curated = WHERE_SHOWING_PICKS[trend.name];
   if (curated?.length) {
@@ -176,11 +213,10 @@ export function mapTrendToWherePicks(trend: Trend): WherePick[] {
       },
     ];
   }
-  return trend.restaurants.map((r, i) => ({
-    restaurant: r.name,
-    neighborhood: r.neighborhood,
-    dish: trend.menuItems[i] ?? trend.menuItems[0] ?? trend.name,
-  }));
+  return trend.restaurants.map((r, i) => {
+    const dish = r.dish ?? trend.menuItems[i] ?? trend.menuItems[0] ?? trend.name;
+    return wherePickFromRestaurantRow(r, dish);
+  });
 }
 
 export function barsFromSignalScore(signalScore: number): {
