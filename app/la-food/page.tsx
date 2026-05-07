@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getRestaurantUrl } from "@/components/foodtrend/wherePick";
+import { getRestaurantUrl, pickHasInstagramLink } from "@/components/foodtrend/wherePick";
 import { TrendIconForName } from "@/components/foodtrend/TrendIconForName";
 import TrendRow from "@/components/foodtrend/TrendRow";
 import { HeaderAtmosphere } from "@/components/HeaderAtmosphere";
@@ -81,10 +81,11 @@ export default async function LaFoodPage() {
                   const r0 = trend.restaurants[0];
                   const dish0 = trend.menuItems[0]?.trim();
                   const footHref = r0 ? getRestaurantUrl(r0) : null;
+                  const showFootIgGlyph = r0 ? pickHasInstagramLink(r0) : false;
                   const foot =
                     r0 && dish0 ? (
-                      <>
-                        {footHref ? (
+                      footHref ? (
+                        <>
                           <a
                             href={footHref}
                             target="_blank"
@@ -92,16 +93,21 @@ export default async function LaFoodPage() {
                             className="ft-early__card-rest-link"
                           >
                             {r0.name}
-                            <span className="ft-early__card-rest-glyph" aria-hidden>
-                              {" "}
-                              ↗
-                            </span>
+                            {showFootIgGlyph ? (
+                              <span className="ft-early__card-rest-glyph" aria-hidden>
+                                {" "}
+                                ↗
+                              </span>
+                            ) : null}
                           </a>
-                        ) : (
+                          <span className="ft-early__card-rest-detail"> — {dish0}</span>
+                        </>
+                      ) : (
+                        <>
                           <span>{r0.name}</span>
-                        )}
-                        <span> — {dish0}</span>
-                      </>
+                          <span> — {dish0}</span>
+                        </>
+                      )
                     ) : (
                       (trend.menuItems[0]?.trim() ?? trend.description)
                     );

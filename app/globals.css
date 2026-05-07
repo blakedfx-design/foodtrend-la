@@ -9,6 +9,8 @@
   --ft-hairline: #e8e6e1;
   --ft-accent: #6b3d2e;
   --ft-divider-dot: #c5c2bb;
+  /** Subtle outbound / profile link hover (Instagram-adjacent rose–violet, not a full brand treatment). */
+  --ft-ext-link-accent: #c23a6b;
   --font-serif: Georgia, "Times New Roman", Times, serif;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
     sans-serif;
@@ -572,12 +574,15 @@ a:hover {
   --ec-line: rgba(26, 43, 60, 0.12);
   --ec-card-face: #fffefb;
   --ec-card-border: #eae6df;
+  box-sizing: border-box;
+  max-width: 1160px;
+  margin-inline: auto;
   background: var(--ec-card-face);
   color: var(--ec-navy);
-  padding: clamp(1.25rem, 2vw, 1.5rem);
+  padding: clamp(1.65rem, 2.8vw, 2.55rem);
   border: 1px solid var(--ec-card-border);
-  border-radius: 11px;
-  box-shadow: 0 1px 2px rgba(26, 43, 60, 0.045), 0 12px 28px rgba(26, 43, 60, 0.03);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(26, 43, 60, 0.045), 0 14px 36px rgba(26, 43, 60, 0.055);
   scroll-margin-top: 1rem;
 }
 
@@ -605,8 +610,8 @@ a:hover {
 
 .ft-editorial-card__grid {
   display: grid;
-  grid-template-columns: minmax(76px, 104px) minmax(0, 1fr) minmax(238px, 292px);
-  gap: 1.75rem 2.25rem;
+  grid-template-columns: minmax(72px, 96px) minmax(0, 1fr) minmax(204px, 256px);
+  gap: 2rem 2.5rem;
   align-items: start;
 }
 
@@ -683,7 +688,7 @@ a:hover {
   line-height: 1.55;
   font-weight: 400;
   color: color-mix(in srgb, var(--ec-navy) 72%, #6b7280);
-  max-width: 38rem;
+  max-width: 40rem;
 }
 
 .ft-editorial-card__eyebrow {
@@ -698,7 +703,7 @@ a:hover {
 .ft-editorial-card__eyebrow--spot {
   margin: 0.15rem 0 0.6rem;
   letter-spacing: 0.17em;
-  color: color-mix(in srgb, var(--ec-navy) 72%, var(--ec-rust));
+  color: color-mix(in srgb, var(--ec-navy) 58%, #6b7280);
 }
 
 .ft-editorial-card__spot-block {
@@ -712,10 +717,23 @@ a:hover {
 .ft-editorial-card__eyebrow--serving {
   margin: 0 0 0.7rem;
   letter-spacing: 0.15em;
-  color: color-mix(in srgb, var(--ec-navy) 52%, var(--ec-rust));
+  color: color-mix(in srgb, var(--ec-navy) 58%, #6b7280);
 }
 
-/* Venue stack: Name ↗ (linked) / plain name, then neighborhood */
+.ft-editorial-card__eyebrow--why {
+  margin: 0 0 0.65rem;
+  color: var(--ec-rust);
+}
+
+.ft-editorial-card__eyebrow--venues {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--ec-navy) 58%, #6b7280);
+}
+
+/* Venue stack: “Name ↗ · Neighborhood” on one line — only the name is linked */
 .ft-editorial-card__venue-stack {
   display: flex;
   flex-direction: column;
@@ -743,28 +761,67 @@ a:hover {
   line-height: 1.35;
 }
 
+.ft-editorial-card__venue-name-line--inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.2rem;
+  row-gap: 0.1rem;
+}
+
+.ft-editorial-card__venue-name-line--stacked {
+  display: block;
+  line-height: 1.35;
+}
+
+.ft-editorial-card__venue-inline-sep {
+  font-weight: 400;
+  color: color-mix(in srgb, var(--ec-navy) 46%, #6b7280);
+  user-select: none;
+}
+
+.ft-editorial-card__venue-hood-inline {
+  font-weight: 400;
+  color: color-mix(in srgb, var(--ec-navy) 46%, #6b7280);
+}
+
+.ft-editorial-card__venue-stack--spot .ft-editorial-card__venue-hood-inline,
+.ft-editorial-card__venue-stack--spot .ft-editorial-card__venue-inline-sep {
+  font-size: 0.8125rem;
+}
+
+.ft-editorial-card__venue-stack--serving .ft-editorial-card__venue-hood-inline,
+.ft-editorial-card__venue-stack--serving .ft-editorial-card__venue-inline-sep,
+.ft-editorial-card__venue-stack--compact .ft-editorial-card__venue-hood-inline,
+.ft-editorial-card__venue-stack--compact .ft-editorial-card__venue-inline-sep {
+  font-size: 0.75rem;
+}
+
 .ft-editorial-card__venue-name {
   font-weight: 700;
   color: var(--ec-navy);
 }
 
-.ft-editorial-card__venue-name-link {
-  display: inline;
-  text-decoration: none;
-  color: var(--ec-navy);
-  font-weight: 700;
-  transition: opacity 0.18s ease;
-}
-
+/* Restaurant name only — editorial link (inherits palette, underline on hover). */
 .ft-editorial-card a.ft-editorial-card__venue-name-link,
 .ft-editorial-card a.ft-editorial-card__venue-name-link:visited {
+  display: inline;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.ft-editorial-card a.ft-editorial-card__venue-name-link .ft-editorial-card__venue-name {
   color: var(--ec-navy);
 }
 
 .ft-editorial-card a.ft-editorial-card__venue-name-link:hover {
-  opacity: 0.85;
+  opacity: 0.92;
   text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--ft-ext-link-accent) 44%, var(--ec-navy));
   text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 .ft-report-page .ft-editorial-card a.ft-editorial-card__venue-name-link:hover {
@@ -791,22 +848,28 @@ a:hover {
   font-weight: 500;
   color: color-mix(in srgb, var(--ec-navy) 42%, #6b7280);
   opacity: 0.55;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.ft-editorial-card a.ft-editorial-card__venue-name-link:hover .ft-editorial-card__venue-glyph {
+  color: color-mix(in srgb, var(--ft-ext-link-accent) 35%, var(--ec-navy));
+  opacity: 0.78;
 }
 
 .ft-home-dispatch .ft-home-early-card .ft-editorial-card__venue-stack--compact .ft-editorial-card__venue-name {
   color: var(--ft-ink);
 }
 
-.ft-home-dispatch .ft-home-early-card .ft-editorial-card__venue-stack--compact .ft-editorial-card__venue-name-link,
-.ft-home-dispatch .ft-home-early-card .ft-editorial-card__venue-stack--compact .ft-editorial-card__venue-name-link:visited {
+.ft-home-dispatch .ft-home-early-card .ft-editorial-card__venue-name-link .ft-editorial-card__venue-name {
   color: var(--ft-ink);
 }
 
-.ft-home-dispatch .ft-home-early-card .ft-editorial-card__venue-stack--compact .ft-editorial-card__venue-hood-line {
+.ft-home-dispatch .ft-home-early-card .ft-editorial-card__venue-hood-inline,
+.ft-home-dispatch .ft-home-early-card .ft-editorial-card__venue-inline-sep {
   color: color-mix(in srgb, var(--ft-ink) 52%, var(--ft-muted));
 }
 
-.ft-home-dispatch .ft-home-early-card .ft-editorial-card__venue-stack--compact .ft-editorial-card__venue-name-link .ft-editorial-card__venue-glyph {
+.ft-home-dispatch .ft-home-early-card .ft-editorial-card__venue-name-link .ft-editorial-card__venue-glyph {
   color: color-mix(in srgb, var(--ft-ink) 45%, var(--ft-muted));
 }
 
@@ -855,12 +918,9 @@ a:hover {
 }
 
 .ft-editorial-card__rest-grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 1.25rem 2.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem 1.75rem;
   margin-bottom: 1.2rem;
 }
 
@@ -960,30 +1020,40 @@ a:hover {
   color: color-mix(in srgb, var(--ec-navy) 82%, #6b7280);
 }
 
-/* Insight rail — signature stamp module */
+/* Insight rail — light panel */
 .ft-editorial-card__insight {
-  --insight-edge: color-mix(in srgb, var(--ec-navy) 17%, #ccc7bc);
-  background: #fff;
+  --insight-pad-x: 1.05rem;
+  --insight-edge: color-mix(in srgb, var(--ec-navy) 6.5%, #d8d2c8);
+  background: color-mix(in srgb, var(--ec-cream) 55%, #e8e4dc);
   border: 1px solid var(--insight-edge);
   border-radius: 12px;
-  padding: 0.95rem 0.95rem 0.875rem;
-  box-shadow: 0 1px 3px rgba(26, 43, 60, 0.055);
+  padding: 1.05rem var(--insight-pad-x) 1.1rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
 }
 
 .ft-editorial-insight__block {
   display: flex;
   gap: 0.5rem;
   align-items: flex-start;
-  margin-bottom: 0.72rem;
+  margin-bottom: 0.55rem;
 }
 
-/* Extra air between Cuisine / Origin and Meal Type so the pair reads as two beats */
-.ft-editorial-card__insight > .ft-editorial-insight__block:first-of-type {
-  margin-bottom: calc(0.72rem + 5px);
+.ft-editorial-insight__block--cuisine {
+  margin-bottom: 0.58rem;
 }
 
-.ft-editorial-insight__block:last-of-type {
-  margin-bottom: 0;
+.ft-editorial-insight__block--meal {
+  margin-bottom: 0.48rem;
+}
+
+/* Space after hero + credit before supporting metadata */
+.ft-editorial-card__hero--rail-lead + .ft-editorial-insight__block--cuisine {
+  margin-top: 1rem;
+}
+
+.ft-editorial-insight__block--meal + .ft-editorial-insight__hairline--before-metrics {
+  margin-top: 0.92rem;
+  margin-bottom: 0.55rem;
 }
 
 .ft-editorial-insight__circle {
@@ -998,7 +1068,7 @@ a:hover {
   color: color-mix(in srgb, var(--ec-navy) 75%, #2563eb);
 }
 
-.ft-editorial-insight__block:nth-child(2) .ft-editorial-insight__circle {
+.ft-editorial-insight__block--meal .ft-editorial-insight__circle {
   background: color-mix(in srgb, var(--ec-green) 22%, transparent);
   color: var(--ec-green);
 }
@@ -1025,7 +1095,7 @@ a:hover {
   margin: 0.1rem 0 0;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--ec-green);
+  color: color-mix(in srgb, var(--ec-navy) 52%, #6b7280);
 }
 
 .ft-editorial-insight__hairline {
@@ -1034,13 +1104,18 @@ a:hover {
   margin: 0.62rem 0 0.5rem;
 }
 
+.ft-editorial-insight__hairline--before-metrics {
+  margin-top: 1.05rem;
+  margin-bottom: 0.62rem;
+}
+
 .ft-editorial-insight__stamp {
   margin: 0 0 0.5rem;
   font-size: 0.5rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--ec-navy);
+  color: color-mix(in srgb, var(--ec-navy) 55%, #6b7280);
 }
 
 .ft-editorial-strength {
@@ -1140,12 +1215,89 @@ a:hover {
   background: color-mix(in srgb, var(--ec-navy) 8%, #e5e7eb);
 }
 
+/* Right rail — metrics stay quiet; hero leads the story */
+.ft-editorial-card__insight .ft-editorial-strength {
+  gap: 0.36rem;
+  margin-bottom: 0.45rem;
+}
+
+.ft-editorial-card__insight .ft-editorial-strength:last-of-type {
+  margin-bottom: 0.32rem;
+}
+
+.ft-editorial-card__insight .ft-editorial-strength__icon {
+  width: 21px;
+  height: 21px;
+}
+
+.ft-editorial-card__insight .ft-editorial-strength__icon--rust {
+  background: color-mix(in srgb, var(--ec-rust) 11%, transparent);
+  color: color-mix(in srgb, var(--ec-rust) 78%, var(--ec-navy));
+}
+
+.ft-editorial-card__insight .ft-editorial-strength__icon--gold {
+  background: color-mix(in srgb, var(--ec-gold) 12%, transparent);
+  color: color-mix(in srgb, var(--ec-gold) 72%, var(--ec-navy));
+}
+
+.ft-editorial-card__insight .ft-editorial-strength__top {
+  margin-bottom: 0.18rem;
+}
+
+.ft-editorial-card__insight .ft-editorial-strength__name {
+  font-size: 0.5rem;
+  color: color-mix(in srgb, var(--ec-navy) 56%, #6b7280);
+}
+
+.ft-editorial-card__insight .ft-editorial-strength__score {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.ft-editorial-card__insight .ft-editorial-strength__score--rust {
+  color: color-mix(in srgb, var(--ec-rust) 72%, var(--ec-navy));
+}
+
+.ft-editorial-card__insight .ft-editorial-strength__score--gold {
+  color: color-mix(in srgb, var(--ec-gold) 65%, var(--ec-navy));
+}
+
+.ft-editorial-card__insight .ft-editorial-segbar {
+  gap: 1px;
+}
+
+.ft-editorial-card__insight .ft-editorial-segbar__on,
+.ft-editorial-card__insight .ft-editorial-segbar__off {
+  height: 6px;
+  border-radius: 1px;
+}
+
+.ft-editorial-card__insight .ft-editorial-segbar--rust .ft-editorial-segbar__on {
+  background: color-mix(in srgb, var(--ec-rust) 68%, var(--ec-navy));
+}
+
+.ft-editorial-card__insight .ft-editorial-segbar--rust .ft-editorial-segbar__off {
+  background: color-mix(in srgb, var(--ec-navy) 6%, #e6e4e0);
+}
+
+.ft-editorial-card__insight .ft-editorial-segbar--gold .ft-editorial-segbar__on {
+  background: color-mix(in srgb, var(--ec-gold) 62%, var(--ec-navy));
+}
+
+.ft-editorial-card__insight .ft-editorial-segbar--gold .ft-editorial-segbar__off {
+  background: color-mix(in srgb, var(--ec-navy) 6%, #e6e4e0);
+}
+
+.ft-editorial-card__insight .ft-editorial-card__move {
+  margin-top: 0.72rem;
+}
+
 .ft-editorial-card__move {
   margin-top: 0.82rem;
   padding: 0.62rem 0.72rem;
   border-radius: 10px;
-  background: color-mix(in srgb, var(--ec-green) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ec-green) 28%, transparent);
+  background: color-mix(in srgb, var(--ec-navy) 5%, #f3f1ec);
+  border: 1px solid color-mix(in srgb, var(--ec-navy) 9%, #ddd8cf);
 }
 
 .ft-editorial-card__move-label {
@@ -1154,7 +1306,7 @@ a:hover {
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ec-navy);
+  color: color-mix(in srgb, var(--ec-navy) 52%, #6b7280);
 }
 
 .ft-editorial-card__move-copy {
@@ -1165,7 +1317,104 @@ a:hover {
   color: var(--ec-navy);
 }
 
+.ft-editorial-card__hero {
+  margin: 0;
+  padding: 0;
+}
+
+.ft-editorial-card__hero--rail {
+  margin-top: 0;
+  margin-left: calc(-1 * var(--insight-pad-x));
+  margin-right: calc(-1 * var(--insight-pad-x));
+  width: calc(100% + 2 * var(--insight-pad-x));
+  max-width: none;
+  box-sizing: border-box;
+}
+
+.ft-editorial-card__hero--rail-lead {
+  margin-bottom: 0.06rem;
+}
+
+.ft-editorial-card__hero-frame {
+  position: relative;
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  background: color-mix(in srgb, var(--ec-navy) 5%, #e8e6e1);
+  box-shadow: none;
+}
+
+.ft-editorial-card__hero--rail .ft-editorial-card__hero-frame {
+  min-height: 10.5rem;
+}
+
+.ft-editorial-card__hero-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.5s ease;
+  filter: saturate(0.87) contrast(0.93) brightness(1.02);
+}
+
+.ft-editorial-card__hero-frame:hover .ft-editorial-card__hero-img,
+.ft-editorial-card__hero-frame:focus-within .ft-editorial-card__hero-img {
+  transform: scale(1.028);
+}
+
+.ft-editorial-card__hero-credit {
+  margin: 0.22rem 0 0;
+  padding: 0 var(--insight-pad-x);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.625rem;
+  line-height: 1.38;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--ec-navy) 38%, #6b7280);
+}
+
+.ft-editorial-card a.ft-editorial-card__hero-credit-link {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.ft-editorial-card a.ft-editorial-card__hero-credit-link:hover {
+  opacity: 0.85;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--ec-rust) 40%, var(--ec-navy));
+}
+
+@media (min-width: 961px) {
+  .ft-editorial-card__insight {
+    padding-top: 0.88rem;
+  }
+
+  .ft-editorial-card__hero--rail-lead {
+    margin-top: -0.88rem;
+  }
+
+  .ft-editorial-card__hero--rail .ft-editorial-card__hero-frame {
+    min-height: 11.85rem;
+  }
+}
+
 @media (max-width: 960px) {
+  .ft-editorial-insight__hairline--before-metrics {
+    margin-top: 0.85rem;
+  }
+
+  .ft-editorial-card__hero--rail-lead {
+    margin-top: -1.05rem;
+  }
+
+  .ft-editorial-card__hero--rail .ft-editorial-card__hero-frame {
+    min-height: 10rem;
+  }
+
   .ft-editorial-card__grid {
     grid-template-columns: 1fr;
     gap: 1.35rem;
@@ -1183,16 +1432,13 @@ a:hover {
   }
 
   .ft-editorial-card__rest-grid {
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: stretch;
+    grid-template-columns: 1fr;
     gap: 0.75rem 0;
-    row-gap: 0.75rem;
-    column-gap: 0;
+    margin-bottom: 1rem;
   }
 
   .ft-editorial-card__rest-cell {
-    flex: 0 0 auto;
+    min-width: 0;
   }
 
   .ft-editorial-card__insight {
@@ -1415,10 +1661,9 @@ a:hover {
     box-shadow 0.18s ease;
 }
 
-.ft-where-pick-row--linked:hover {
-  background: color-mix(in srgb, var(--ft-ink) 6.5%, transparent);
-  border-color: color-mix(in srgb, var(--ft-line) 55%, var(--ft-muted));
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+.ft-where-pick-row:hover {
+  background: color-mix(in srgb, var(--ft-ink) 5.5%, transparent);
+  border-color: color-mix(in srgb, var(--ft-line) 60%, var(--ft-muted));
 }
 
 .ft-where-pick-main {
@@ -1426,6 +1671,27 @@ a:hover {
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+}
+
+.ft-where-pick-name-line--inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.2rem;
+  row-gap: 0.15rem;
+}
+
+.ft-where-pick-inline-sep {
+  font-weight: 400;
+  color: color-mix(in srgb, var(--ft-ink) 55%, var(--ft-muted));
+  user-select: none;
+}
+
+.ft-where-pick-hood-inline {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--ft-ink) 62%, var(--ft-muted));
 }
 
 .ft-where-pick-name-line {
@@ -1440,24 +1706,38 @@ a:hover {
   color: var(--ft-ink);
 }
 
-.ft-where-pick-name--link {
+a.ft-where-pick-name-link,
+a.ft-where-pick-name-link:visited {
+  display: inline;
   text-decoration: none;
-  color: var(--ft-ink);
+  color: inherit;
   cursor: pointer;
-  transition: opacity 0.18s ease;
+  transition: opacity 0.2s ease;
 }
 
-.ft-where-pick-row--linked:hover .ft-where-pick-name--link {
+a.ft-where-pick-name-link:hover {
+  opacity: 0.92;
   text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--ft-ext-link-accent) 42%, var(--ft-ink));
   text-underline-offset: 3px;
-  opacity: 0.85;
+  text-decoration-thickness: 1px;
 }
 
-.ft-where-pick-name--link .ft-where-pick-glyph {
+.ft-where-pick-name-link .ft-where-pick-name {
+  color: var(--ft-ink);
+}
+
+.ft-where-pick-name-link .ft-where-pick-glyph {
   font-size: 0.72em;
   font-weight: 500;
   color: color-mix(in srgb, var(--ft-muted) 88%, var(--ft-ink));
   opacity: 0.65;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+a.ft-where-pick-name-link:hover .ft-where-pick-glyph {
+  color: color-mix(in srgb, var(--ft-ext-link-accent) 32%, var(--ft-ink));
+  opacity: 0.85;
 }
 
 .ft-where-pick-meta {
@@ -2046,19 +2326,33 @@ a:hover {
   font-weight: 700;
   color: var(--ft-ink);
   text-decoration: none;
-  transition: opacity 0.18s ease;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
 .ft-early__card-foot a.ft-early__card-rest-link:hover {
   text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--ft-ext-link-accent) 42%, var(--ft-ink));
   text-underline-offset: 3px;
-  opacity: 0.85;
+  text-decoration-thickness: 1px;
+  opacity: 0.92;
+}
+
+.ft-early__card-foot a.ft-early__card-rest-link .ft-early__card-rest-detail {
+  font-weight: 400;
+  color: color-mix(in srgb, var(--ft-muted) 88%, var(--ft-ink));
 }
 
 .ft-early__card-rest-link .ft-early__card-rest-glyph {
   font-weight: 500;
   font-size: 0.92em;
   opacity: 0.62;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.ft-early__card-foot a.ft-early__card-rest-link:hover .ft-early__card-rest-glyph {
+  color: color-mix(in srgb, var(--ft-ext-link-accent) 28%, var(--ft-ink));
+  opacity: 0.88;
 }
 
 /* Footer */
@@ -2123,4 +2417,82 @@ a:hover {
     justify-self: center;
     justify-content: center;
   }
+}
+
+.ft-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ft-editorial-card__venue-name-inner,
+.ft-where-pick-name-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  vertical-align: baseline;
+}
+
+.ft-venue-social-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.72;
+}
+
+.ft-venue-social-badge__svg {
+  display: block;
+}
+
+.ft-venue-social-badge--instagram {
+  color: color-mix(in srgb, var(--ft-ext-link-accent) 55%, var(--ec-navy));
+}
+
+.ft-home-dispatch .ft-home-early-card .ft-venue-social-badge--instagram {
+  color: color-mix(in srgb, var(--ft-ext-link-accent) 50%, var(--ft-ink));
+}
+
+.ft-venue-social-badge--tiktok {
+  color: color-mix(in srgb, var(--ft-ink) 35%, #2c2c2c);
+}
+
+.ft-momentum-cue {
+  margin: 0 0 1.05rem;
+  max-width: 36rem;
+}
+
+.ft-momentum-cue__kicker {
+  display: block;
+  margin: 0 0 0.3rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ec-navy) 48%, #6b7280);
+}
+
+.ft-home-dispatch .ft-momentum-cue__kicker {
+  color: color-mix(in srgb, var(--ft-ink) 44%, var(--ft-muted));
+}
+
+.ft-momentum-cue__dek {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--ec-navy) 72%, #5a5f66);
+}
+
+.ft-home-dispatch .ft-momentum-cue__dek {
+  color: color-mix(in srgb, var(--ft-ink) 68%, var(--ft-muted));
 }

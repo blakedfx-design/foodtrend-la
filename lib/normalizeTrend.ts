@@ -4,11 +4,12 @@ import type {
   TrendConfidence,
   TrendRestaurant,
 } from "@/types/laFoodTrend";
+import type { TrendSocialSignal, TrendSocialSignalLabel } from "@/types/socialSignal";
 import type {
-  YelpNeighborhoodCluster,
-  YelpSignal,
-} from "@/types/yelpSignal";
-import type { WherePick } from "@/components/foodtrend/wherePick";
+  ListingsNeighborhoodCluster,
+  ListingsSignal,
+} from "@/types/listingsSignal";
+import { isLikelyGoogleMapsUrl, type WherePick } from "@/components/foodtrend/wherePick";
 import {
   WHERE_SHOWING_PICKS,
   getEntryRestLine,
@@ -20,11 +21,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function parseNeighborhoodClusters(raw: unknown): YelpNeighborhoodCluster[] {
+function parseListingsNeighborhoodClusters(raw: unknown): ListingsNeighborhoodCluster[] {
   if (!Array.isArray(raw)) {
     return [];
   }
-  const out: YelpNeighborhoodCluster[] = [];
+  const out: ListingsNeighborhoodCluster[] = [];
   for (const el of raw) {
     if (!isRecord(el)) {
       continue;
@@ -43,13 +44,18 @@ function parseNeighborhoodClusters(raw: unknown): YelpNeighborhoodCluster[] {
   return out;
 }
 
-function parseTrendYelpSignals(raw: unknown): YelpSignal[] | undefined {
-  if (!Array.isArray(raw) || raw.length === 0) {
+function parseTrendListingsSignals(r: Record<string, unknown>): ListingsSignal[] | undefined {
+  const rawSignals = r.listingsSignals ?? r.yelpSignals;
+  if (!Array.isArray(rawSignals) || rawSignals.length === 0) {
     return undefined;
   }
-  const out: YelpSignal[] = [];
-  for (const el of raw) {
-    if (!isRecord(el) || el.source !== "yelp") {
+  const out: ListingsSignal[] = [];
+  for (const el of rawSignals) {
+    if (!isRecord(el)) {
+      continue;
+    }
+    const src = el.source;
+    if (src !== "listings" && src !== "yelp") {
       continue;
     }
     const term_searched =
@@ -61,8 +67,8 @@ function parseTrendYelpSignals(raw: unknown): YelpSignal[] | undefined {
     if (!term_searched || bc == null) {
       continue;
     }
-    const scoreRaw = el.yelp_signal_score;
-    const yelp_signal_score =
+    const scoreRaw = el.listings_signal_score ?? el.yelp_signal_score;
+    const listings_signal_score =
       typeof scoreRaw === "number" && Number.isFinite(scoreRaw)
         ? Math.round(scoreRaw)
         : 0;
@@ -71,7 +77,7 @@ function parseTrendYelpSignals(raw: unknown): YelpSignal[] | undefined {
         ? Math.max(0, Math.floor(el.total_review_volume))
         : 0;
     out.push({
-      source: "yelp",
+      source: "listings",
       term_searched,
       business_count: bc,
       avg_rating:
@@ -79,9 +85,56 @@ function parseTrendYelpSignals(raw: unknown): YelpSignal[] | undefined {
           ? el.avg_rating
           : null,
       total_review_volume: tr,
-      neighborhood_clusters: parseNeighborhoodClusters(el.neighborhood_clusters),
-      yelp_signal_score,
+      neighborhood_clusters: parseListingsNeighborhoodClusters(el.neighborhood_clusters),
+      listings_signal_score,
     });
+  }
+  return out.length > 0 ? out : undefined;
+}
+
+const SOCIAL_LABELS = new Set<TrendSocialSignalLabel>([
+  "Creator Reel",
+  "TikTok post",
+  "Reddit mention",
+]);
+
+function defaultSocialLabel(platform: "instagram" | "tiktok" | "reddit"): TrendSocialSignalLabel {
+  if (platform === "instagram") {
+    return "Creator Reel";
+  }
+  if (platform === "tiktok") {
+    return "TikTok post";
+  }
+  return "Reddit mention";
+}
+
+function parseTrendSocialSignals(r: Record<string, unknown>): TrendSocialSignal[] | undefined {
+  const rawSignals = r.socialSignals ?? r.social_signals;
+  if (!Array.isArray(rawSignals) || rawSignals.length === 0) {
+    return undefined;
+  }
+  const out: TrendSocialSignal[] = [];
+  for (const el of rawSignals) {
+    if (!isRecord(el)) {
+      continue;
+    }
+    const platform = el.platform;
+    if (platform !== "instagram" && platform !== "tiktok" && platform !== "reddit") {
+      continue;
+    }
+    const rawLabel = typeof el.label === "string" ? el.label.trim() : "";
+    const label: TrendSocialSignalLabel = SOCIAL_LABELS.has(rawLabel as TrendSocialSignalLabel)
+      ? (rawLabel as TrendSocialSignalLabel)
+      : defaultSocialLabel(platform);
+    const url = optionalHttpsUrl(el.url);
+    if (!url) {
+      continue;
+    }
+    const strength = el.strength;
+    if (strength !== "high" && strength !== "medium" && strength !== "low") {
+      continue;
+    }
+    out.push({ platform, label, url, strength });
   }
   return out.length > 0 ? out : undefined;
 }
@@ -144,10 +197,59 @@ export function normalizeRestaurant(raw: unknown): TrendRestaurant | null {
   const dishRaw = typeof raw.dish === "string" ? raw.dish.trim() : "";
   const dish = dishRaw || undefined;
 
-  const url = optionalHttpsUrl(raw.url);
-  const yelp_url = optionalHttpsUrl(raw.yelp_url);
-  const source_url = optionalHttpsUrl(raw.source_url);
-  const link = optionalHttpsUrl(raw.link);
+  const instagramRaw = readOptionalTrimmedString(raw, "instagramUrl", "instagram_url");
+  const instagramUrl = instagramRaw ? optionalHttpsUrl(instagramRaw) : undefined;
+  const tiktokRaw = readOptionalTrimmedString(raw, "tiktokUrl", "tiktok_url");
+  const tiktokUrl = tiktokRaw ? optionalHttpsUrl(tiktokRaw) : undefined;
+
+  let websiteUrl =
+    readOptionalTrimmedString(raw, "websiteUrl", "website_url") ?? undefined;
+  websiteUrl = websiteUrl ? optionalHttpsUrl(websiteUrl) : undefined;
+
+  let googleMapsUrl =
+    readOptionalTrimmedString(raw, "googleMapsUrl", "google_maps_url") ?? undefined;
+  googleMapsUrl = googleMapsUrl ? optionalHttpsUrl(googleMapsUrl) : undefined;
+
+  let fallbackUrl =
+    readOptionalTrimmedString(raw, "fallbackUrl", "fallback_url") ?? undefined;
+  fallbackUrl = fallbackUrl ? optionalHttpsUrl(fallbackUrl) : undefined;
+
+  if (fallbackUrl && isLikelyGoogleMapsUrl(fallbackUrl) && !googleMapsUrl) {
+    googleMapsUrl = fallbackUrl;
+    fallbackUrl = undefined;
+  }
+
+  const legacySite = optionalHttpsUrl(raw.url);
+  if (legacySite) {
+    if (isLikelyGoogleMapsUrl(legacySite) && !googleMapsUrl) {
+      googleMapsUrl = legacySite;
+    } else if (!websiteUrl) {
+      websiteUrl = legacySite;
+    }
+  }
+
+  const legacyVendorUrl = optionalHttpsUrl((raw as Record<string, unknown>).yelp_url);
+  if (legacyVendorUrl && !websiteUrl) {
+    websiteUrl = legacyVendorUrl;
+  }
+
+  const legacySource = optionalHttpsUrl(raw.source_url);
+  if (legacySource) {
+    if (isLikelyGoogleMapsUrl(legacySource) && !googleMapsUrl) {
+      googleMapsUrl = legacySource;
+    } else if (!websiteUrl) {
+      websiteUrl = legacySource;
+    }
+  }
+
+  const legacyLink = optionalHttpsUrl(raw.link);
+  if (legacyLink) {
+    if (isLikelyGoogleMapsUrl(legacyLink) && !googleMapsUrl) {
+      googleMapsUrl = legacyLink;
+    } else if (!websiteUrl) {
+      websiteUrl = legacyLink;
+    }
+  }
 
   const sourceRaw = typeof raw.source === "string" ? raw.source.trim() : "";
   const source = sourceRaw || undefined;
@@ -172,10 +274,11 @@ export function normalizeRestaurant(raw: unknown): TrendRestaurant | null {
     name,
     neighborhood,
     ...(dish ? { dish } : {}),
-    ...(url ? { url } : {}),
-    ...(yelp_url ? { yelp_url } : {}),
-    ...(source_url ? { source_url } : {}),
-    ...(link ? { link } : {}),
+    ...(instagramUrl ? { instagramUrl } : {}),
+    ...(tiktokUrl ? { tiktokUrl } : {}),
+    ...(websiteUrl ? { websiteUrl } : {}),
+    ...(googleMapsUrl ? { googleMapsUrl } : {}),
+    ...(fallbackUrl ? { fallbackUrl } : {}),
     ...(source ? { source } : {}),
     ...(rating != null ? { rating } : {}),
     ...(review_count != null ? { review_count } : {}),
@@ -205,17 +308,20 @@ function restaurantToDiskJson(r: TrendRestaurant): Record<string, unknown> {
   if (r.dish != null && r.dish !== "") {
     o.dish = r.dish;
   }
-  if (r.url != null) {
-    o.url = r.url;
+  if (r.instagramUrl != null && r.instagramUrl !== "") {
+    o.instagramUrl = r.instagramUrl;
   }
-  if (r.yelp_url != null) {
-    o.yelp_url = r.yelp_url;
+  if (r.tiktokUrl != null && r.tiktokUrl !== "") {
+    o.tiktokUrl = r.tiktokUrl;
   }
-  if (r.source_url != null) {
-    o.source_url = r.source_url;
+  if (r.websiteUrl != null && r.websiteUrl !== "") {
+    o.websiteUrl = r.websiteUrl;
   }
-  if (r.link != null) {
-    o.link = r.link;
+  if (r.googleMapsUrl != null && r.googleMapsUrl !== "") {
+    o.googleMapsUrl = r.googleMapsUrl;
+  }
+  if (r.fallbackUrl != null && r.fallbackUrl !== "") {
+    o.fallbackUrl = r.fallbackUrl;
   }
   if (r.source != null) {
     o.source = r.source;
@@ -230,7 +336,9 @@ function restaurantToDiskJson(r: TrendRestaurant): Record<string, unknown> {
 }
 
 export const TREND_SHORT_DESCRIPTOR = "short descriptor";
-export const TREND_WHY_EVERYWHERE = "WHY IT'S EVERYWHERE";
+/** Canonical on-disk key; `WHY IT'S EVERYWHERE` still read for older files. */
+export const TREND_WHY_HITTING = "WHY IT'S HITTING";
+const TREND_WHY_EVERYWHERE_LEGACY = "WHY IT'S EVERYWHERE";
 export const TREND_MOST_SPOTTED = "MOST SPOTTED";
 export const TREND_WHAT_TO_ORDER = "WHAT TO ORDER";
 export const TREND_WORTH_SPLURGE = "WORTH THE SPLURGE";
@@ -262,17 +370,20 @@ function picksFromRestaurantsAndMenu(
       neighborhood: r.neighborhood || "Los Angeles",
       dish,
     };
-    if (r.url != null) {
-      pick.url = r.url;
+    if (r.instagramUrl != null) {
+      pick.instagramUrl = r.instagramUrl;
     }
-    if (r.yelp_url != null) {
-      pick.yelp_url = r.yelp_url;
+    if (r.tiktokUrl != null) {
+      pick.tiktokUrl = r.tiktokUrl;
     }
-    if (r.source_url != null) {
-      pick.source_url = r.source_url;
+    if (r.websiteUrl != null) {
+      pick.websiteUrl = r.websiteUrl;
     }
-    if (r.link != null) {
-      pick.link = r.link;
+    if (r.googleMapsUrl != null) {
+      pick.googleMapsUrl = r.googleMapsUrl;
+    }
+    if (r.fallbackUrl != null) {
+      pick.fallbackUrl = r.fallbackUrl;
     }
     if (r.source != null) {
       pick.source = r.source;
@@ -310,7 +421,12 @@ export function normalizeTrendRow(row: unknown): Trend {
   const neighborhoods = (Array.isArray(r.neighborhoods) ? r.neighborhoods : []) as string[];
 
   const shortDesc = String(r[TREND_SHORT_DESCRIPTOR] ?? r.description ?? "");
-  const whyAll = String(r[TREND_WHY_EVERYWHERE] ?? r.whyItsEverywhere ?? "");
+  const whyAll = String(
+    r[TREND_WHY_HITTING] ??
+      r[TREND_WHY_EVERYWHERE_LEGACY] ??
+      r.whyItsEverywhere ??
+      "",
+  );
   const worksRaw = String(r[TREND_WHY_WORKS] ?? r.whyItWorks ?? "").trim();
 
   const picks = picksFromRestaurantsAndMenu(name, restaurants, menuItems);
@@ -332,13 +448,22 @@ export function normalizeTrendRow(row: unknown): Trend {
       ? r.sourceCount
       : undefined;
 
-  const yelpSignals = parseTrendYelpSignals(r.yelpSignals);
+  const listingsSignals = parseTrendListingsSignals(r);
+  const socialSignals = parseTrendSocialSignals(r);
 
   const signalScore = Number(r.signalScore ?? 0);
   const cuisineOrigin = readOptionalTrimmedString(r, "cuisineOrigin", "cuisine_origin");
   const mealType = readOptionalTrimmedString(r, "mealType", "meal_type");
   const mealMoment = readOptionalTrimmedString(r, "mealMoment", "meal_moment");
   const moveCopy = readOptionalTrimmedString(r, "moveCopy", "move_copy");
+  const heroImageUrl = readOptionalTrimmedString(r, "heroImageUrl", "hero_image_url");
+  const heroImageSource = readOptionalTrimmedString(r, "heroImageSource", "hero_image_source");
+  const heroImageSourceUrl = readOptionalTrimmedString(
+    r,
+    "heroImageSourceUrl",
+    "hero_image_source_url",
+  );
+  const heroImageCredit = readOptionalTrimmedString(r, "heroImageCredit", "hero_image_credit");
   const rawMom = readOptionalFiniteNumber(r, "momentumScore", "momentum_score");
   const rawPop = readOptionalFiniteNumber(r, "popularityScore", "popularity_score");
   const momentumScore =
@@ -365,15 +490,20 @@ export function normalizeTrendRow(row: unknown): Trend {
     whyItWorks: worksRaw || undefined,
     evidenceSummary,
     sourceCount,
-    ...(yelpSignals != null ? { yelpSignals } : {}),
+    ...(listingsSignals != null ? { listingsSignals } : {}),
+    ...(socialSignals != null ? { socialSignals } : {}),
     ...(cuisineOrigin ? { cuisineOrigin } : {}),
     ...(mealType ? { mealType } : {}),
     ...(mealMoment ? { mealMoment } : {}),
     ...(moveCopy ? { moveCopy } : {}),
+    ...(heroImageUrl ? { heroImageUrl } : {}),
+    ...(heroImageSource ? { heroImageSource } : {}),
+    ...(heroImageSourceUrl ? { heroImageSourceUrl } : {}),
+    ...(heroImageCredit ? { heroImageCredit } : {}),
     momentumScore,
     popularityScore,
     [TREND_SHORT_DESCRIPTOR]: shortDesc,
-    [TREND_WHY_EVERYWHERE]: whyAll,
+    [TREND_WHY_HITTING]: whyAll,
     [TREND_MOST_SPOTTED]: most,
     [TREND_WHAT_TO_ORDER]: [...whatToOrder],
     [TREND_WORTH_SPLURGE]: worth,
@@ -388,7 +518,7 @@ export function trendToJsonObject(t: Trend): Record<string, unknown> {
     id: t.id,
     name: t.name,
     [TREND_SHORT_DESCRIPTOR]: t[TREND_SHORT_DESCRIPTOR],
-    [TREND_WHY_EVERYWHERE]: t[TREND_WHY_EVERYWHERE],
+    [TREND_WHY_HITTING]: t[TREND_WHY_HITTING],
     signalScore: t.signalScore,
     lastUpdated: t.lastUpdated,
     sources: t.sources,
@@ -404,13 +534,22 @@ export function trendToJsonObject(t: Trend): Record<string, unknown> {
       ? { evidenceSummary: t.evidenceSummary }
       : {}),
     ...(t.sourceCount != null ? { sourceCount: t.sourceCount } : {}),
-    ...(t.yelpSignals != null && t.yelpSignals.length > 0 ? { yelpSignals: t.yelpSignals } : {}),
+    ...(t.listingsSignals != null && t.listingsSignals.length > 0
+      ? { listingsSignals: t.listingsSignals }
+      : {}),
+    ...(t.socialSignals != null && t.socialSignals.length > 0
+      ? { socialSignals: t.socialSignals }
+      : {}),
     ...(t.cuisineOrigin ? { cuisineOrigin: t.cuisineOrigin } : {}),
     ...(t.mealType ? { mealType: t.mealType } : {}),
     ...(t.mealMoment ? { mealMoment: t.mealMoment } : {}),
     ...(t.moveCopy ? { moveCopy: t.moveCopy } : {}),
     momentumScore: t.momentumScore,
     popularityScore: t.popularityScore,
+    ...(t.heroImageUrl ? { heroImageUrl: t.heroImageUrl } : {}),
+    ...(t.heroImageSource ? { heroImageSource: t.heroImageSource } : {}),
+    ...(t.heroImageSourceUrl ? { heroImageSourceUrl: t.heroImageSourceUrl } : {}),
+    ...(t.heroImageCredit ? { heroImageCredit: t.heroImageCredit } : {}),
   };
 }
 

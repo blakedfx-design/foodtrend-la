@@ -2,11 +2,11 @@ import { searchPlaces } from "@/lib/places";
 import { searchReddit } from "@/lib/sources/reddit";
 import type { RedditSearchSignal } from "@/lib/sources/reddit";
 import {
-  fetchYelpPipelineTermSignals,
-  selectYelpSignalsForTrend,
-  yelpEvidenceLine,
-  yelpSupplyBoostFromSignals,
-} from "@/lib/sources/yelp";
+  fetchListingsPipelineTermSignals,
+  listingsEvidenceLine,
+  listingsSupplyBoostFromSignals,
+  selectListingsSignalsForTrend,
+} from "@/lib/sources/listingsSupply";
 
 const SHORT_DESCRIPTOR_KEY = "short descriptor";
 const WHAT_TO_ORDER_KEY = "WHAT TO ORDER";
@@ -60,9 +60,9 @@ function redditEvidenceLine(signal: RedditSearchSignal): string {
 function combinedEvidence(
   placesLine: string,
   redditLine: string,
-  yelpLine: string,
+  listingsLine: string,
 ): string {
-  return [placesLine, redditLine, yelpLine].filter(Boolean).join(" ");
+  return [placesLine, redditLine, listingsLine].filter(Boolean).join(" ");
 }
 
 function evidenceLine(
@@ -151,9 +151,10 @@ function trendSupplyContext(el: Record<string, unknown>): {
 
 /**
  * Weekend cron: for each row in `trends` and `aboutToHit`, run Places
- * (`name` + " Los Angeles"), Reddit (`name` in LA subs, 14d), and optional Yelp Fusion
- * mapped searches (LA supply validation — not a freshness source). Updates signal fields,
- * `yelpSignals` (term aggregates only), `evidenceSummary`, sources, and root `sourceCount`.
+ * (`name` + " Los Angeles"), Reddit (`name` in LA subs, 14d), and optional
+ * open-listings mapped searches (LA supply validation — not a freshness source). Updates
+ * signal fields, `listingsSignals` (term aggregates only), `evidenceSummary`, sources,
+ * and root `sourceCount`.
  */
 export async function applyWeekendGooglePlacesSignalsToParsed(
   parsed: Record<string, unknown>,
@@ -162,18 +163,20 @@ export async function applyWeekendGooglePlacesSignalsToParsed(
   parsed.lastUpdated = now;
   parsed.refreshType = "weekend";
 
-  const hasYelpKey = Boolean(process.env.YELP_API_KEY?.trim());
-  if (!hasYelpKey) {
-    console.log("Yelp source disabled: credentials not configured.");
+  const hasListingsKey = Boolean(
+    process.env.LISTINGS_SUPPLY_API_KEY?.trim() ?? process.env.YELP_API_KEY?.trim(),
+  );
+  if (!hasListingsKey) {
+    console.log("Listings supply API disabled: credentials not configured.");
   }
 
-  let yelpTermSignals: Awaited<ReturnType<typeof fetchYelpPipelineTermSignals>> = [];
-  if (hasYelpKey) {
+  let listingsTermSignals: Awaited<ReturnType<typeof fetchListingsPipelineTermSignals>> = [];
+  if (hasListingsKey) {
     try {
       const editorialTrendNames = editorialTrendNamesFromParsed(parsed);
-      yelpTermSignals = await fetchYelpPipelineTermSignals({ editorialTrendNames });
+      listingsTermSignals = await fetchListingsPipelineTermSignals({ editorialTrendNames });
     } catch {
-      yelpTermSignals = [];
+      listingsTermSignals = [];
     }
   }
 
@@ -202,25 +205,25 @@ export async function applyWeekendGooglePlacesSignalsToParsed(
       }
 
       const { blobLower, neighborhoods } = trendSupplyContext(el);
-      const yelpForTrend =
-        yelpTermSignals.length > 0
-          ? selectYelpSignalsForTrend(yelpTermSignals, {
+      const listingsForTrend =
+        listingsTermSignals.length > 0
+          ? selectListingsSignalsForTrend(listingsTermSignals, {
               trendBlobLower: blobLower,
               trendNeighborhoods: neighborhoods,
               minScore: 30,
               limit: 8,
             })
           : [];
-      if (yelpForTrend.length > 0) {
-        nextSources = mergeSources(nextSources, "Yelp Fusion");
+      if (listingsForTrend.length > 0) {
+        nextSources = mergeSources(nextSources, "Open listings");
       }
-      const yelpLine = yelpEvidenceLine(yelpForTrend);
-      const yelpBoost = yelpSupplyBoostFromSignals(yelpForTrend);
+      const listingsLine = listingsEvidenceLine(listingsForTrend);
+      const listingsBoost = listingsSupplyBoostFromSignals(listingsForTrend);
 
       el.signalScore = clampScore(
         placesScore +
           redditBoostFromMomentum(redditSig.momentumScore, redditSig.postCount) +
-          yelpBoost,
+          listingsBoost,
       );
       el.sources = nextSources;
       el.sourceCount = nextSources.length;
@@ -228,13 +231,14 @@ export async function applyWeekendGooglePlacesSignalsToParsed(
       el.evidenceSummary = combinedEvidence(
         placesLine,
         redditEvidenceLine(redditSig),
-        yelpLine,
+        listingsLine,
       );
-      if (yelpForTrend.length > 0) {
-        el.yelpSignals = yelpForTrend;
+      if (listingsForTrend.length > 0) {
+        el.listingsSignals = listingsForTrend;
       } else {
-        delete el.yelpSignals;
+        delete el.listingsSignals;
       }
+      delete el.yelpSignals;
     }
   }
 

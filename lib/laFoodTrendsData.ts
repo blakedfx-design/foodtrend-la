@@ -9,6 +9,45 @@ import { laFoodTrendsFileToDiskJson, normalizeTrendRow } from "@/lib/normalizeTr
 import type { WherePick } from "@/components/foodtrend/wherePick";
 import { WHERE_SHOWING_PICKS } from "@/lib/whereShowing";
 
+/** Normalize venue labels so curated copy matches `data/la-food-trends.json` rows. */
+function normalizeVenueKey(name: string): string {
+  return name
+    .trim()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "")
+    .replace(/[''\u2018\u2019]/g, "'")
+    .replace(/\s+/g, " ");
+}
+
+function trendRestaurantsByNormalizedName(
+  restaurants: readonly TrendRestaurant[],
+): Map<string, TrendRestaurant> {
+  const map = new Map<string, TrendRestaurant>();
+  for (const r of restaurants) {
+    const key = normalizeVenueKey(r.name);
+    if (key) {
+      map.set(key, r);
+    }
+  }
+  return map;
+}
+
+function mergePickWithRestaurantRow(pick: WherePick, row: TrendRestaurant): WherePick {
+  return {
+    ...pick,
+    neighborhood: pick.neighborhood?.trim() ? pick.neighborhood : row.neighborhood || pick.neighborhood,
+    instagramUrl: pick.instagramUrl ?? row.instagramUrl,
+    tiktokUrl: pick.tiktokUrl ?? row.tiktokUrl,
+    websiteUrl: pick.websiteUrl ?? row.websiteUrl,
+    googleMapsUrl: pick.googleMapsUrl ?? row.googleMapsUrl,
+    fallbackUrl: pick.fallbackUrl ?? row.fallbackUrl,
+    source: pick.source ?? row.source,
+    rating: pick.rating ?? row.rating,
+    review_count: pick.review_count ?? row.review_count,
+  };
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -175,17 +214,20 @@ function wherePickFromRestaurantRow(
     neighborhood: r.neighborhood || "Los Angeles",
     dish,
   };
-  if (r.url != null) {
-    pick.url = r.url;
+  if (r.instagramUrl != null) {
+    pick.instagramUrl = r.instagramUrl;
   }
-  if (r.yelp_url != null) {
-    pick.yelp_url = r.yelp_url;
+  if (r.tiktokUrl != null) {
+    pick.tiktokUrl = r.tiktokUrl;
   }
-  if (r.source_url != null) {
-    pick.source_url = r.source_url;
+  if (r.websiteUrl != null) {
+    pick.websiteUrl = r.websiteUrl;
   }
-  if (r.link != null) {
-    pick.link = r.link;
+  if (r.googleMapsUrl != null) {
+    pick.googleMapsUrl = r.googleMapsUrl;
+  }
+  if (r.fallbackUrl != null) {
+    pick.fallbackUrl = r.fallbackUrl;
   }
   if (r.source != null) {
     pick.source = r.source;
@@ -200,9 +242,13 @@ function wherePickFromRestaurantRow(
 }
 
 export function mapTrendToWherePicks(trend: Trend): WherePick[] {
+  const byName = trendRestaurantsByNormalizedName(trend.restaurants);
   const curated = WHERE_SHOWING_PICKS[trend.name];
   if (curated?.length) {
-    return [...curated];
+    return curated.map((p) => {
+      const row = byName.get(normalizeVenueKey(p.restaurant));
+      return row ? mergePickWithRestaurantRow({ ...p }, row) : { ...p };
+    });
   }
   if (!trend.restaurants.length) {
     return [

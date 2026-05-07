@@ -1,18 +1,28 @@
-import type { YelpSignal } from "@/types/yelpSignal";
+import type { ListingsSignal } from "@/types/listingsSignal";
+import type { TrendSocialSignal } from "@/types/socialSignal";
 
 export type TrendConfidence = "low" | "medium" | "high";
 
+/**
+ * Venue row in `data/la-food-trends.json` — always an object (not a bare string).
+ * Name links use the first available URL in priority order (see `resolveRestaurantLink`).
+ */
 export type TrendRestaurant = {
   name: string;
   neighborhood: string;
   /** Plate or menu line when known for this venue */
   dish?: string;
-  url?: string;
-  yelp_url?: string;
-  source_url?: string;
-  /** Legacy / ingest alias for outbound URL (same precedence as picks after normalize). */
-  link?: string;
-  /** Provenance label for UI (e.g. Yelp, Google Maps) */
+  /** Official Instagram profile (`https://www.instagram.com/...`). */
+  instagramUrl?: string;
+  /** TikTok profile or post URL (`https://www.tiktok.com/...`). */
+  tiktokUrl?: string;
+  /** Restaurant website when not social-first. */
+  websiteUrl?: string;
+  /** Google Maps place / search URL. */
+  googleMapsUrl?: string;
+  /** Any other outbound fallback (tertiary listings, etc.). */
+  fallbackUrl?: string;
+  /** Provenance label for UI (e.g. Google Maps) */
   source?: string;
   rating?: number;
   review_count?: number;
@@ -21,7 +31,7 @@ export type TrendRestaurant = {
 /** Editorial keys stored in `data/la-food-trends.json` (normalized in-memory copy mirrors legacy fields). */
 export type TrendEditorialFields = {
   "short descriptor": string;
-  "WHY IT'S EVERYWHERE": string;
+  "WHY IT'S HITTING": string;
   "MOST SPOTTED": string;
   "WHAT TO ORDER": string[];
   "WORTH THE SPLURGE": string;
@@ -36,7 +46,7 @@ export type Trend = {
   name: string;
   /** Mirrors `short descriptor` after load. */
   description: string;
-  /** Mirrors `WHY IT'S EVERYWHERE` after load. */
+  /** Mirrors `WHY IT'S HITTING` after load. */
   whyItsEverywhere: string;
   signalScore: number;
   lastUpdated: string;
@@ -53,8 +63,10 @@ export type Trend = {
   evidenceSummary?: string;
   /** Distinct source labels for this trend after refresh. */
   sourceCount?: number;
-  /** Yelp Fusion term aggregates (supply map / validation; not UI-facing yet). */
-  yelpSignals?: YelpSignal[];
+  /** Open-listings term aggregates (supply map / validation; not UI-facing yet). */
+  listingsSignals?: ListingsSignal[];
+  /** Curated social cues for the trend (reels, posts, threads). */
+  socialSignals?: TrendSocialSignal[];
   /** Insight rail — editorial cuisine label */
   cuisineOrigin?: string;
   mealType?: string;
@@ -64,6 +76,17 @@ export type Trend = {
   popularityScore: number;
   /** Bottom insight CTA copy */
   moveCopy?: string;
+  /**
+   * Manually curated dish photo only: URL path under `public/`, e.g.
+   * `/editorial/food/aguachile-holbox.jpg`. Remote URLs are ignored by the card UI.
+   */
+  heroImageUrl?: string;
+  /** Shown in “Photo via …” when `heroImageUrl` resolves to a valid local food asset. */
+  heroImageSource?: string;
+  /** Optional link on the credit line (e.g. restaurant site). */
+  heroImageSourceUrl?: string;
+  /** Optional explicit caption; if omitted, UI uses “Photo via {heroImageSource}”. */
+  heroImageCredit?: string;
 } & TrendEditorialFields;
 
 export type TrendRefreshType = "weekly" | "weekend";

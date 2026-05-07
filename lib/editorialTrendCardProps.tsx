@@ -12,11 +12,7 @@ function editorialWhyLines(trend: Trend, max = 3): string[] {
   return whyLinesForEditorialCard(trend.whyItsEverywhere, trend.whyItWorks, max);
 }
 
-export function trendToEditorialCardProps(
-  trend: Trend,
-  rank: number,
-  allInBatch: Trend[],
-): FtTrendRowProps {
+export function trendToEditorialCardProps(trend: Trend, rank: number, allInBatch: Trend[]): FtTrendRowProps {
   const rankNum = String(rank).padStart(2, "0");
   const picks = mapTrendToWherePicks(trend);
   const mealScan = editorialMealScanLabel(trend);
@@ -39,5 +35,9 @@ export function trendToEditorialCardProps(
     momentumScore: scores.momentumScore,
     popularityScore: scores.popularityScore,
     moveCopy: editorialMoveCopy(trend.id, mealScan, trend.moveCopy),
+    ...(trend.heroImageUrl ? { heroImageUrl: trend.heroImageUrl } : {}),
+    ...(trend.heroImageSource ? { heroImageSource: trend.heroImageSource } : {}),
+    ...(trend.heroImageSourceUrl ? { heroImageSourceUrl: trend.heroImageSourceUrl } : {}),
+    ...(trend.heroImageCredit ? { heroImageCredit: trend.heroImageCredit } : {}),
   };
 }

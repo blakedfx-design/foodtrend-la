@@ -25,6 +25,11 @@ function normalizeScore(n: number): number {
   return Math.min(100, Math.max(0, Math.round(n)));
 }
 
+/** When the engine only supplies names, Maps search is a neutral outbound fallback (no Instagram handle). */
+function venueFallbackMaps(name: string, neighborhood: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${neighborhood}, Los Angeles, CA`)}`;
+}
+
 /**
  * Converts legacy engine output into the MVP trend file shape (for `scout-la-food` and migrations).
  */
@@ -42,10 +47,14 @@ export function foodTrendsPayloadToLaFoodTrendsFile(
       lastUpdated,
       sources: [...row.sources],
       neighborhoods: [],
-      restaurants: row.representative_restaurants.map((name) => ({
-        name,
-        neighborhood: "Los Angeles",
-      })),
+      restaurants: row.representative_restaurants.map((name) => {
+        const neighborhood = "Los Angeles";
+        return {
+          name,
+          neighborhood,
+          googleMapsUrl: venueFallbackMaps(name, neighborhood),
+        };
+      }),
       menuItems: row.representative_restaurants.map(() => row.trend_name),
       confidence: stageToConfidence(row.trend_stage),
     }),
@@ -61,10 +70,14 @@ export function foodTrendsPayloadToLaFoodTrendsFile(
       lastUpdated,
       sources: [...row.sources],
       neighborhoods: [],
-      restaurants: row.early_places_to_watch.map((name) => ({
-        name,
-        neighborhood: "Los Angeles",
-      })),
+      restaurants: row.early_places_to_watch.map((name) => {
+        const neighborhood = "Los Angeles";
+        return {
+          name,
+          neighborhood,
+          googleMapsUrl: venueFallbackMaps(name, neighborhood),
+        };
+      }),
       menuItems: [row.emerging_dish_or_item],
       confidence: "low",
     }),

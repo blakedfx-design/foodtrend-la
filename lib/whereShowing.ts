@@ -42,19 +42,19 @@ export const WHERE_SHOWING_PICKS: Record<string, readonly WherePick[]> = {
   ],
   "Korean Ssam Bar Snacks": [
     {
-      restaurant: "Yangban Society",
-      neighborhood: "Downtown LA",
-      dish: "Pork belly ssam with perilla leaf, rice, and ssamjang — build it yourself, eat it in one bite",
-    },
-    {
-      restaurant: "Here's Looking At You",
+      restaurant: "Dan Sung Sa",
       neighborhood: "Koreatown",
-      dish: "Pork belly ssam with perilla leaf, rice, and ssamjang — build it yourself, eat it in one bite",
+      dish: "Late-night skewers, pajun, lettuce-wrap anju — soju on the table, plates never stop",
     },
     {
-      restaurant: "Bar Sinizki",
-      neighborhood: "West Hollywood",
-      dish: "Pork belly ssam with perilla leaf, rice, and ssamjang — build it yourself, eat it in one bite",
+      restaurant: "Jilli",
+      neighborhood: "Koreatown",
+      dish: "Modern Korean anju — ssam-ready bites, chilled pours, built for passing and wrapping",
+    },
+    {
+      restaurant: "Yangban Society",
+      neighborhood: "Arts District",
+      dish: "Composed ssam set — pork belly, perilla, ssamjang; polish when you want structure",
     },
   ],
   "Aguachile on Ice": [
@@ -69,9 +69,9 @@ export const WHERE_SHOWING_PICKS: Record<string, readonly WherePick[]> = {
       dish: "Shrimp aguachile negro, fresh-milled tostadas, lime wedges you squeeze until your fingers sting",
     },
     {
-      restaurant: "Petty Cash Taqueria",
-      neighborhood: "Fairfax",
-      dish: "Snapper in clear chile-lime, cool cucumber, chili oil pooled at the edge of the cup",
+      restaurant: "Mariscos Jalisco",
+      neighborhood: "Boyle Heights",
+      dish: "Shrimp aguachile-style tostada — lime-forward, ice-cold, eaten at the truck counter",
     },
   ],
   "Natural Wine \u201cMartini\u201d Hour": [
@@ -86,9 +86,9 @@ export const WHERE_SHOWING_PICKS: Record<string, readonly WherePick[]> = {
       dish: "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
     },
     {
-      restaurant: "Melody",
-      neighborhood: "Virgil Village",
-      dish: "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
+      restaurant: "Donna's",
+      neighborhood: "Echo Park",
+      dish: "Martini-apertivo pacing with natural pours — early seat, low lights, neighborhood room",
     },
   ],
 };
@@ -104,11 +104,11 @@ const MOST_SPOTTED_REST: Record<string, string> = {
   "Fermented Everything": "Bestia (Arts District) — Fermented Carrot",
   "Snacks Are the New Starters": "Courage Bagels (Silver Lake) — Market Pickles",
   "Korean Ssam Bar Snacks":
-    "Yangban Society (Downtown LA)\nHere's Looking At You (Koreatown)\nBar Sinizki (West Hollywood)",
+    "Dan Sung Sa (Koreatown)\nJilli (Koreatown)\nYangban Society (Arts District)",
   "Aguachile on Ice":
     "Holbox (Downtown LA) — Shrimp aguachile verde — heavy lime, serrano heat, sliced cucumber, served ice-cold with tostadas.",
   "Natural Wine \u201cMartini\u201d Hour":
-    "Bar Bandini (Echo Park); Tabula Rasa (Silver Lake); Melody (Virgil Village)",
+    "Bar Bandini (Echo Park); Tabula Rasa (Silver Lake); Donna's (Echo Park)",
 };
 
 /** Copy after exactly “Worth the splurge: ” */
@@ -137,7 +137,7 @@ const EASY_ENTRY_REST: Record<string, string> = {
   "Slow-Fermented Bagels": "Farmers market bagel stalls (Weekends) — Blistered sesame bagel",
   "Fermented Everything": "Kismet (Los Feliz) — Koji Butter",
   "Snacks Are the New Starters": "Republique (Mid-Wilshire) — Focaccia + Dip",
-  "Korean Ssam Bar Snacks": "Here's Looking At You — more casual, still hits",
+  "Korean Ssam Bar Snacks": "Dan Sung Sa — late-night anju bar energy, endless small plates to wrap",
   "Aguachile on Ice": "Mariscos Jalisco — faster, louder, and just as craveable.",
   "Natural Wine \u201cMartini\u201d Hour":
     "Tabula Rasa (Silver Lake) — approachable, louder, easy to slide into",

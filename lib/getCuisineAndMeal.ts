@@ -3,7 +3,7 @@ import type { Trend } from "@/types/laFoodTrend";
 /**
  * Resolved cuisine + meal labels for editorial cards.
  * Central place for defaults and scan-label fallbacks; later can extend with
- * keyword / Yelp / Reddit tagging without touching UI components.
+ * keyword / open-web / Reddit tagging without touching UI components.
  */
 export type CuisineAndMealResolved = {
   cuisineOrigin: string;

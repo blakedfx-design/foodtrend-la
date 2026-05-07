@@ -4,11 +4,12 @@
     {
       "id": "korean-ssam-bar-snacks",
       "name": "Korean Ssam Bar Snacks",
-      "short descriptor": "Grilled meats, banchan, and build-your-own lettuce wraps taking over late dinners.",
+      "short descriptor": "Lettuce, ssamjang, sizzling picks — the table refuses to quiet down.",
       "cuisineOrigin": "Korean",
       "mealType": "Shared Plates",
-      "mealMoment": "Dinner / Late Night",
-      "WHY IT'S EVERYWHERE": "People pass lettuce and ssamjang mid-meal.\nNobody wants the table to quiet down.\nLate dinners stretch without anyone noticing.",
+      "mealMoment": "Late Night",
+      "moveCopy": "Wrap it, drag it through sauce, repeat.",
+      "WHY IT'S HITTING": "Built for grazing, not committing.\nEvery bite gets a little messier.\nLate-night food with actual structure.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -20,45 +21,68 @@
       ],
       "neighborhoods": [
         "Koreatown",
-        "West Hollywood",
         "Arts District"
       ],
       "restaurants": [
         {
-          "name": "Yangban Society",
-          "neighborhood": "Downtown LA",
-          "yelp_url": "https://www.yelp.com/biz/yangban-los-angeles"
-        },
-        {
-          "name": "Bar Sinizki",
-          "neighborhood": "West Hollywood",
-          "yelp_url": "https://www.yelp.com/biz/bar-sinizki-los-angeles"
-        },
-        {
-          "name": "Here's Looking At You",
+          "name": "Dan Sung Sa",
           "neighborhood": "Koreatown",
-          "yelp_url": "https://www.yelp.com/biz/heres-looking-at-you-los-angeles"
+          "instagramUrl": "https://www.instagram.com/dan_sung_sa_la/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Dan%20Sung%20Sa%2C%20Koreatown%2C%20Los%20Angeles%2C%20CA"
+        },
+        {
+          "name": "Jilli",
+          "neighborhood": "Koreatown",
+          "instagramUrl": "https://www.instagram.com/jilli.la/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Jilli%2C%20Koreatown%2C%20Los%20Angeles%2C%20CA"
+        },
+        {
+          "name": "Yangban Society",
+          "neighborhood": "Arts District",
+          "instagramUrl": "https://www.instagram.com/yangbanla/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Yangban%20Society%2C%20Arts%20District%2C%20Los%20Angeles%2C%20CA"
         }
       ],
       "WHAT TO ORDER": [
         "Pork belly ssam with perilla leaf, rice, and ssamjang — build it yourself, eat it in one bite"
       ],
-      "MOST SPOTTED": "Yangban Society (Downtown LA)\nHere's Looking At You (Koreatown)\nBar Sinizki (West Hollywood)",
+      "MOST SPOTTED": "Dan Sung Sa (Koreatown)\nJilli (Koreatown)\nYangban Society (Arts District)",
       "WORTH THE SPLURGE": "Yangban Society — bigger spread, more composed plates",
-      "EASY ENTRY": "Here's Looking At You — more casual, still hits",
+      "EASY ENTRY": "Dan Sung Sa — late-night anju bar energy, endless small plates to wrap",
       "WHY IT WORKS": "",
       "confidence": "high",
       "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Korean Ssam Bar Snacks” (query “Korean Ssam Bar Snacks Los Angeles”) · avg rating 4.5 · ~7407 review rollups."
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Korean Ssam Bar Snacks” (query “Korean Ssam Bar Snacks Los Angeles”) · avg rating 4.5 · ~7407 review rollups.",
+      "socialSignals": [
+        {
+          "platform": "instagram",
+          "label": "Creator Reel",
+          "url": "https://www.instagram.com/explore/search/keyword/?q=Korean%20Ssam%20Bar%20Snacks%20Los%20Angeles%20food",
+          "strength": "high"
+        },
+        {
+          "platform": "tiktok",
+          "label": "TikTok post",
+          "url": "https://www.tiktok.com/search?q=Korean%20Ssam%20Bar%20Snacks%20Los%20Angeles%20food",
+          "strength": "medium"
+        },
+        {
+          "platform": "reddit",
+          "label": "Reddit mention",
+          "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Korean%20Ssam%20Bar%20Snacks&restrict_sr=1",
+          "strength": "low"
+        }
+      ]
     },
     {
       "id": "sonoran-breakfast-burritos",
       "name": "Sonoran-Style Breakfast Burritos",
-      "short descriptor": "Flour tortillas, eggs, potato, and crisped machaca-style fills—morning lines stretching outside Highland Park and Boyle Heights pits.",
+      "short descriptor": "Blistered flour tortilla, egg, potato, machaca — morning belt-buckle fuel.",
       "cuisineOrigin": "Northern Mexican (Sonoran)",
       "mealType": "Breakfast",
       "mealMoment": "Morning",
-      "WHY IT'S EVERYWHERE": "Morning lines want something heavy to hold.\nIt survives the commute without falling apart.\nTaquerías keep swapping in thicker tortillas.",
+      "moveCopy": "Respect the tortilla.",
+      "WHY IT'S HITTING": "The flour tortilla is doing real work.\nBreakfast, but with road-trip energy.\nSalsa decides the whole thing.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -69,25 +93,28 @@
         "Google Places"
       ],
       "neighborhoods": [
-        "Highland Park",
-        "Boyle Heights",
+        "Downtown LA",
+        "Whittier",
         "Glassell Park"
       ],
       "restaurants": [
         {
-          "name": "HomeState",
-          "neighborhood": "Highland Park",
-          "yelp_url": "https://www.yelp.com/biz/homestate-los-angeles"
+          "name": "Sonoratown",
+          "neighborhood": "Downtown LA",
+          "instagramUrl": "https://www.instagram.com/sonoratownla/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Sonoratown%2C%20Downtown%20LA%2C%20Los%20Angeles%2C%20CA"
         },
         {
-          "name": "Colonia Tacos Guisados",
-          "neighborhood": "Boyle Heights",
-          "yelp_url": "https://www.yelp.com/biz/guisados-los-angeles"
+          "name": "Colonia Publica",
+          "neighborhood": "Whittier",
+          "instagramUrl": "https://www.instagram.com/coloniapublica/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Colonia%20Publica%2C%20Whittier%2C%20CA"
         },
         {
           "name": "Cilantro Mexican Grill",
           "neighborhood": "Glassell Park",
-          "yelp_url": "https://www.yelp.com/biz/cilantro-mexican-grill-north-hollywood"
+          "instagramUrl": "https://www.instagram.com/cilantromex/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Cilantro%20Mexican%20Grill%2C%20Glassell%20Park%2C%20Los%20Angeles%2C%20CA"
         }
       ],
       "WHAT TO ORDER": [
@@ -95,22 +122,43 @@
         "Chorizo-potato morning wrap",
         "Bacon-egg blistered tortilla roll"
       ],
-      "MOST SPOTTED": "HomeState (Highland Park) — Machaca breakfast burrito",
+      "MOST SPOTTED": "Sonoratown (Downtown LA) — Machaca breakfast burrito",
       "WORTH THE SPLURGE": "Cilantro Mexican Grill (Glassell Park) — Bacon-egg blistered tortilla roll",
-      "EASY ENTRY": "HomeState (Highland Park) — Machaca breakfast burrito",
+      "EASY ENTRY": "Sonoratown (Downtown LA) — Machaca breakfast burrito",
       "WHY IT WORKS": "",
       "confidence": "medium",
       "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Sonoran-Style Breakfast Burritos” (query “Sonoran-Style Breakfast Burritos Los Angeles”) · avg rating 4.4 · ~7909 review rollups."
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Sonoran-Style Breakfast Burritos” (query “Sonoran-Style Breakfast Burritos Los Angeles”) · avg rating 4.4 · ~7909 review rollups.",
+      "socialSignals": [
+        {
+          "platform": "instagram",
+          "label": "Creator Reel",
+          "url": "https://www.instagram.com/explore/search/keyword/?q=Sonoran-Style%20Breakfast%20Burritos%20Los%20Angeles%20food",
+          "strength": "medium"
+        },
+        {
+          "platform": "tiktok",
+          "label": "TikTok post",
+          "url": "https://www.tiktok.com/search?q=Sonoran-Style%20Breakfast%20Burritos%20Los%20Angeles%20food",
+          "strength": "low"
+        },
+        {
+          "platform": "reddit",
+          "label": "Reddit mention",
+          "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Sonoran-Style%20Breakfast%20Burritos&restrict_sr=1",
+          "strength": "high"
+        }
+      ]
     },
     {
       "id": "hainan-chicken-lunch",
       "name": "Hainan Chicken Lunch Counters",
-      "short descriptor": "Ginger-poached bird, chicken-fat rice, and three-sauce trays popping up as fast daytime platters from Westlake to the SGV.",
+      "short descriptor": "Poached bird, schmaltz-y rice, sauce trio — counter-speed SGV lunch.",
       "cuisineOrigin": "Southeast Asian (Singaporean)",
       "mealType": "Rice Plates",
       "mealMoment": "Lunch",
-      "WHY IT'S EVERYWHERE": "Lighter than fried, still satisfying.\nShows up in quick lunch spots.\nEasy repeat order.",
+      "moveCopy": "Get the rice. Don't negotiate.",
+      "WHY IT'S HITTING": "The chicken is quiet; the rice does the talking.\nIt feels clean, but still fully lunch.\nSauces turn one plate into three moods.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -121,48 +169,76 @@
         "Google Places"
       ],
       "neighborhoods": [
-        "Westlake",
         "Alhambra",
+        "Pasadena",
+        "Chinatown",
         "Monterey Park"
       ],
       "restaurants": [
         {
-          "name": "Side Chick",
-          "neighborhood": "Arcadia",
-          "yelp_url": "https://www.yelp.com/biz/side-chick-arcadia"
+          "name": "Savoy Kitchen",
+          "neighborhood": "Alhambra",
+          "instagramUrl": "https://www.instagram.com/savoykitchen/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Savoy%20Kitchen%2C%20Alhambra%2C%20Los%20Angeles%2C%20CA"
         },
         {
           "name": "Cluck2Go",
           "neighborhood": "Pasadena",
-          "yelp_url": "https://www.yelp.com/biz/cluck2go-pasadena-9"
+          "instagramUrl": "https://www.instagram.com/cluck2go/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Cluck2Go%2C%20Pasadena%2C%20Los%20Angeles%2C%20CA"
         },
         {
-          "name": "Savoy Kitchen",
-          "neighborhood": "Alhambra",
-          "yelp_url": "https://www.yelp.com/biz/savoy-kitchen-alhambra"
+          "name": "Pearl River Deli",
+          "neighborhood": "Chinatown",
+          "instagramUrl": "https://www.instagram.com/prd_la/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pearl%20River%20Deli%2C%20Chinatown%2C%20Los%20Angeles%2C%20CA"
         }
       ],
       "WHAT TO ORDER": [
-        "Half Hainan chicken plate",
-        "Crispy chicken skin add-on",
-        "Ginger-scallion rice bowl"
+        "Hainan chicken rice — poached bird, chicken-fat rice, ginger-scallion oil",
+        "Three-sauce tray — chile, ginger-scallion, sweet dark soy",
+        "Extra chicken rice side — lunch-counter refill culture"
       ],
-      "MOST SPOTTED": "Side Chick (Arcadia) — Half Hainan chicken plate",
-      "WORTH THE SPLURGE": "Savoy Kitchen (Alhambra) — Ginger-scallion rice bowl",
-      "EASY ENTRY": "Side Chick (Arcadia) — Half Hainan chicken plate",
+      "MOST SPOTTED": "Savoy Kitchen (Alhambra) — Hainan chicken rice, three-sauce tray\nCluck2Go (Pasadena) — fast lunch-counter rice plate\nPearl River Deli (Chinatown) — Chinatown Hainan counter line culture",
+      "WORTH THE SPLURGE": "Savoy Kitchen (Alhambra) — full Hainan chicken lunch set with sauces and rice",
+      "EASY ENTRY": "Cluck2Go (Pasadena) — counter-style rice plate, fast daytime turns",
       "WHY IT WORKS": "",
       "confidence": "medium",
       "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Hainan Chicken Lunch Counters” (query “Hainan Chicken Lunch Counters Los Angeles”) · avg rating 4.3 · ~6117 review rollups."
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Hainan Chicken Lunch Counters” (query “Hainan Chicken Lunch Counters Los Angeles”) · avg rating 4.3 · ~6117 review rollups.",
+      "socialSignals": [
+        {
+          "platform": "instagram",
+          "label": "Creator Reel",
+          "url": "https://www.instagram.com/explore/search/keyword/?q=Hainan%20Chicken%20Lunch%20Counters%20Los%20Angeles%20food",
+          "strength": "low"
+        },
+        {
+          "platform": "tiktok",
+          "label": "TikTok post",
+          "url": "https://www.tiktok.com/search?q=Hainan%20Chicken%20Lunch%20Counters%20Los%20Angeles%20food",
+          "strength": "high"
+        },
+        {
+          "platform": "reddit",
+          "label": "Reddit mention",
+          "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Hainan%20Chicken%20Lunch%20Counters&restrict_sr=1",
+          "strength": "medium"
+        }
+      ]
     },
     {
       "id": "aguachile-ice",
       "name": "Aguachile on Ice",
-      "short descriptor": "Chilled, citrusy aguachile served ice-cold — bright, spicy, and built for warm LA nights.",
+      "short descriptor": "Shrimp in an electric lime-chile bath — colder than your beer, louder than small talk.",
       "cuisineOrigin": "Coastal Mexican",
       "mealType": "Cold Seafood",
       "mealMoment": "Table Starter",
-      "WHY IT'S EVERYWHERE": "People are ordering it first.\nCold + citrus hits before anything else.\nWorks in LA heat.",
+      "heroImageUrl": "/editorial/food/aguachile-holbox.jpg",
+      "heroImageSource": "Holbox",
+      "heroImageCredit": "Photo via Holbox",
+      "moveCopy": "Order it cold, eat it first.",
+      "WHY IT'S HITTING": "It hits before the table even settles.\nCitrus, chile, ice — LA's holy trinity.\nLight enough to keep the night moving.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -175,23 +251,27 @@
       "neighborhoods": [
         "Venice",
         "Long Beach",
-        "Silver Lake"
+        "Boyle Heights",
+        "West Hollywood"
       ],
       "restaurants": [
         {
           "name": "Holbox",
           "neighborhood": "Downtown LA",
-          "yelp_url": "https://www.yelp.com/biz/holbox-los-angeles-2"
+          "instagramUrl": "https://www.instagram.com/holboxlosangeles/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Holbox%2C%20Downtown%20LA%2C%20Los%20Angeles%2C%20CA"
         },
         {
           "name": "Coni'Seafood",
           "neighborhood": "Inglewood",
-          "yelp_url": "https://www.yelp.com/biz/coniseafood-inglewood"
+          "instagramUrl": "https://www.instagram.com/coniseafood/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Coni'Seafood%2C%20Inglewood%2C%20Los%20Angeles%2C%20CA"
         },
         {
-          "name": "Petty Cash Taqueria",
-          "neighborhood": "Fairfax",
-          "yelp_url": "https://www.yelp.com/biz/petty-cash-taqueria-and-bar-los-angeles"
+          "name": "Mariscos Jalisco",
+          "neighborhood": "Boyle Heights",
+          "instagramUrl": "https://www.instagram.com/mariscosjalisco/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mariscos%20Jalisco%2C%20Boyle%20Heights%2C%20Los%20Angeles%2C%20CA"
         }
       ],
       "WHAT TO ORDER": [
@@ -203,16 +283,37 @@
       "WHY IT WORKS": "",
       "confidence": "medium",
       "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Aguachile on Ice” (query “Aguachile on Ice Los Angeles”) · avg rating 4.5 · ~20491 review rollups."
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Aguachile on Ice” (query “Aguachile on Ice Los Angeles”) · avg rating 4.5 · ~20491 review rollups.",
+      "socialSignals": [
+        {
+          "platform": "instagram",
+          "label": "Creator Reel",
+          "url": "https://www.instagram.com/explore/search/keyword/?q=Aguachile%20on%20Ice%20Los%20Angeles%20food",
+          "strength": "high"
+        },
+        {
+          "platform": "tiktok",
+          "label": "TikTok post",
+          "url": "https://www.tiktok.com/search?q=Aguachile%20on%20Ice%20Los%20Angeles%20food",
+          "strength": "medium"
+        },
+        {
+          "platform": "reddit",
+          "label": "Reddit mention",
+          "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Aguachile%20on%20Ice&restrict_sr=1",
+          "strength": "low"
+        }
+      ]
     },
     {
       "id": "natural-wine-martini-hour",
       "name": "Natural Wine “Martini” Hour",
-      "short descriptor": "Chilled natural wines poured like martinis — early evening, low-key buzz, everywhere right now.",
+      "short descriptor": "Orange wine in a stem, martini brain, golden hour spilling onto the sidewalk.",
       "cuisineOrigin": "European / Wine Bar",
       "mealType": "Drinks",
       "mealMoment": "Aperitivo",
-      "WHY IT'S EVERYWHERE": "People treat funky pours like cocktails.\nOne glass turns into the whole night.\nSidewalk seats fill around sunset.",
+      "moveCopy": "Tiny glass, big little mood.",
+      "WHY IT'S HITTING": "It scratches the cocktail itch without going full cocktail.\nSalty, cold, bitter — very pre-dinner.\nMakes 6 p.m. feel like a plan.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -224,38 +325,60 @@
       ],
       "neighborhoods": [
         "Echo Park",
-        "Silver Lake",
-        "Virgil Village"
+        "Silver Lake"
       ],
       "restaurants": [
         {
           "name": "Bar Bandini",
           "neighborhood": "Echo Park",
-          "yelp_url": "https://www.yelp.com/biz/bar-bandini-los-angeles"
+          "instagramUrl": "https://www.instagram.com/barbandini/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Bar%20Bandini%2C%20Echo%20Park%2C%20Los%20Angeles%2C%20CA"
         },
         {
           "name": "Tabula Rasa",
           "neighborhood": "Silver Lake",
-          "yelp_url": "https://www.yelp.com/biz/tabula-rasa-bar-los-angeles"
+          "instagramUrl": "https://www.instagram.com/tabularasabar/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Tabula%20Rasa%2C%20Silver%20Lake%2C%20Los%20Angeles%2C%20CA"
         },
         {
-          "name": "Melody",
-          "neighborhood": "Virgil Village",
-          "yelp_url": "https://www.yelp.com/biz/melody-los-angeles-2"
+          "name": "Donna's",
+          "neighborhood": "Echo Park",
+          "instagramUrl": "https://www.instagram.com/donnas_ep/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Donna's%2C%20Echo%20Park%2C%20Los%20Angeles%2C%20CA"
         }
       ],
       "WHAT TO ORDER": [
         "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
         "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
-        "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often"
+        "Martini or spritz round — aperitivo pacing with funky wine still in rotation"
       ],
-      "MOST SPOTTED": "Bar Bandini (Echo Park); Tabula Rasa (Silver Lake); Melody (Virgil Village)",
+      "MOST SPOTTED": "Bar Bandini (Echo Park); Tabula Rasa (Silver Lake); Donna's (Echo Park)",
       "WORTH THE SPLURGE": "Bar Bandini (Echo Park) — deeper list, more interesting pours, slower vibe",
       "EASY ENTRY": "Tabula Rasa (Silver Lake) — approachable, louder, easy to slide into",
       "WHY IT WORKS": "",
       "confidence": "medium",
       "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Natural Wine “Martini” Hour” (query “Natural Wine “Martini” Hour Los Angeles”) · avg rating 4.6 · ~12170 review rollups."
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Natural Wine “Martini” Hour” (query “Natural Wine “Martini” Hour Los Angeles”) · avg rating 4.6 · ~12170 review rollups.",
+      "socialSignals": [
+        {
+          "platform": "instagram",
+          "label": "Creator Reel",
+          "url": "https://www.instagram.com/explore/search/keyword/?q=Natural%20Wine%20%E2%80%9CMartini%E2%80%9D%20Hour%20Los%20Angeles%20food",
+          "strength": "medium"
+        },
+        {
+          "platform": "tiktok",
+          "label": "TikTok post",
+          "url": "https://www.tiktok.com/search?q=Natural%20Wine%20%E2%80%9CMartini%E2%80%9D%20Hour%20Los%20Angeles%20food",
+          "strength": "low"
+        },
+        {
+          "platform": "reddit",
+          "label": "Reddit mention",
+          "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Natural%20Wine%20%E2%80%9CMartini%E2%80%9D%20Hour&restrict_sr=1",
+          "strength": "high"
+        }
+      ]
     }
   ],
   "aboutToHit": [
@@ -266,7 +389,7 @@
       "cuisineOrigin": "European / Mediterranean",
       "mealType": "Dessert",
       "mealMoment": "Afternoon / Evening",
-      "WHY IT'S EVERYWHERE": "Guests still want that 'clean' dessert shot.\nOlive oil reads fancy without chocolate.\nPastry teams trial it on weekends first.",
+      "WHY IT'S HITTING": "Guests still want that 'clean' dessert shot.\nOlive oil reads fancy without chocolate.\nPastry teams trial it on weekends first.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -285,17 +408,20 @@
         {
           "name": "Botanica Restaurant",
           "neighborhood": "Silver Lake",
-          "yelp_url": "https://www.yelp.com/biz/botanica-restaurant-los-angeles"
+          "instagramUrl": "https://www.instagram.com/botanicafood/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Botanica%20Restaurant%2C%20Silver%20Lake%2C%20Los%20Angeles%2C%20CA"
         },
         {
           "name": "Sweet Rose Creamery",
           "neighborhood": "Brentwood",
-          "yelp_url": "https://www.yelp.com/biz/sweet-rose-creamery-los-angeles"
+          "instagramUrl": "https://www.instagram.com/sweetrosecreamery/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Sweet%20Rose%20Creamery%2C%20Brentwood%2C%20Los%20Angeles%2C%20CA"
         },
         {
           "name": "République Café",
           "neighborhood": "Mid-Wilshire",
-          "yelp_url": "https://www.yelp.com/biz/république-los-angeles"
+          "instagramUrl": "https://www.instagram.com/republique.restaurantla/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=R%C3%A9publique%20Caf%C3%A9%2C%20Mid-Wilshire%2C%20Los%20Angeles%2C%20CA"
         }
       ],
       "WHAT TO ORDER": [
@@ -309,7 +435,27 @@
       "WHY IT WORKS": "",
       "confidence": "low",
       "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Olive Oil Dessert Loops” (query “Olive Oil Dessert Loops Los Angeles”) · avg rating 4.4 · ~9121 review rollups."
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Olive Oil Dessert Loops” (query “Olive Oil Dessert Loops Los Angeles”) · avg rating 4.4 · ~9121 review rollups.",
+      "socialSignals": [
+        {
+          "platform": "instagram",
+          "label": "Creator Reel",
+          "url": "https://www.instagram.com/explore/search/keyword/?q=Olive%20Oil%20Dessert%20Loops%20Los%20Angeles%20food",
+          "strength": "low"
+        },
+        {
+          "platform": "tiktok",
+          "label": "TikTok post",
+          "url": "https://www.tiktok.com/search?q=Olive%20Oil%20Dessert%20Loops%20Los%20Angeles%20food",
+          "strength": "high"
+        },
+        {
+          "platform": "reddit",
+          "label": "Reddit mention",
+          "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Olive%20Oil%20Dessert%20Loops&restrict_sr=1",
+          "strength": "medium"
+        }
+      ]
     },
     {
       "id": "filipino-bbq-skewer-nights",
@@ -318,7 +464,7 @@
       "cuisineOrigin": "Filipino",
       "mealType": "Grilled Platters",
       "mealMoment": "Dinner",
-      "WHY IT'S EVERYWHERE": "Patios want a pile of sticks on the table.\nBreweries like loud, shareable protein.\nTrays slide across outdoor seating.",
+      "WHY IT'S HITTING": "Patios want a pile of sticks on the table.\nBreweries like loud, shareable protein.\nTrays slide across outdoor seating.",
       "signalScore": 100,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -329,6 +475,7 @@
         "Google Places"
       ],
       "neighborhoods": [
+        "Chinatown",
         "Historic Filipinotown",
         "Artesia",
         "North Hollywood"
@@ -337,16 +484,20 @@
         {
           "name": "LASA Supper Club",
           "neighborhood": "Chinatown",
-          "yelp_url": "https://www.yelp.com/biz/lasa-los-angeles"
+          "instagramUrl": "https://www.instagram.com/lasasupperclub/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=LASA%20Supper%20Club%2C%20Chinatown%2C%20Los%20Angeles%2C%20CA"
         },
         {
           "name": "Bangkok BBQ",
           "neighborhood": "North Hollywood",
-          "yelp_url": "https://www.yelp.com/biz/bangkok-bbq-north-hollywood"
+          "instagramUrl": "https://www.instagram.com/bangkokbbqbowl/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Bangkok%20BBQ%2C%20North%20Hollywood%2C%20Los%20Angeles%2C%20CA"
         },
         {
-          "name": "Weekend brewery pop-ups",
-          "neighborhood": "Arts District"
+          "name": "Highland Park Brewery",
+          "neighborhood": "Chinatown",
+          "instagramUrl": "https://www.instagram.com/highlandparkbrewery/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Highland%20Park%20Brewery%2C%20Chinatown%2C%20Los%20Angeles%2C%20CA"
         }
       ],
       "WHAT TO ORDER": [
@@ -355,12 +506,32 @@
         "Garlic rice family tray"
       ],
       "MOST SPOTTED": "LASA Supper Club (Chinatown) — Calamansi-glazed pork stick",
-      "WORTH THE SPLURGE": "Weekend brewery pop-ups (Arts District) — Garlic rice family tray",
+      "WORTH THE SPLURGE": "Highland Park Brewery (Chinatown) — Garlic rice family tray",
       "EASY ENTRY": "LASA Supper Club (Chinatown) — Calamansi-glazed pork stick",
       "WHY IT WORKS": "",
       "confidence": "low",
       "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Filipino BBQ Skewer Nights” (query “Filipino BBQ Skewer Nights Los Angeles”) · avg rating 4.4 · ~9368 review rollups."
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Filipino BBQ Skewer Nights” (query “Filipino BBQ Skewer Nights Los Angeles”) · avg rating 4.4 · ~9368 review rollups.",
+      "socialSignals": [
+        {
+          "platform": "instagram",
+          "label": "Creator Reel",
+          "url": "https://www.instagram.com/explore/search/keyword/?q=Filipino%20BBQ%20Skewer%20Nights%20Los%20Angeles%20food",
+          "strength": "high"
+        },
+        {
+          "platform": "tiktok",
+          "label": "TikTok post",
+          "url": "https://www.tiktok.com/search?q=Filipino%20BBQ%20Skewer%20Nights%20Los%20Angeles%20food",
+          "strength": "medium"
+        },
+        {
+          "platform": "reddit",
+          "label": "Reddit mention",
+          "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Filipino%20BBQ%20Skewer%20Nights&restrict_sr=1",
+          "strength": "low"
+        }
+      ]
     },
     {
       "id": "ube-basque-slices",
@@ -369,7 +540,7 @@
       "cuisineOrigin": "Filipino-American",
       "mealType": "Pastry / Dessert",
       "mealMoment": "Afternoon",
-      "WHY IT'S EVERYWHERE": "Purple cakes still crush on the feed.\nTiny kitchens can trial it Saturday only.\nLow stakes before full dessert menus.",
+      "WHY IT'S HITTING": "Purple cakes still crush on the feed.\nTiny kitchens can trial it Saturday only.\nLow stakes before full dessert menus.",
       "signalScore": 78,
       "lastUpdated": "2026-05-05T06:31:18.157Z",
       "sources": [
@@ -388,15 +559,20 @@
         {
           "name": "Cafe 86",
           "neighborhood": "Artesia",
-          "yelp_url": "https://www.yelp.com/biz/cafe-86-artesia"
+          "instagramUrl": "https://www.instagram.com/cafe_86/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Cafe%2086%2C%20Artesia%2C%20Los%20Angeles%2C%20CA"
         },
         {
           "name": "Broadway Corridor bakeries",
-          "neighborhood": "Long Beach"
+          "neighborhood": "Long Beach",
+          "instagramUrl": "https://www.instagram.com/gustobread/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Broadway%20Corridor%20bakeries%2C%20Long%20Beach%2C%20Los%20Angeles%2C%20CA"
         },
         {
           "name": "Smorgasburg pastry stalls",
-          "neighborhood": "Downtown LA"
+          "neighborhood": "Downtown LA",
+          "instagramUrl": "https://www.instagram.com/smorgasburgla/",
+          "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Smorgasburg%20pastry%20stalls%2C%20Downtown%20LA%2C%20Los%20Angeles%2C%20CA"
         }
       ],
       "WHAT TO ORDER": [
@@ -410,7 +586,27 @@
       "WHY IT WORKS": "",
       "confidence": "low",
       "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 6 result(s) for “Ube Basque Cheesecake Slices” (query “Ube Basque Cheesecake Slices Los Angeles”) · avg rating 4.7 · ~670 review rollups."
+      "evidenceSummary": "Google Places (weekend): 6 result(s) for “Ube Basque Cheesecake Slices” (query “Ube Basque Cheesecake Slices Los Angeles”) · avg rating 4.7 · ~670 review rollups.",
+      "socialSignals": [
+        {
+          "platform": "instagram",
+          "label": "Creator Reel",
+          "url": "https://www.instagram.com/explore/search/keyword/?q=Ube%20Basque%20Cheesecake%20Slices%20Los%20Angeles%20food",
+          "strength": "medium"
+        },
+        {
+          "platform": "tiktok",
+          "label": "TikTok post",
+          "url": "https://www.tiktok.com/search?q=Ube%20Basque%20Cheesecake%20Slices%20Los%20Angeles%20food",
+          "strength": "low"
+        },
+        {
+          "platform": "reddit",
+          "label": "Reddit mention",
+          "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Ube%20Basque%20Cheesecake%20Slices&restrict_sr=1",
+          "strength": "high"
+        }
+      ]
     }
   ],
   "refreshType": "weekend",

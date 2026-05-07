@@ -16,6 +16,7 @@ function scrubLeadingNoise(s: string): string {
   return s
     .trim()
     .replace(/^[\-\u2022•*\s]+/, "")
+    .replace(/^why\s+it's\s+hitting\s*[—:-]\s*/i, "")
     .replace(/^why\s+it's\s+everywhere\s*[—:-]\s*/i, "")
     .replace(/^why\s+it\s+works\s*[—:-]\s*/i, "")
     .trim();
@@ -61,7 +62,7 @@ function roughlyDuplicates(existing: string, candidate: string): boolean {
 }
 
 /**
- * Max 3 punchy, standalone lines for the editorial card ("Why it's everywhere").
+ * Max 3 punchy, standalone lines for the editorial card ("Why it's hitting").
  * Prefers newline-authored bullets in source text; otherwise splits sentences and compacts.
  */
 export function whyLinesForEditorialCard(

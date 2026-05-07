@@ -8,6 +8,10 @@ export const PLACEHOLDER_SOURCES = [
   "Food Blog",
 ] as const;
 
+function venueFallbackMaps(name: string, hood: string): string {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${hood}, Los Angeles, CA`)}`;
+}
+
 /** Illustrative snapshot only — not verified live menu research. */
 export function simulatedPrimaryTrends(isoTimestamp: string): unknown[] {
   return [
@@ -15,40 +19,70 @@ export function simulatedPrimaryTrends(isoTimestamp: string): unknown[] {
       id: "korean-ssam-bar-snacks",
       name: "Korean Ssam Bar Snacks",
       description:
-        "Grilled meats, banchan, and build-your-own lettuce wraps taking over late dinners.",
+        "Lettuce, ssamjang, sizzling picks — the table refuses to quiet down.",
+      moveCopy: "Wrap it, drag it through sauce, repeat.",
       whyItsEverywhere:
-        "Dinner turns into something interactive. Tables are ordering everything, passing plates, and building wraps nonstop — it's louder, more social, and people stay way longer.",
+        "Built for grazing, not committing.\nEvery bite gets a little messier.\nLate-night food with actual structure.",
       signalScore: 88,
       lastUpdated: isoTimestamp,
       sources: [...PLACEHOLDER_SOURCES],
-      neighborhoods: ["Koreatown", "West Hollywood", "Arts District"],
+      neighborhoods: ["Koreatown", "Arts District"],
       restaurants: [
-        { name: "Yangban Society", neighborhood: "Downtown LA" },
-        { name: "Bar Sinizki", neighborhood: "West Hollywood" },
-        { name: "Here's Looking At You", neighborhood: "Koreatown" },
+        {
+          name: "Dan Sung Sa",
+          neighborhood: "Koreatown",
+          instagramUrl: "https://www.instagram.com/dan_sung_sa_la/",
+          googleMapsUrl: venueFallbackMaps("Dan Sung Sa", "Koreatown"),
+        },
+        {
+          name: "Jilli",
+          neighborhood: "Koreatown",
+          instagramUrl: "https://www.instagram.com/jilli.la/",
+          googleMapsUrl: venueFallbackMaps("Jilli", "Koreatown"),
+        },
+        {
+          name: "Yangban Society",
+          neighborhood: "Arts District",
+          instagramUrl: "https://www.instagram.com/yangbanla/",
+          googleMapsUrl: venueFallbackMaps("Yangban Society", "Arts District"),
+        },
       ],
       menuItems: [
         "Pork belly ssam with perilla leaf, rice, and ssamjang — build it yourself, eat it in one bite",
       ],
       confidence: "high",
-      whyItWorks:
-        "Hands-on, fast, and built for sharing — the table never slows down.",
     },
     {
       id: "sonoran-breakfast-burritos",
       name: "Sonoran-Style Breakfast Burritos",
       description:
-        "Flour tortillas, eggs, potato, and crisped machaca-style fills—morning lines stretching outside Highland Park and Boyle Heights pits.",
+        "Blistered flour tortilla, egg, potato, machaca — morning belt-buckle fuel.",
+      moveCopy: "Respect the tortilla.",
       whyItsEverywhere:
-        "Handheld dayparts stay crowded. Taquerias are trading thin wraps for blistered, heavier builds that survive a car ride.",
+        "The flour tortilla is doing real work.\nBreakfast, but with road-trip energy.\nSalsa decides the whole thing.",
       signalScore: 81,
       lastUpdated: isoTimestamp,
       sources: [...PLACEHOLDER_SOURCES],
-      neighborhoods: ["Highland Park", "Boyle Heights", "Glassell Park"],
+      neighborhoods: ["Downtown LA", "Whittier", "Glassell Park"],
       restaurants: [
-        { name: "HomeState", neighborhood: "Highland Park" },
-        { name: "Colonia Tacos Guisados", neighborhood: "Boyle Heights" },
-        { name: "Cilantro Mexican Grill", neighborhood: "Glassell Park" },
+        {
+          name: "Sonoratown",
+          neighborhood: "Downtown LA",
+          instagramUrl: "https://www.instagram.com/sonoratownla/",
+          googleMapsUrl: venueFallbackMaps("Sonoratown", "Downtown LA"),
+        },
+        {
+          name: "Colonia Publica",
+          neighborhood: "Whittier",
+          instagramUrl: "https://www.instagram.com/coloniapublica/",
+          googleMapsUrl: venueFallbackMaps("Colonia Publica", "Whittier"),
+        },
+        {
+          name: "Cilantro Mexican Grill",
+          neighborhood: "Glassell Park",
+          instagramUrl: "https://www.instagram.com/cilantromex/",
+          googleMapsUrl: venueFallbackMaps("Cilantro Mexican Grill", "Glassell Park"),
+        },
       ],
       menuItems: [
         "Machaca breakfast burrito",
@@ -61,22 +95,38 @@ export function simulatedPrimaryTrends(isoTimestamp: string): unknown[] {
       id: "hainan-chicken-lunch",
       name: "Hainan Chicken Lunch Counters",
       description:
-        "Ginger-poached bird, chicken-fat rice, and three-sauce trays popping up as fast daytime platters from Westlake to the SGV.",
+        "Poached bird, schmaltz-y rice, sauce trio — counter-speed SGV lunch.",
+      moveCopy: "Get the rice. Don't negotiate.",
       whyItsEverywhere:
-        "Price-conscious lunch crowds want something cleaner than fried chicken but still comforting. Counter service keeps turns high.",
+        "The chicken is quiet; the rice does the talking.\nIt feels clean, but still fully lunch.\nSauces turn one plate into three moods.",
       signalScore: 79,
       lastUpdated: isoTimestamp,
       sources: [...PLACEHOLDER_SOURCES],
-      neighborhoods: ["Westlake", "Alhambra", "Monterey Park"],
+      neighborhoods: ["Alhambra", "Pasadena", "Chinatown", "Monterey Park"],
       restaurants: [
-        { name: "Side Chick", neighborhood: "Arcadia" },
-        { name: "Cluck2Go", neighborhood: "Pasadena" },
-        { name: "Savoy Kitchen", neighborhood: "Alhambra" },
+        {
+          name: "Savoy Kitchen",
+          neighborhood: "Alhambra",
+          instagramUrl: "https://www.instagram.com/savoykitchen/",
+          googleMapsUrl: venueFallbackMaps("Savoy Kitchen", "Alhambra"),
+        },
+        {
+          name: "Cluck2Go",
+          neighborhood: "Pasadena",
+          instagramUrl: "https://www.instagram.com/cluck2go/",
+          googleMapsUrl: venueFallbackMaps("Cluck2Go", "Pasadena"),
+        },
+        {
+          name: "Pearl River Deli",
+          neighborhood: "Chinatown",
+          instagramUrl: "https://www.instagram.com/prd_la/",
+          googleMapsUrl: venueFallbackMaps("Pearl River Deli", "Chinatown"),
+        },
       ],
       menuItems: [
-        "Half Hainan chicken plate",
-        "Crispy chicken skin add-on",
-        "Ginger-scallion rice bowl",
+        "Hainan chicken rice — poached bird, chicken-fat rice, ginger-scallion oil",
+        "Three-sauce tray — chile, ginger-scallion, sweet dark soy",
+        "Extra chicken rice side — lunch-counter refill culture",
       ],
       confidence: "medium",
     },
@@ -84,17 +134,33 @@ export function simulatedPrimaryTrends(isoTimestamp: string): unknown[] {
       id: "aguachile-ice",
       name: "Aguachile on Ice",
       description:
-        "Chilled, citrusy aguachile served ice-cold — bright, spicy, and built for warm LA nights.",
+        "Shrimp in an electric lime-chile bath — colder than your beer, louder than small talk.",
+      moveCopy: "Order it cold, eat it first.",
       whyItsEverywhere:
-        "It's the perfect LA table-starter: cold, sharp, and loud with lime. People are ordering it before the meal even starts, passing chips around, and scraping the last bits of cucumber and chile from the plate.",
+        "It hits before the table even settles.\nCitrus, chile, ice — LA's holy trinity.\nLight enough to keep the night moving.",
       signalScore: 76,
       lastUpdated: isoTimestamp,
       sources: [...PLACEHOLDER_SOURCES],
-      neighborhoods: ["Venice", "Long Beach", "Silver Lake"],
+      neighborhoods: ["Venice", "Long Beach", "Boyle Heights", "West Hollywood"],
       restaurants: [
-        { name: "Holbox", neighborhood: "Downtown LA" },
-        { name: "Coni'Seafood", neighborhood: "Inglewood" },
-        { name: "Petty Cash Taqueria", neighborhood: "Fairfax" },
+        {
+          name: "Holbox",
+          neighborhood: "Downtown LA",
+          instagramUrl: "https://www.instagram.com/holboxlosangeles/",
+          googleMapsUrl: venueFallbackMaps("Holbox", "Downtown LA"),
+        },
+        {
+          name: "Coni'Seafood",
+          neighborhood: "Inglewood",
+          instagramUrl: "https://www.instagram.com/coniseafood/",
+          googleMapsUrl: venueFallbackMaps("Coni'Seafood", "Inglewood"),
+        },
+        {
+          name: "Mariscos Jalisco",
+          neighborhood: "Boyle Heights",
+          instagramUrl: "https://www.instagram.com/mariscosjalisco/",
+          googleMapsUrl: venueFallbackMaps("Mariscos Jalisco", "Boyle Heights"),
+        },
       ],
       menuItems: [
         "Shrimp aguachile verde — heavy lime, serrano heat, sliced cucumber, served ice-cold with tostadas.",
@@ -107,26 +173,40 @@ export function simulatedPrimaryTrends(isoTimestamp: string): unknown[] {
       id: "natural-wine-martini-hour",
       name: "Natural Wine “Martini” Hour",
       description:
-        "Chilled natural wines poured like martinis — early evening, low-key buzz, everywhere right now.",
+        "Orange wine in a stem, martini brain, golden hour spilling onto the sidewalk.",
+      moveCopy: "Tiny glass, big little mood.",
       whyItsEverywhere:
-        "It’s replacing the traditional happy hour. People aren’t doing rounds of cocktails — they’re posting up with a cold glass of something funky and staying for hours. You see it spilling onto sidewalks in Silver Lake and Echo Park right around golden hour.",
+        "It scratches the cocktail itch without going full cocktail.\nSalty, cold, bitter — very pre-dinner.\nMakes 6 p.m. feel like a plan.",
       signalScore: 72,
       lastUpdated: isoTimestamp,
       sources: [...PLACEHOLDER_SOURCES],
-      neighborhoods: ["Echo Park", "Silver Lake", "Virgil Village"],
+      neighborhoods: ["Echo Park", "Silver Lake"],
       restaurants: [
-        { name: "Bar Bandini", neighborhood: "Echo Park" },
-        { name: "Tabula Rasa", neighborhood: "Silver Lake" },
-        { name: "Melody", neighborhood: "Virgil Village" },
+        {
+          name: "Bar Bandini",
+          neighborhood: "Echo Park",
+          instagramUrl: "https://www.instagram.com/barbandini/",
+          googleMapsUrl: venueFallbackMaps("Bar Bandini", "Echo Park"),
+        },
+        {
+          name: "Tabula Rasa",
+          neighborhood: "Silver Lake",
+          instagramUrl: "https://www.instagram.com/tabularasabar/",
+          googleMapsUrl: venueFallbackMaps("Tabula Rasa", "Silver Lake"),
+        },
+        {
+          name: "Donna's",
+          neighborhood: "Echo Park",
+          instagramUrl: "https://www.instagram.com/donnas_ep/",
+          googleMapsUrl: venueFallbackMaps("Donna's", "Echo Park"),
+        },
       ],
       menuItems: [
         "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
         "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
-        "Skin-contact white or chilled red — served cold, slightly cloudy, poured fast and refilled often",
+        "Martini or spritz round — aperitivo pacing with funky wine still in rotation",
       ],
       confidence: "medium",
-      whyItWorks:
-        "Why it works — lower alcohol, high flavor — you can drink it like a cocktail but stay longer. It turns one drink into the whole night.",
     },
   ];
 }
@@ -145,9 +225,24 @@ export function simulatedAboutToHitTrends(isoTimestamp: string): unknown[] {
       sources: [...PLACEHOLDER_SOURCES],
       neighborhoods: ["Larchmont", "Santa Monica", "Echo Park"],
       restaurants: [
-        { name: "Botanica Restaurant", neighborhood: "Silver Lake" },
-        { name: "Sweet Rose Creamery", neighborhood: "Brentwood" },
-        { name: "République Café", neighborhood: "Mid-Wilshire" },
+        {
+          name: "Botanica Restaurant",
+          neighborhood: "Silver Lake",
+          instagramUrl: "https://www.instagram.com/botanicafood/",
+          googleMapsUrl: venueFallbackMaps("Botanica Restaurant", "Silver Lake"),
+        },
+        {
+          name: "Sweet Rose Creamery",
+          neighborhood: "Brentwood",
+          instagramUrl: "https://www.instagram.com/sweetrosecreamery/",
+          googleMapsUrl: venueFallbackMaps("Sweet Rose Creamery", "Brentwood"),
+        },
+        {
+          name: "République Café",
+          neighborhood: "Mid-Wilshire",
+          instagramUrl: "https://www.instagram.com/republique.restaurantla/",
+          googleMapsUrl: venueFallbackMaps("République Café", "Mid-Wilshire"),
+        },
       ],
       menuItems: [
         "Olive oil soft serve swirl",
@@ -166,11 +261,26 @@ export function simulatedAboutToHitTrends(isoTimestamp: string): unknown[] {
       signalScore: 55,
       lastUpdated: isoTimestamp,
       sources: [...PLACEHOLDER_SOURCES],
-      neighborhoods: ["Historic Filipinotown", "Artesia", "North Hollywood"],
+      neighborhoods: ["Chinatown", "Historic Filipinotown", "Artesia", "North Hollywood"],
       restaurants: [
-        { name: "LASA Supper Club", neighborhood: "Chinatown" },
-        { name: "Bangkok BBQ", neighborhood: "North Hollywood" },
-        { name: "Weekend brewery pop-ups", neighborhood: "Arts District" },
+        {
+          name: "LASA Supper Club",
+          neighborhood: "Chinatown",
+          instagramUrl: "https://www.instagram.com/lasasupperclub/",
+          googleMapsUrl: venueFallbackMaps("LASA Supper Club", "Chinatown"),
+        },
+        {
+          name: "Bangkok BBQ",
+          neighborhood: "North Hollywood",
+          instagramUrl: "https://www.instagram.com/bangkokbbqbowl/",
+          googleMapsUrl: venueFallbackMaps("Bangkok BBQ", "North Hollywood"),
+        },
+        {
+          name: "Highland Park Brewery",
+          neighborhood: "Chinatown",
+          instagramUrl: "https://www.instagram.com/highlandparkbrewery/",
+          googleMapsUrl: venueFallbackMaps("Highland Park Brewery", "Chinatown"),
+        },
       ],
       menuItems: [
         "Calamansi-glazed pork stick",
@@ -191,9 +301,24 @@ export function simulatedAboutToHitTrends(isoTimestamp: string): unknown[] {
       sources: [...PLACEHOLDER_SOURCES],
       neighborhoods: ["Sawtelle", "Long Beach", "West Adams"],
       restaurants: [
-        { name: "Cafe 86", neighborhood: "Artesia" },
-        { name: "Broadway Corridor bakeries", neighborhood: "Long Beach" },
-        { name: "Smorgasburg pastry stalls", neighborhood: "Downtown LA" },
+        {
+          name: "Cafe 86",
+          neighborhood: "Artesia",
+          instagramUrl: "https://www.instagram.com/cafe_86/",
+          googleMapsUrl: venueFallbackMaps("Cafe 86", "Artesia"),
+        },
+        {
+          name: "Broadway Corridor bakeries",
+          neighborhood: "Long Beach",
+          instagramUrl: "https://www.instagram.com/gustobread/",
+          googleMapsUrl: venueFallbackMaps("Gusto Bread", "Long Beach"),
+        },
+        {
+          name: "Smorgasburg pastry stalls",
+          neighborhood: "Downtown LA",
+          instagramUrl: "https://www.instagram.com/smorgasburgla/",
+          googleMapsUrl: venueFallbackMaps("Smorgasburg LA", "Downtown LA"),
+        },
       ],
       menuItems: ["Ube basque wedge", "Macapuno coconut cream side", "Pandan swirl cheesecake"],
       confidence: "low",

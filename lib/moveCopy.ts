@@ -8,7 +8,7 @@ function hashString(s: string): number {
 }
 
 function pickVariant(trendId: string, options: string[]): string {
-  if (options.length === 0) return "Start here.";
+  if (options.length === 0) return "Worth ordering once, at least.";
   return options[hashString(trendId) % options.length];
 }
 
@@ -23,23 +23,23 @@ export function editorialMoveCopy(
   const L = (mealScanLabel ?? "").toUpperCase();
 
   if (L.includes("TABLE STARTER") || L.includes("STARTER")) {
-    return pickVariant(trendId, ["Start here.", "Get this first."]);
+    return pickVariant(trendId, ["Before the mains land.", "Open with this."]);
   }
   if (L.includes("LUNCH")) {
-    return pickVariant(trendId, ["Easy lunch.", "Go-to order."]);
+    return pickVariant(trendId, ["Counter energy.", "Middle-of-the-day fuel."]);
   }
   if (L.includes("DINNER SNACK") || L.includes("SNACK")) {
-    return pickVariant(trendId, ["Order with drinks.", "Share this."]);
+    return pickVariant(trendId, ["Park this mid-table.", "Glass in one hand, bite in the other."]);
   }
   if (L.includes("APERITIVO")) {
-    return pickVariant(trendId, ["Pre-dinner move.", "Start the night here."]);
+    return pickVariant(trendId, ["Golden-hour pour.", "Sip before the reservation."]);
   }
   if (L.includes("BREAKFAST")) {
-    return pickVariant(trendId, ["Morning go-to.", "Grab this early."]);
+    return pickVariant(trendId, ["Morning rig, handheld.", "First-thing worthy."]);
   }
   if (L.includes("DESSERT")) {
-    return pickVariant(trendId, ["Save room.", "Sweet stop."]);
+    return pickVariant(trendId, ["Save stomach real estate.", "Sweet finish, zero shame."]);
   }
 
-  return pickVariant(trendId, ["Start here.", "Try this first."]);
+  return pickVariant(trendId, ["Order one for the table.", "Low-drama, high-reward."]);
 }

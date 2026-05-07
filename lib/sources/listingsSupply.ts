@@ -1,18 +1,22 @@
+/**
+ * Open-listings supply fetch (HTTP). Set `LISTINGS_SUPPLY_API_KEY`, or `YELP_API_KEY`
+ * for backward compatibility with existing deployments.
+ */
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type {
-  YelpNeighborhoodCluster,
-  YelpSignal,
-} from "@/types/yelpSignal";
+  ListingsNeighborhoodCluster,
+  ListingsSignal,
+} from "@/types/listingsSignal";
 
-const YELP_SEARCH_URL = "https://api.yelp.com/v3/businesses/search";
-const YELP_LOCATION = "Los Angeles, CA";
+const OPEN_LISTINGS_API_ENDPOINT = "https://api.yelp.com/v3/businesses/search";
+const OPEN_LISTINGS_SEARCH_LOCATION = "Los Angeles, CA";
 
 /**
- * Canonical dish-trend Fusion `term` queries (aligned with Reddit ingest vocabulary).
+ * Canonical dish-trend search `term` queries (aligned with Reddit ingest vocabulary).
  */
-export const YELP_LA_FOOD_TERMS = [
+export const LISTINGS_SUPPLY_TERMS = [
   "tacos",
   "bagels",
   "matcha",
@@ -70,7 +74,7 @@ const LA_NEIGHBORHOOD_HINTS: { needle: string; label: string }[] = [
   { needle: "filipino town", label: "Historic Filipino Town" },
 ];
 
-type YelpBusinessRaw = {
+type ProviderBusinessJson = {
   id?: string;
   name?: string;
   is_closed?: boolean;
@@ -83,32 +87,33 @@ type YelpBusinessRaw = {
   };
 };
 
-type YelpSearchJson = {
-  businesses?: YelpBusinessRaw[];
+type ProviderSearchJson = {
+  businesses?: ProviderBusinessJson[];
 };
 
-type DiskCacheEntry = { fetchedAt: number; businesses: YelpBusinessRaw[] };
+type DiskCacheEntry = { fetchedAt: number; businesses: ProviderBusinessJson[] };
 type DiskCacheFile = { entries: Record<string, DiskCacheEntry> };
 
-const memoryTermCache = new Map<string, { expires: number; businesses: YelpBusinessRaw[] }>();
+const memoryTermCache = new Map<string, { expires: number; businesses: ProviderBusinessJson[] }>();
 
-let lastYelpRequestAt = 0;
+let lastListingsRequestAt = 0;
 
 const rateState = {
   remaining: null as number | null,
   resetUtc: null as number | null,
 };
 
-function yelpApiKey(): string | null {
-  const k = process.env.YELP_API_KEY?.trim();
+function listingsSupplyApiKey(): string | null {
+  const k =
+    process.env.LISTINGS_SUPPLY_API_KEY?.trim() ?? process.env.YELP_API_KEY?.trim();
   return k && k.length > 0 ? k : null;
 }
 
 function diskCachePath(): string {
-  return path.join(os.tmpdir(), "foodtrend-la-yelp-search.json");
+  return path.join(os.tmpdir(), "foodtrend-la-listings-search.json");
 }
 
-function parseYelpRateHeaders(res: Response): void {
+function parseListingsRateHeaders(res: Response): void {
   const rem = res.headers.get("ratelimit-remaining");
   const reset = res.headers.get("ratelimit-reset");
   if (rem != null) {
@@ -122,7 +127,7 @@ function parseYelpRateHeaders(res: Response): void {
   }
 }
 
-async function respectYelpRateLimit(): Promise<void> {
+async function respectListingsRateLimit(): Promise<void> {
   if (
     rateState.remaining != null &&
     rateState.remaining < 3 &&
@@ -133,7 +138,7 @@ async function respectYelpRateLimit(): Promise<void> {
       await new Promise((r) => setTimeout(r, waitMs));
     }
   }
-  const gap = lastYelpRequestAt + MIN_REQUEST_GAP_MS - Date.now();
+  const gap = lastListingsRequestAt + MIN_REQUEST_GAP_MS - Date.now();
   if (gap > 0) {
     await new Promise((r) => setTimeout(r, gap));
   }
@@ -160,7 +165,7 @@ async function saveDiskCache(cache: DiskCacheFile): Promise<void> {
   }
 }
 
-function neighborhoodFromBusiness(b: YelpBusinessRaw): string | null {
+function neighborhoodFromBusiness(b: ProviderBusinessJson): string | null {
   const n = b.location?.neighborhood;
   if (Array.isArray(n) && n.length > 0 && typeof n[0] === "string" && n[0].trim()) {
     return n[0].trim();
@@ -178,9 +183,9 @@ function neighborhoodFromBusiness(b: YelpBusinessRaw): string | null {
   return city || null;
 }
 
-function dedupeOpenBusinesses(rows: YelpBusinessRaw[]): YelpBusinessRaw[] {
+function dedupeOpenBusinesses(rows: ProviderBusinessJson[]): ProviderBusinessJson[] {
   const seen = new Set<string>();
-  const out: YelpBusinessRaw[] = [];
+  const out: ProviderBusinessJson[] = [];
   for (const b of rows) {
     if (b.is_closed === true) {
       continue;
@@ -195,7 +200,7 @@ function dedupeOpenBusinesses(rows: YelpBusinessRaw[]): YelpBusinessRaw[] {
   return out;
 }
 
-function aggregateNeighborhoodClusters(openRows: YelpBusinessRaw[]): YelpNeighborhoodCluster[] {
+function aggregateNeighborhoodClusters(openRows: ProviderBusinessJson[]): ListingsNeighborhoodCluster[] {
   const hoodCounts = new Map<string, number>();
   for (const b of openRows) {
     const label = neighborhoodFromBusiness(b) ?? "Los Angeles metro";
@@ -208,7 +213,7 @@ function aggregateNeighborhoodClusters(openRows: YelpBusinessRaw[]): YelpNeighbo
 }
 
 /** Intrinsic supply strength from listing depth + ratings volume (no editorial trend fit). */
-function intrinsicSupplyScore(sig: Omit<YelpSignal, "source">): number {
+function intrinsicSupplyScore(sig: Omit<ListingsSignal, "source">): number {
   const avg = sig.avg_rating ?? 3.5;
   const n = sig.business_count;
   const vol = sig.total_review_volume;
@@ -220,12 +225,12 @@ function intrinsicSupplyScore(sig: Omit<YelpSignal, "source">): number {
 }
 
 /**
- * Build one structured `YelpSignal` from Fusion hits for a single `term` query.
+ * Build one structured `ListingsSignal` from Fusion hits for a single `term` query.
  */
-export function normalizeTermResultsToYelpSignal(
+export function normalizeTermResultsToListingsSignal(
   term_searched: string,
-  rawBusinesses: YelpBusinessRaw[],
-): YelpSignal {
+  rawBusinesses: ProviderBusinessJson[],
+): ListingsSignal {
   const openRows = dedupeOpenBusinesses(rawBusinesses);
   const ratings = openRows
     .map((b) => b.rating)
@@ -247,25 +252,25 @@ export function normalizeTermResultsToYelpSignal(
     avg_rating,
     total_review_volume,
     neighborhood_clusters,
-    yelp_signal_score: 0,
+    listings_signal_score: 0,
   };
-  const yelp_signal_score = intrinsicSupplyScore(base);
+  const listings_signal_score = intrinsicSupplyScore(base);
 
   return {
-    source: "yelp",
+    source: "listings",
     ...base,
-    yelp_signal_score,
+    listings_signal_score,
   };
 }
 
 async function fetchTermFromNetwork(
   term: string,
   apiKey: string,
-): Promise<YelpBusinessRaw[]> {
-  await respectYelpRateLimit();
-  const url = new URL(YELP_SEARCH_URL);
+): Promise<ProviderBusinessJson[]> {
+  await respectListingsRateLimit();
+  const url = new URL(OPEN_LISTINGS_API_ENDPOINT);
   url.searchParams.set("term", term);
-  url.searchParams.set("location", YELP_LOCATION);
+  url.searchParams.set("location", OPEN_LISTINGS_SEARCH_LOCATION);
   url.searchParams.set("limit", String(SEARCH_LIMIT));
 
   const res = await fetch(url.toString(), {
@@ -274,19 +279,19 @@ async function fetchTermFromNetwork(
       Accept: "application/json",
     },
   });
-  lastYelpRequestAt = Date.now();
-  parseYelpRateHeaders(res);
+  lastListingsRequestAt = Date.now();
+  parseListingsRateHeaders(res);
 
   if (!res.ok) {
     await res.text().catch(() => "");
     return [];
   }
 
-  const json = (await res.json()) as YelpSearchJson;
+  const json = (await res.json()) as ProviderSearchJson;
   return json.businesses ?? [];
 }
 
-async function businessesForTerm(term: string, apiKey: string): Promise<YelpBusinessRaw[]> {
+async function businessesForTerm(term: string, apiKey: string): Promise<ProviderBusinessJson[]> {
   const now = Date.now();
   const mem = memoryTermCache.get(term);
   if (mem && mem.expires > now) {
@@ -303,7 +308,7 @@ async function businessesForTerm(term: string, apiKey: string): Promise<YelpBusi
     return diskEntry.businesses;
   }
 
-  let businesses: YelpBusinessRaw[];
+  let businesses: ProviderBusinessJson[];
   try {
     businesses = await fetchTermFromNetwork(term, apiKey);
   } catch {
@@ -319,7 +324,7 @@ async function businessesForTerm(term: string, apiKey: string): Promise<YelpBusi
 
 function termRegistryFromPipeline(opts: { editorialTrendNames: string[] }): string[] {
   const byKey = new Map<string, string>();
-  for (const t of YELP_LA_FOOD_TERMS) {
+  for (const t of LISTINGS_SUPPLY_TERMS) {
     const k = t.toLowerCase().trim();
     if (k) {
       byKey.set(k, t);
@@ -344,28 +349,28 @@ function termRegistryFromPipeline(opts: { editorialTrendNames: string[] }): stri
 }
 
 /**
- * Targeted Fusion searches: canonical dish terms plus deduped editorial trend names.
- * Returns **one aggregate YelpSignal per query term** (no raw businesses).
+ * Targeted open-listings searches: canonical dish terms plus deduped editorial trend names.
+ * Returns **one aggregate ListingsSignal per query term** (no raw businesses).
  */
-export async function fetchYelpPipelineTermSignals(opts: {
+export async function fetchListingsPipelineTermSignals(opts: {
   editorialTrendNames: string[];
-}): Promise<YelpSignal[]> {
-  const apiKey = yelpApiKey();
+}): Promise<ListingsSignal[]> {
+  const apiKey = listingsSupplyApiKey();
   if (!apiKey) {
     return [];
   }
 
   const terms = termRegistryFromPipeline(opts);
-  const signals: YelpSignal[] = [];
+  const signals: ListingsSignal[] = [];
 
   for (const term of terms) {
-    let raw: YelpBusinessRaw[];
+    let raw: ProviderBusinessJson[];
     try {
       raw = await businessesForTerm(term, apiKey);
     } catch {
       raw = [];
     }
-    signals.push(normalizeTermResultsToYelpSignal(term, raw));
+    signals.push(normalizeTermResultsToListingsSignal(term, raw));
   }
 
   return signals;
@@ -391,7 +396,7 @@ function tokenOverlapScore(term: string, blob: string): number {
 }
 
 function clusterOverlapPoints(
-  clusters: YelpNeighborhoodCluster[],
+  clusters: ListingsNeighborhoodCluster[],
   trendHoods: string[],
 ): number {
   if (!trendHoods.length || !clusters.length) {
@@ -408,44 +413,44 @@ function clusterOverlapPoints(
 }
 
 function trendWeightedScore(
-  sig: YelpSignal,
+  sig: ListingsSignal,
   trendBlobLower: string,
   trendNeighborhoods: string[],
 ): number {
   const overlap = tokenOverlapScore(sig.term_searched, trendBlobLower);
   const hoodPts = clusterOverlapPoints(sig.neighborhood_clusters, trendNeighborhoods);
   const combined =
-    sig.yelp_signal_score * 0.35 + overlap * 1.15 + hoodPts * 1.1 + sig.business_count * 0.08;
+    sig.listings_signal_score * 0.35 + overlap * 1.15 + hoodPts * 1.1 + sig.business_count * 0.08;
   return Math.min(100, Math.max(0, Math.round(combined)));
 }
 
 /**
  * Pick aggregate signals relevant to one editorial trend (structured rows only).
  */
-export function selectYelpSignalsForTrend(
-  termSignals: YelpSignal[],
+export function selectListingsSignalsForTrend(
+  termSignals: ListingsSignal[],
   opts: {
     trendBlobLower: string;
     trendNeighborhoods: string[];
     minScore?: number;
     limit?: number;
   },
-): YelpSignal[] {
+): ListingsSignal[] {
   const minScore = opts.minScore ?? 30;
   const limit = opts.limit ?? 8;
 
   const scored = termSignals
     .map((sig) => ({
       ...sig,
-      yelp_signal_score: trendWeightedScore(sig, opts.trendBlobLower, opts.trendNeighborhoods),
+      listings_signal_score: trendWeightedScore(sig, opts.trendBlobLower, opts.trendNeighborhoods),
     }))
-    .filter((s) => s.yelp_signal_score >= minScore && s.business_count > 0)
-    .sort((a, b) => b.yelp_signal_score - a.yelp_signal_score);
+    .filter((s) => s.listings_signal_score >= minScore && s.business_count > 0)
+    .sort((a, b) => b.listings_signal_score - a.listings_signal_score);
 
   return scored.slice(0, limit);
 }
 
-export function yelpSupplyBoostFromSignals(signals: YelpSignal[]): number {
+export function listingsSupplyBoostFromSignals(signals: ListingsSignal[]): number {
   if (!signals.length) {
     return 0;
   }
@@ -463,7 +468,7 @@ export function yelpSupplyBoostFromSignals(signals: YelpSignal[]): number {
   );
 }
 
-export function yelpEvidenceLine(signals: YelpSignal[]): string {
+export function listingsEvidenceLine(signals: ListingsSignal[]): string {
   if (!signals.length) {
     return "";
   }
@@ -487,9 +492,9 @@ export function yelpEvidenceLine(signals: YelpSignal[]): string {
   });
   const avgPart = avgR != null ? ` blended avg ★${avgR.toFixed(1)}` : "";
   const revPart = reviews > 0 ? ` · ~${reviews} review volume indexed` : "";
-  return `Yelp Fusion (aggregated): ${listings} open listings across ${signals.length} mapped search slice${signals.length === 1 ? "" : "s"}${avgPart}${revPart}. ${topTerms.join("; ")}.`;
+  return `Open listings (aggregated): ${listings} open listings across ${signals.length} mapped search slice${signals.length === 1 ? "" : "s"}${avgPart}${revPart}. ${topTerms.join("; ")}.`;
 }
 
-export function yelpRateLimitRemainingSnapshot(): number | null {
+export function listingsRateLimitRemainingSnapshot(): number | null {
   return lastRateLimitRemaining;
 }
