@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-05T06:31:18.157Z",
+  "lastUpdated": "2026-05-07T15:47:05.341Z",
   "trends": [
     {
       "id": "korean-ssam-bar-snacks",
@@ -11,13 +11,14 @@
       "moveCopy": "Wrap it, drag it through sauce, repeat.",
       "WHY IT'S HITTING": "Built for grazing, not committing.\nEvery bite gets a little messier.\nLate-night food with actual structure.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-05T06:31:18.157Z",
+      "lastUpdated": "2026-05-07T15:47:05.341Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
         "Food Blog",
-        "Google Places"
+        "Google Places",
+        "Open listings"
       ],
       "neighborhoods": [
         "Koreatown",
@@ -51,8 +52,8 @@
       "EASY ENTRY": "Dan Sung Sa — late-night anju bar energy, endless small plates to wrap",
       "WHY IT WORKS": "",
       "confidence": "high",
-      "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Korean Ssam Bar Snacks” (query “Korean Ssam Bar Snacks Los Angeles”) · avg rating 4.5 · ~7407 review rollups.",
+      "sourceCount": 6,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Korean Ssam Bar Snacks” (query “Korean Ssam Bar Snacks Los Angeles”) · avg rating 4.5 · ~4959 review rollups. Open listings (aggregated): 400 open listings across 8 mapped search slices blended avg ★4.1 · ~208099 review volume indexed. “Korean Ssam Bar Snacks”: 50 open (★2.7); “Korean food”: 50 open (★4.5); “Aguachile on Ice”: 50 open (★3.9); “tacos”: 50 open (★4.4).",
       "socialSignals": [
         {
           "platform": "instagram",
@@ -72,6 +73,332 @@
           "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Korean%20Ssam%20Bar%20Snacks&restrict_sr=1",
           "strength": "low"
         }
+      ],
+      "listingsSignals": [
+        {
+          "source": "listings",
+          "term_searched": "Korean Ssam Bar Snacks",
+          "business_count": 50,
+          "avg_rating": 2.72,
+          "total_review_volume": 33,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 48
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            }
+          ],
+          "listings_signal_score": 51
+        },
+        {
+          "source": "listings",
+          "term_searched": "Korean food",
+          "business_count": 50,
+          "avg_rating": 4.462000000000001,
+          "total_review_volume": 57740,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 45
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 41
+        },
+        {
+          "source": "listings",
+          "term_searched": "Aguachile on Ice",
+          "business_count": 50,
+          "avg_rating": 3.912000000000001,
+          "total_review_volume": 717,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 40
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Inglewood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Long Beach",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Reseda",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 38
+        },
+        {
+          "source": "listings",
+          "term_searched": "tacos",
+          "business_count": 50,
+          "avg_rating": 4.356000000000001,
+          "total_review_volume": 41313,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 42
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Fernando Valley",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Anaheim",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Huntington Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "matcha",
+          "business_count": 50,
+          "avg_rating": 4.3740000000000006,
+          "total_review_volume": 21766,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 36
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Northridge",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Echo Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "sandwiches",
+          "business_count": 50,
+          "avg_rating": 4.412,
+          "total_review_volume": 37135,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 32
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 5
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Whittier",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Manhattan Beach",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "burgers",
+          "business_count": 50,
+          "avg_rating": 4.3580000000000005,
+          "total_review_volume": 30440,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 35
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Inglewood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Van Nuys",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Westwood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "La Crescenta",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "coffee",
+          "business_count": 50,
+          "avg_rating": 4.404,
+          "total_review_volume": 18955,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 46
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        }
       ]
     },
     {
@@ -84,13 +411,14 @@
       "moveCopy": "Respect the tortilla.",
       "WHY IT'S HITTING": "The flour tortilla is doing real work.\nBreakfast, but with road-trip energy.\nSalsa decides the whole thing.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-05T06:31:18.157Z",
+      "lastUpdated": "2026-05-07T15:47:05.341Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
         "Food Blog",
-        "Google Places"
+        "Google Places",
+        "Open listings"
       ],
       "neighborhoods": [
         "Downtown LA",
@@ -127,8 +455,8 @@
       "EASY ENTRY": "Sonoratown (Downtown LA) — Machaca breakfast burrito",
       "WHY IT WORKS": "",
       "confidence": "medium",
-      "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Sonoran-Style Breakfast Burritos” (query “Sonoran-Style Breakfast Burritos Los Angeles”) · avg rating 4.4 · ~7909 review rollups.",
+      "sourceCount": 6,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Sonoran-Style Breakfast Burritos” (query “Sonoran-Style Breakfast Burritos Los Angeles”) · avg rating 4.3 · ~11533 review rollups. Open listings (aggregated): 400 open listings across 8 mapped search slices blended avg ★4.2 · ~231421 review volume indexed. “Sonoran-Style Breakfast Burritos”: 50 open (★3.0); “sandwiches”: 50 open (★4.4); “bagels”: 50 open (★4.1); “Korean food”: 50 open (★4.5).",
       "socialSignals": [
         {
           "platform": "instagram",
@@ -148,6 +476,348 @@
           "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Sonoran-Style%20Breakfast%20Burritos&restrict_sr=1",
           "strength": "high"
         }
+      ],
+      "listingsSignals": [
+        {
+          "source": "listings",
+          "term_searched": "Sonoran-Style Breakfast Burritos",
+          "business_count": 50,
+          "avg_rating": 3.01,
+          "total_review_volume": 1163,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 46
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 54
+        },
+        {
+          "source": "listings",
+          "term_searched": "sandwiches",
+          "business_count": 50,
+          "avg_rating": 4.412,
+          "total_review_volume": 37135,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 32
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 5
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Whittier",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Manhattan Beach",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 40
+        },
+        {
+          "source": "listings",
+          "term_searched": "bagels",
+          "business_count": 50,
+          "avg_rating": 4.121999999999999,
+          "total_review_volume": 22909,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 34
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monterey Park",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Whittier",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 39
+        },
+        {
+          "source": "listings",
+          "term_searched": "Korean food",
+          "business_count": 50,
+          "avg_rating": 4.462000000000001,
+          "total_review_volume": 57740,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 45
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 34
+        },
+        {
+          "source": "listings",
+          "term_searched": "tacos",
+          "business_count": 50,
+          "avg_rating": 4.356000000000001,
+          "total_review_volume": 41313,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 42
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Fernando Valley",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Anaheim",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Huntington Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "matcha",
+          "business_count": 50,
+          "avg_rating": 4.3740000000000006,
+          "total_review_volume": 21766,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 36
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Northridge",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Echo Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "burgers",
+          "business_count": 50,
+          "avg_rating": 4.3580000000000005,
+          "total_review_volume": 30440,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 35
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Inglewood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Van Nuys",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Westwood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "La Crescenta",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "coffee",
+          "business_count": 50,
+          "avg_rating": 4.404,
+          "total_review_volume": 18955,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 46
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        }
       ]
     },
     {
@@ -160,13 +830,14 @@
       "moveCopy": "Get the rice. Don't negotiate.",
       "WHY IT'S HITTING": "The chicken is quiet; the rice does the talking.\nIt feels clean, but still fully lunch.\nSauces turn one plate into three moods.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-05T06:31:18.157Z",
+      "lastUpdated": "2026-05-07T15:47:05.341Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
         "Food Blog",
-        "Google Places"
+        "Google Places",
+        "Open listings"
       ],
       "neighborhoods": [
         "Alhambra",
@@ -204,8 +875,8 @@
       "EASY ENTRY": "Cluck2Go (Pasadena) — counter-style rice plate, fast daytime turns",
       "WHY IT WORKS": "",
       "confidence": "medium",
-      "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Hainan Chicken Lunch Counters” (query “Hainan Chicken Lunch Counters Los Angeles”) · avg rating 4.3 · ~6117 review rollups.",
+      "sourceCount": 6,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Hainan Chicken Lunch Counters” (query “Hainan Chicken Lunch Counters Los Angeles”) · avg rating 4.3 · ~5847 review rollups. Open listings (aggregated): 399 open listings across 8 mapped search slices blended avg ★4.1 · ~214629 review volume indexed. “Hainan Chicken Lunch Counters”: 49 open (★2.5); “Japanese food”: 50 open (★4.4); “Vietnamese food”: 50 open (★4.2); “bagels”: 50 open (★4.1).",
       "socialSignals": [
         {
           "platform": "instagram",
@@ -225,6 +896,436 @@
           "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Hainan%20Chicken%20Lunch%20Counters&restrict_sr=1",
           "strength": "medium"
         }
+      ],
+      "listingsSignals": [
+        {
+          "source": "listings",
+          "term_searched": "Hainan Chicken Lunch Counters",
+          "business_count": 49,
+          "avg_rating": 2.489795918367347,
+          "total_review_volume": 29,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 48
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 50
+        },
+        {
+          "source": "listings",
+          "term_searched": "Japanese food",
+          "business_count": 50,
+          "avg_rating": 4.3820000000000014,
+          "total_review_volume": 71061,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 34
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Gardena",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Westwood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Malibu",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monterey Park",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 48
+        },
+        {
+          "source": "listings",
+          "term_searched": "Vietnamese food",
+          "business_count": 50,
+          "avg_rating": 4.2059999999999995,
+          "total_review_volume": 38324,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 33
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Alhambra",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Gardena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Lawndale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "El Segundo",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 47
+        },
+        {
+          "source": "listings",
+          "term_searched": "bagels",
+          "business_count": 50,
+          "avg_rating": 4.121999999999999,
+          "total_review_volume": 22909,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 34
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monterey Park",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Whittier",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 45
+        },
+        {
+          "source": "listings",
+          "term_searched": "new restaurant",
+          "business_count": 50,
+          "avg_rating": 4.315999999999998,
+          "total_review_volume": 12316,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 35
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Monterey Park",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Rowland Hts",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Rosemead",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Northridge",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Redondo Beach",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Gardena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Buena Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 42
+        },
+        {
+          "source": "listings",
+          "term_searched": "matcha",
+          "business_count": 50,
+          "avg_rating": 4.3740000000000006,
+          "total_review_volume": 21766,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 36
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Northridge",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Echo Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 40
+        },
+        {
+          "source": "listings",
+          "term_searched": "cocktails",
+          "business_count": 50,
+          "avg_rating": 4.336,
+          "total_review_volume": 29996,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 40
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Toluca Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Alhambra",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 40
+        },
+        {
+          "source": "listings",
+          "term_searched": "Filipino food",
+          "business_count": 50,
+          "avg_rating": 4.232,
+          "total_review_volume": 18228,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 28
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Winnetka",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Carson",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monrovia",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hawthorne",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Bellflower",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Lawndale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 40
+        }
       ]
     },
     {
@@ -240,13 +1341,14 @@
       "moveCopy": "Order it cold, eat it first.",
       "WHY IT'S HITTING": "It hits before the table even settles.\nCitrus, chile, ice — LA's holy trinity.\nLight enough to keep the night moving.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-05T06:31:18.157Z",
+      "lastUpdated": "2026-05-07T15:47:05.341Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
         "Food Blog",
-        "Google Places"
+        "Google Places",
+        "Open listings"
       ],
       "neighborhoods": [
         "Venice",
@@ -282,8 +1384,8 @@
       "EASY ENTRY": "Mariscos Jalisco — faster, louder, and just as craveable.",
       "WHY IT WORKS": "",
       "confidence": "medium",
-      "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Aguachile on Ice” (query “Aguachile on Ice Los Angeles”) · avg rating 4.5 · ~20491 review rollups.",
+      "sourceCount": 6,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Aguachile on Ice” (query “Aguachile on Ice Los Angeles”) · avg rating 4.5 · ~19405 review rollups. Open listings (aggregated): 398 open listings across 8 mapped search slices blended avg ★3.8 · ~95501 review volume indexed. “Aguachile on Ice”: 50 open (★3.9); “dessert”: 50 open (★4.4); “Filipino food”: 50 open (★4.2); “pop-up”: 48 open (★2.7).",
       "socialSignals": [
         {
           "platform": "instagram",
@@ -303,6 +1405,404 @@
           "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Aguachile%20on%20Ice&restrict_sr=1",
           "strength": "low"
         }
+      ],
+      "listingsSignals": [
+        {
+          "source": "listings",
+          "term_searched": "Aguachile on Ice",
+          "business_count": 50,
+          "avg_rating": 3.912000000000001,
+          "total_review_volume": 717,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 40
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Inglewood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Long Beach",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Reseda",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 77
+        },
+        {
+          "source": "listings",
+          "term_searched": "dessert",
+          "business_count": 50,
+          "avg_rating": 4.394,
+          "total_review_volume": 16059,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 29
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hawthorne",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Newhall",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Universal City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Gardena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Los Feliz",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Downey",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Fernando Valley",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 49
+        },
+        {
+          "source": "listings",
+          "term_searched": "Filipino food",
+          "business_count": 50,
+          "avg_rating": 4.232,
+          "total_review_volume": 18228,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 28
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Winnetka",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Carson",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monrovia",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hawthorne",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Bellflower",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Lawndale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 46
+        },
+        {
+          "source": "listings",
+          "term_searched": "pop-up",
+          "business_count": 48,
+          "avg_rating": 2.6958333333333333,
+          "total_review_volume": 344,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 40
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Walnut",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Los angeles",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Maywood",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 43
+        },
+        {
+          "source": "listings",
+          "term_searched": "Sonoran-Style Breakfast Burritos",
+          "business_count": 50,
+          "avg_rating": 3.01,
+          "total_review_volume": 1163,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 46
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 43
+        },
+        {
+          "source": "listings",
+          "term_searched": "matcha",
+          "business_count": 50,
+          "avg_rating": 4.3740000000000006,
+          "total_review_volume": 21766,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 36
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Northridge",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Echo Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 42
+        },
+        {
+          "source": "listings",
+          "term_searched": "sandwiches",
+          "business_count": 50,
+          "avg_rating": 4.412,
+          "total_review_volume": 37135,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 32
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 5
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Whittier",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Manhattan Beach",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 42
+        },
+        {
+          "source": "listings",
+          "term_searched": "Olive Oil Dessert Loops",
+          "business_count": 50,
+          "avg_rating": 3.6460000000000004,
+          "total_review_volume": 89,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 44
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 42
+        }
       ]
     },
     {
@@ -315,13 +1815,14 @@
       "moveCopy": "Tiny glass, big little mood.",
       "WHY IT'S HITTING": "It scratches the cocktail itch without going full cocktail.\nSalty, cold, bitter — very pre-dinner.\nMakes 6 p.m. feel like a plan.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-05T06:31:18.157Z",
+      "lastUpdated": "2026-05-07T15:47:05.341Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
         "Food Blog",
-        "Google Places"
+        "Google Places",
+        "Open listings"
       ],
       "neighborhoods": [
         "Echo Park",
@@ -357,8 +1858,8 @@
       "EASY ENTRY": "Tabula Rasa (Silver Lake) — approachable, louder, easy to slide into",
       "WHY IT WORKS": "",
       "confidence": "medium",
-      "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Natural Wine “Martini” Hour” (query “Natural Wine “Martini” Hour Los Angeles”) · avg rating 4.6 · ~12170 review rollups.",
+      "sourceCount": 6,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Natural Wine “Martini” Hour” (query “Natural Wine “Martini” Hour Los Angeles”) · avg rating 4.6 · ~12185 review rollups. Open listings (aggregated): 400 open listings across 8 mapped search slices blended avg ★4.3 · ~258533 review volume indexed. “Natural Wine “Martini” Hour”: 50 open (★3.7); “matcha”: 50 open (★4.4); “coffee”: 50 open (★4.4); “Thai food”: 50 open (★4.3).",
       "socialSignals": [
         {
           "platform": "instagram",
@@ -378,6 +1879,364 @@
           "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Natural%20Wine%20%E2%80%9CMartini%E2%80%9D%20Hour&restrict_sr=1",
           "strength": "high"
         }
+      ],
+      "listingsSignals": [
+        {
+          "source": "listings",
+          "term_searched": "Natural Wine “Martini” Hour",
+          "business_count": 50,
+          "avg_rating": 3.68,
+          "total_review_volume": 155,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 40
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Van Nuys",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 55
+        },
+        {
+          "source": "listings",
+          "term_searched": "matcha",
+          "business_count": 50,
+          "avg_rating": 4.3740000000000006,
+          "total_review_volume": 21766,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 36
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Northridge",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Echo Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 47
+        },
+        {
+          "source": "listings",
+          "term_searched": "coffee",
+          "business_count": 50,
+          "avg_rating": 4.404,
+          "total_review_volume": 18955,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 46
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 40
+        },
+        {
+          "source": "listings",
+          "term_searched": "Thai food",
+          "business_count": 50,
+          "avg_rating": 4.258000000000002,
+          "total_review_volume": 51029,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 31
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 8
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Westwood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Rancho Palos Verdes",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sherman Oaks",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Mission Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Long Beach",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Altadena",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 39
+        },
+        {
+          "source": "listings",
+          "term_searched": "Korean food",
+          "business_count": 50,
+          "avg_rating": 4.462000000000001,
+          "total_review_volume": 57740,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 45
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 34
+        },
+        {
+          "source": "listings",
+          "term_searched": "tacos",
+          "business_count": 50,
+          "avg_rating": 4.356000000000001,
+          "total_review_volume": 41313,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 42
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Fernando Valley",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Anaheim",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Huntington Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "sandwiches",
+          "business_count": 50,
+          "avg_rating": 4.412,
+          "total_review_volume": 37135,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 32
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 5
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Whittier",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Manhattan Beach",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "burgers",
+          "business_count": 50,
+          "avg_rating": 4.3580000000000005,
+          "total_review_volume": 30440,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 35
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Inglewood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Van Nuys",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Westwood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "La Crescenta",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        }
       ]
     }
   ],
@@ -391,13 +2250,14 @@
       "mealMoment": "Afternoon / Evening",
       "WHY IT'S HITTING": "Guests still want that 'clean' dessert shot.\nOlive oil reads fancy without chocolate.\nPastry teams trial it on weekends first.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-05T06:31:18.157Z",
+      "lastUpdated": "2026-05-07T15:47:05.341Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
         "Food Blog",
-        "Google Places"
+        "Google Places",
+        "Open listings"
       ],
       "neighborhoods": [
         "Larchmont",
@@ -434,8 +2294,8 @@
       "EASY ENTRY": "Botanica Restaurant (Silver Lake) — Olive oil soft serve swirl",
       "WHY IT WORKS": "",
       "confidence": "low",
-      "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Olive Oil Dessert Loops” (query “Olive Oil Dessert Loops Los Angeles”) · avg rating 4.4 · ~9121 review rollups.",
+      "sourceCount": 6,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Olive Oil Dessert Loops” (query “Olive Oil Dessert Loops Los Angeles”) · avg rating 4.5 · ~6033 review rollups. Open listings (aggregated): 400 open listings across 8 mapped search slices blended avg ★4.2 · ~147457 review volume indexed. “dessert”: 50 open (★4.4); “Olive Oil Dessert Loops”: 50 open (★3.6); “matcha”: 50 open (★4.4); “sandwiches”: 50 open (★4.4).",
       "socialSignals": [
         {
           "platform": "instagram",
@@ -455,6 +2315,432 @@
           "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Olive%20Oil%20Dessert%20Loops&restrict_sr=1",
           "strength": "medium"
         }
+      ],
+      "listingsSignals": [
+        {
+          "source": "listings",
+          "term_searched": "dessert",
+          "business_count": 50,
+          "avg_rating": 4.394,
+          "total_review_volume": 16059,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 29
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hawthorne",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Newhall",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Universal City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Gardena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Los Feliz",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Downey",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Fernando Valley",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 69
+        },
+        {
+          "source": "listings",
+          "term_searched": "Olive Oil Dessert Loops",
+          "business_count": 50,
+          "avg_rating": 3.6460000000000004,
+          "total_review_volume": 89,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 44
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 54
+        },
+        {
+          "source": "listings",
+          "term_searched": "matcha",
+          "business_count": 50,
+          "avg_rating": 4.3740000000000006,
+          "total_review_volume": 21766,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 36
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Northridge",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Echo Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 48
+        },
+        {
+          "source": "listings",
+          "term_searched": "sandwiches",
+          "business_count": 50,
+          "avg_rating": 4.412,
+          "total_review_volume": 37135,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 32
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 5
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Whittier",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Manhattan Beach",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 44
+        },
+        {
+          "source": "listings",
+          "term_searched": "Filipino food",
+          "business_count": 50,
+          "avg_rating": 4.232,
+          "total_review_volume": 18228,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 28
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Winnetka",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Carson",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monrovia",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hawthorne",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Bellflower",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Lawndale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 43
+        },
+        {
+          "source": "listings",
+          "term_searched": "new restaurant",
+          "business_count": 50,
+          "avg_rating": 4.315999999999998,
+          "total_review_volume": 12316,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 35
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Monterey Park",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Rowland Hts",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Rosemead",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Northridge",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Redondo Beach",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Gardena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Buena Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 42
+        },
+        {
+          "source": "listings",
+          "term_searched": "bagels",
+          "business_count": 50,
+          "avg_rating": 4.121999999999999,
+          "total_review_volume": 22909,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 34
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monterey Park",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Whittier",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 41
+        },
+        {
+          "source": "listings",
+          "term_searched": "coffee",
+          "business_count": 50,
+          "avg_rating": 4.404,
+          "total_review_volume": 18955,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 46
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 40
+        }
       ]
     },
     {
@@ -466,13 +2752,14 @@
       "mealMoment": "Dinner",
       "WHY IT'S HITTING": "Patios want a pile of sticks on the table.\nBreweries like loud, shareable protein.\nTrays slide across outdoor seating.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-05T06:31:18.157Z",
+      "lastUpdated": "2026-05-07T15:47:05.341Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
         "Food Blog",
-        "Google Places"
+        "Google Places",
+        "Open listings"
       ],
       "neighborhoods": [
         "Chinatown",
@@ -510,8 +2797,8 @@
       "EASY ENTRY": "LASA Supper Club (Chinatown) — Calamansi-glazed pork stick",
       "WHY IT WORKS": "",
       "confidence": "low",
-      "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Filipino BBQ Skewer Nights” (query “Filipino BBQ Skewer Nights Los Angeles”) · avg rating 4.4 · ~9368 review rollups.",
+      "sourceCount": 6,
+      "evidenceSummary": "Google Places (weekend): 20 result(s) for “Filipino BBQ Skewer Nights” (query “Filipino BBQ Skewer Nights Los Angeles”) · avg rating 4.4 · ~6116 review rollups. Open listings (aggregated): 400 open listings across 8 mapped search slices blended avg ★4.1 · ~207382 review volume indexed. “Filipino BBQ Skewer Nights”: 50 open (★2.9); “Filipino food”: 50 open (★4.2); “Aguachile on Ice”: 50 open (★3.9); “Korean food”: 50 open (★4.5).",
       "socialSignals": [
         {
           "platform": "instagram",
@@ -531,6 +2818,380 @@
           "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Filipino%20BBQ%20Skewer%20Nights&restrict_sr=1",
           "strength": "low"
         }
+      ],
+      "listingsSignals": [
+        {
+          "source": "listings",
+          "term_searched": "Filipino BBQ Skewer Nights",
+          "business_count": 50,
+          "avg_rating": 2.93,
+          "total_review_volume": 43,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 48
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Commerce",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 51
+        },
+        {
+          "source": "listings",
+          "term_searched": "Filipino food",
+          "business_count": 50,
+          "avg_rating": 4.232,
+          "total_review_volume": 18228,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 28
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Winnetka",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Carson",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monrovia",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hawthorne",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Bellflower",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Lawndale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 40
+        },
+        {
+          "source": "listings",
+          "term_searched": "Aguachile on Ice",
+          "business_count": 50,
+          "avg_rating": 3.912000000000001,
+          "total_review_volume": 717,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 40
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Inglewood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Long Beach",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Reseda",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 38
+        },
+        {
+          "source": "listings",
+          "term_searched": "Korean food",
+          "business_count": 50,
+          "avg_rating": 4.462000000000001,
+          "total_review_volume": 57740,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 45
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 34
+        },
+        {
+          "source": "listings",
+          "term_searched": "tacos",
+          "business_count": 50,
+          "avg_rating": 4.356000000000001,
+          "total_review_volume": 41313,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 42
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Fernando Valley",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Anaheim",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Huntington Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "matcha",
+          "business_count": 50,
+          "avg_rating": 4.3740000000000006,
+          "total_review_volume": 21766,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 36
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Northridge",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Echo Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "sandwiches",
+          "business_count": 50,
+          "avg_rating": 4.412,
+          "total_review_volume": 37135,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 32
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 5
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 3
+            },
+            {
+              "neighborhood": "Burbank",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Whittier",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Manhattan Beach",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        },
+        {
+          "source": "listings",
+          "term_searched": "burgers",
+          "business_count": 50,
+          "avg_rating": 4.3580000000000005,
+          "total_review_volume": 30440,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 35
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Inglewood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Culver City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Van Nuys",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Westwood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "La Crescenta",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 33
+        }
       ]
     },
     {
@@ -541,14 +3202,15 @@
       "mealType": "Pastry / Dessert",
       "mealMoment": "Afternoon",
       "WHY IT'S HITTING": "Purple cakes still crush on the feed.\nTiny kitchens can trial it Saturday only.\nLow stakes before full dessert menus.",
-      "signalScore": 78,
-      "lastUpdated": "2026-05-05T06:31:18.157Z",
+      "signalScore": 90,
+      "lastUpdated": "2026-05-07T15:47:05.341Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
         "Reddit LA",
         "Food Blog",
-        "Google Places"
+        "Google Places",
+        "Open listings"
       ],
       "neighborhoods": [
         "Sawtelle",
@@ -585,8 +3247,8 @@
       "EASY ENTRY": "Cafe 86 (Artesia) — Ube basque wedge",
       "WHY IT WORKS": "",
       "confidence": "low",
-      "sourceCount": 5,
-      "evidenceSummary": "Google Places (weekend): 6 result(s) for “Ube Basque Cheesecake Slices” (query “Ube Basque Cheesecake Slices Los Angeles”) · avg rating 4.7 · ~670 review rollups.",
+      "sourceCount": 6,
+      "evidenceSummary": "Google Places (weekend): 6 result(s) for “Ube Basque Cheesecake Slices” (query “Ube Basque Cheesecake Slices Los Angeles”) · avg rating 4.6 · ~556 review rollups. Open listings (aggregated): 400 open listings across 8 mapped search slices blended avg ★4.1 · ~256329 review volume indexed. “dessert”: 50 open (★4.4); “Ube Basque Cheesecake Slices”: 50 open (★2.9); “Thai food”: 50 open (★4.3); “Filipino food”: 50 open (★4.2).",
       "socialSignals": [
         {
           "platform": "instagram",
@@ -606,9 +3268,415 @@
           "url": "https://www.reddit.com/r/FoodLosAngeles/search/?q=Ube%20Basque%20Cheesecake%20Slices&restrict_sr=1",
           "strength": "high"
         }
+      ],
+      "listingsSignals": [
+        {
+          "source": "listings",
+          "term_searched": "dessert",
+          "business_count": 50,
+          "avg_rating": 4.394,
+          "total_review_volume": 16059,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 29
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hawthorne",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Woodland Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Newhall",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Universal City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Gardena",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Los Feliz",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Downey",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Fernando Valley",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 59
+        },
+        {
+          "source": "listings",
+          "term_searched": "Ube Basque Cheesecake Slices",
+          "business_count": 50,
+          "avg_rating": 2.866,
+          "total_review_volume": 182,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 43
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Compton",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Inglewood",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 54
+        },
+        {
+          "source": "listings",
+          "term_searched": "Thai food",
+          "business_count": 50,
+          "avg_rating": 4.258000000000002,
+          "total_review_volume": 51029,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 31
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 8
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Westwood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Rancho Palos Verdes",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Silver Lake",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sherman Oaks",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Mission Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Long Beach",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Altadena",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 46
+        },
+        {
+          "source": "listings",
+          "term_searched": "Filipino food",
+          "business_count": 50,
+          "avg_rating": 4.232,
+          "total_review_volume": 18228,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 28
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hills",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Winnetka",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Carson",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monrovia",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Hawthorne",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Bellflower",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Lawndale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 46
+        },
+        {
+          "source": "listings",
+          "term_searched": "Aguachile on Ice",
+          "business_count": 50,
+          "avg_rating": 3.912000000000001,
+          "total_review_volume": 717,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 40
+            },
+            {
+              "neighborhood": "Venice",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Inglewood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Long Beach",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Reseda",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "San Pedro",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Torrance",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 44
+        },
+        {
+          "source": "listings",
+          "term_searched": "Japanese food",
+          "business_count": 50,
+          "avg_rating": 4.3820000000000014,
+          "total_review_volume": 71061,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 34
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 4
+            },
+            {
+              "neighborhood": "Pasadena",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Gardena",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "West Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Westwood",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Malibu",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Studio City",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Monterey Park",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Beverly Hills",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 43
+        },
+        {
+          "source": "listings",
+          "term_searched": "Korean food",
+          "business_count": 50,
+          "avg_rating": 4.462000000000001,
+          "total_review_volume": 57740,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 45
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Gabriel",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Santa Monica",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 41
+        },
+        {
+          "source": "listings",
+          "term_searched": "tacos",
+          "business_count": 50,
+          "avg_rating": 4.356000000000001,
+          "total_review_volume": 41313,
+          "neighborhood_clusters": [
+            {
+              "neighborhood": "Los Angeles",
+              "business_count": 42
+            },
+            {
+              "neighborhood": "Glendale",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "Hollywood",
+              "business_count": 2
+            },
+            {
+              "neighborhood": "San Fernando Valley",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Sawtelle",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Anaheim",
+              "business_count": 1
+            },
+            {
+              "neighborhood": "Huntington Park",
+              "business_count": 1
+            }
+          ],
+          "listings_signal_score": 40
+        }
       ]
     }
   ],
   "refreshType": "weekend",
-  "sourceCount": 5
+  "sourceCount": 6
 }
