@@ -78,6 +78,12 @@ export default async function LaFoodPage() {
                   const bullets = whyLinesForEditorialCard(trend.whyItsEverywhere, trend.whyItWorks);
                   const b0 = bullets[0] ?? "—";
                   const b1 = bullets[1] ?? b0;
+                  const earlyThumbSrc =
+                    trend.id === "ube-cheesecake" &&
+                    typeof trend.heroImageUrl === "string" &&
+                    trend.heroImageUrl.startsWith("/editorial/food/")
+                      ? trend.heroImageUrl
+                      : null;
                   const r0 = trend.restaurants[0];
                   const dish0 = trend.menuItems[0]?.trim();
                   const footHref = r0 ? getRestaurantUrl(r0) : null;
@@ -130,6 +136,12 @@ export default async function LaFoodPage() {
                           Signal {trend.signalScore}
                         </span>
                       </div>
+                      {earlyThumbSrc ? (
+                        <figure className="ft-early__card-thumb">
+                          {/* eslint-disable-next-line @next/next/no-img-element -- curated local trend thumbnail */}
+                          <img src={earlyThumbSrc} alt="" className="ft-early__card-thumb-img" loading="lazy" />
+                        </figure>
+                      ) : null}
                       <ul className="ft-early__card-bullets">
                         <li>{b0}</li>
                         <li>{b1}</li>

@@ -42,19 +42,47 @@ export const WHERE_SHOWING_PICKS: Record<string, readonly WherePick[]> = {
   ],
   "Korean Ssam Bar Snacks": [
     {
-      restaurant: "Dan Sung Sa",
-      neighborhood: "Koreatown",
-      dish: "Late-night skewers, pajun, lettuce-wrap anju — soju on the table, plates never stop",
-    },
-    {
       restaurant: "Jilli",
       neighborhood: "Koreatown",
-      dish: "Modern Korean anju — ssam-ready bites, chilled pours, built for passing and wrapping",
+      dish: "Modern sool-jib shared plates with wrap-ready bites, spicy gloss, and late-night table energy",
     },
     {
-      restaurant: "Yangban Society",
-      neighborhood: "Arts District",
-      dish: "Composed ssam set — pork belly, perilla, ssamjang; polish when you want structure",
+      restaurant: "Soban",
+      neighborhood: "Koreatown",
+      dish: "Banchan-led Korean cooking with rich mains balanced by lettuce wraps and bright sides",
+    },
+    {
+      restaurant: "Mapo Dak Galbi",
+      neighborhood: "Koreatown",
+      dish: "Spicy dak galbi and shareable plates that keep the table moving without full grill format",
+    },
+    {
+      restaurant: "Yangmani",
+      neighborhood: "Koreatown",
+      dish: "Late-night Korean comfort dishes with crowd-pleasing sauce play and social-table pacing",
+    },
+  ],
+  "Sonoran-Style Breakfast Burritos": [
+    {
+      restaurant: "Macheen",
+      neighborhood: "Boyle Heights",
+      dish: "Machaca breakfast burrito on a thin griddled flour tortilla with egg, potato, and crisped edges",
+    },
+    {
+      restaurant: "Tacos Villa Corona",
+      neighborhood: "Atwater Village",
+      dish: "Potato-and-egg breakfast burrito wrapped in a thinner flour tortilla with salsa on the side",
+    },
+    {
+      restaurant: "Cilantro Mexican Grill",
+      neighborhood: "Glassell Park",
+      dish: "Northern-style breakfast burrito with blistered tortilla, egg, potato, and savory machaca profile",
+      googleMapsUrl: "",
+    },
+    {
+      restaurant: "Burritos La Palma",
+      neighborhood: "El Monte",
+      dish: "Northern Mexico flour-tortilla craft with tightly wrapped fillings and focused texture",
     },
   ],
   "Aguachile on Ice": [
@@ -104,7 +132,9 @@ const MOST_SPOTTED_REST: Record<string, string> = {
   "Fermented Everything": "Bestia (Arts District) — Fermented Carrot",
   "Snacks Are the New Starters": "Courage Bagels (Silver Lake) — Market Pickles",
   "Korean Ssam Bar Snacks":
-    "Dan Sung Sa (Koreatown)\nJilli (Koreatown)\nYangban Society (Arts District)",
+    "Jilli (Koreatown)\nSoban (Koreatown)\nMapo Dak Galbi (Koreatown)\nYangmani (Koreatown)",
+  "Sonoran-Style Breakfast Burritos":
+    "Macheen (Boyle Heights)\nTacos Villa Corona (Atwater Village)\nCilantro Mexican Grill (Glassell Park)\nBurritos La Palma (El Monte)",
   "Aguachile on Ice":
     "Holbox (Downtown LA) — Shrimp aguachile verde — heavy lime, serrano heat, sliced cucumber, served ice-cold with tostadas.",
   "Natural Wine \u201cMartini\u201d Hour":
@@ -121,7 +151,9 @@ const WORTH_SPLURGE_REST: Record<string, string> = {
   "Slow-Fermented Bagels": "Neighborhood bakehouses (Across LA) — Long-ferment sourdough ring",
   "Fermented Everything": "Mother Wolf (Hollywood) — Fermented Garlic Dip",
   "Snacks Are the New Starters": "Petit Trois (Hollywood) — Gougères",
-  "Korean Ssam Bar Snacks": "Yangban Society — bigger spread, more composed plates",
+  "Korean Ssam Bar Snacks": "Soban (Koreatown) — deeper banchan range and more composed shared-table spread",
+  "Sonoran-Style Breakfast Burritos":
+    "Macheen (Boyle Heights) — Sonoran flour-tortilla structure, machaca depth, and crisp griddled finish",
   "Aguachile on Ice": "Holbox — pristine seafood, deeper citrus, cleaner heat.",
   "Natural Wine \u201cMartini\u201d Hour":
     "Bar Bandini (Echo Park) — deeper list, more interesting pours, slower vibe",
@@ -137,7 +169,10 @@ const EASY_ENTRY_REST: Record<string, string> = {
   "Slow-Fermented Bagels": "Farmers market bagel stalls (Weekends) — Blistered sesame bagel",
   "Fermented Everything": "Kismet (Los Feliz) — Koji Butter",
   "Snacks Are the New Starters": "Republique (Mid-Wilshire) — Focaccia + Dip",
-  "Korean Ssam Bar Snacks": "Dan Sung Sa — late-night anju bar energy, endless small plates to wrap",
+  "Korean Ssam Bar Snacks":
+    "Yangmani (Koreatown) — energetic, flavor-forward Korean plates that stay easy for groups",
+  "Sonoran-Style Breakfast Burritos":
+    "Tacos Villa Corona (Atwater Village) — straightforward potato-egg burrito format with true morning pace",
   "Aguachile on Ice": "Mariscos Jalisco — faster, louder, and just as craveable.",
   "Natural Wine \u201cMartini\u201d Hour":
     "Tabula Rasa (Silver Lake) — approachable, louder, easy to slide into",
