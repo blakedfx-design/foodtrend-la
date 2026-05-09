@@ -6,6 +6,7 @@ import {
   getLastEditorialIngestionStats,
 } from "@/lib/signals/sources/editorialSignals";
 import type { TrendSignal } from "@/lib/signals/types";
+import { classifyTrendMaturity } from "@/lib/signals/trendMaturity";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -49,6 +50,29 @@ function feedStatus(scannedBySource: Record<EditorialSource, number>) {
     infatuation: scannedBySource.infatuation > 0 ? "green" : "red",
     latimes: scannedBySource.latimes > 0 ? "green" : "red",
   };
+}
+
+function supportTypesForCandidateSignals(signals: TrendSignal[]): string[] {
+  const types = new Set<string>();
+  let hasGooglePlaces = false;
+  let hasReddit = false;
+  let hasReservation = false;
+  const editorialPublications = new Set<string>();
+  for (const signal of signals) {
+    if (signal.source === "google_places") hasGooglePlaces = true;
+    if (signal.source === "reddit") hasReddit = true;
+    if (signal.source === "reservation") hasReservation = true;
+    if (signal.source === "eater" || signal.source === "infatuation" || signal.source === "latimes") {
+      const publication =
+        typeof signal.metadata?.publication === "string" ? signal.metadata.publication : signal.source;
+      editorialPublications.add(publication);
+    }
+  }
+  if (hasGooglePlaces) types.add("google_places");
+  if (hasReddit) types.add("reddit");
+  if (hasReservation) types.add("reservation_or_review");
+  if (editorialPublications.size >= 2) types.add("editorial_overlap");
+  return [...types];
 }
 
 export async function GET() {
@@ -101,6 +125,34 @@ export async function GET() {
       publicationOverlap: stats.overlapEntities,
       candidateOnlyCount: candidateOnlySignals.length,
       convergenceCandidateDebug: editorialCandidates.map((candidate) => ({
+        ...(function () {
+          const maturity = classifyTrendMaturity({
+            entity: candidate.entity,
+            score: candidate.score,
+            stage: candidate.candidateOnly
+              ? candidate.aboutToHitEligible
+                ? "about_to_hit"
+                : "blocked"
+              : "top5",
+            candidateOnly: Boolean(candidate.candidateOnly),
+            primaryEligible: candidate.primaryEligible ?? true,
+            aboutToHitEligible: candidate.aboutToHitEligible ?? true,
+            supportingPublicationCount: candidate.supportingPublicationCount ?? 0,
+            sourceMix: candidate.sourceMix ?? {},
+            supportTypes: supportTypesForCandidateSignals(candidate.supportingSignals),
+            editorialContributionPct: candidate.editorialContributionPct ?? 0,
+            replacementBlocked: false,
+            eligibilityReason: candidate.eligibilityReason ?? null,
+            previousHistory: [],
+          });
+          return {
+            maturityState: maturity.state,
+            maturityConfidence: Number(maturity.confidence.toFixed(2)),
+            maturityReason: maturity.maturityReason,
+            velocityHint: maturity.velocityHint,
+            riskFlags: maturity.riskFlags,
+          };
+        })(),
         entity: candidate.entity,
         score: candidate.score,
         editorialContributionPct: candidate.editorialContributionPct ?? 0,
