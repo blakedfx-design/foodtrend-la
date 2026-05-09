@@ -21,8 +21,10 @@ import {
   sourceInventory,
 } from "@/lib/pipelineAudit";
 import type { TrendCandidate } from "@/lib/signals/types";
+import { classifyTrendMaturity } from "@/lib/signals/trendMaturity";
 
 const TREND_HISTORY_FILE = "data/trend-history.json";
+const TREND_TRANSITIONS_FILE = "data/trend-transitions.json";
 
 function formatEditorialSignalsLog(signals: ReturnType<typeof buildTrendCandidates>, topN = 5): string {
   const lines: string[] = [];
@@ -62,6 +64,26 @@ type TrendHistoryEntry = {
   candidateOnly: boolean;
   replacementBlocked: boolean;
   replacementReason: string | null;
+  maturityState: string;
+  maturityConfidence: number;
+  maturityReason: string;
+  velocityHint: string;
+  riskFlags: string[];
+};
+
+type TrendTransitionEntry = {
+  entity: string;
+  week: string;
+  timestamp: string;
+  fromState: string;
+  toState: string;
+  previousScore: number;
+  currentScore: number;
+  supportTypes: string[];
+  sourceMix: Record<string, number>;
+  editorialContributionPct: number;
+  candidateOnly: boolean;
+  transitionReason: string;
 };
 
 function supportTypesForCandidate(candidate: TrendCandidate): string[] {
@@ -113,6 +135,124 @@ function parseTrendHistory(raw: string): TrendHistoryEntry[] {
   }
 }
 
+function parseTrendTransitions(raw: string): TrendTransitionEntry[] {
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((row) => isRecord(row) && typeof row.entity === "string") as TrendTransitionEntry[];
+  } catch {
+    return [];
+  }
+}
+
+function stateRank(state: string): number {
+  switch (state) {
+    case "weak_signal":
+      return 1;
+    case "emerging":
+      return 2;
+    case "accelerating":
+      return 3;
+    case "peak":
+      return 4;
+    case "stabilizing":
+      return 3;
+    case "fading":
+      return 2;
+    case "blocked":
+      return 0;
+    default:
+      return -1;
+  }
+}
+
+function isMeaningfulMaturityTransition(fromState: string, toState: string): boolean {
+  if (fromState === toState) return false;
+  if (toState === "blocked") return true;
+  const key = `${fromState}->${toState}`;
+  const explicit = new Set([
+    "weak_signal->emerging",
+    "emerging->accelerating",
+    "accelerating->peak",
+    "peak->stabilizing",
+    "stabilizing->fading",
+  ]);
+  if (explicit.has(key)) return true;
+  const fromRank = stateRank(fromState);
+  const toRank = stateRank(toState);
+  if (fromRank < 0 || toRank < 0) return false;
+  return Math.abs(toRank - fromRank) >= 2;
+}
+
+function transitionReasonFor(args: {
+  fromState: string;
+  toState: string;
+  fromStage: TrendHistoryStage;
+  toStage: TrendHistoryStage;
+  supportTypes: string[];
+  replacementBlocked: boolean;
+  scoreDelta: number;
+}): string {
+  const { fromState, toState, fromStage, toStage, supportTypes, replacementBlocked, scoreDelta } = args;
+  if (toState === "blocked") {
+    if (replacementBlocked) return "replacement blocked by preservation guard";
+    return "support dropped below threshold";
+  }
+  if (fromStage === "about_to_hit" && toStage === "top5") return "entered guarded Top 5";
+  if (supportTypes.includes("editorial_overlap")) return "cross-publication editorial overlap";
+  if (supportTypes.length >= 2) return "gained multi-source support";
+  if (toState === "fading" || scoreDelta < 0) return "lost support momentum";
+  if (fromState === "weak_signal" && toState === "emerging") return "support rose above weak-signal threshold";
+  return "maturity transition detected";
+}
+
+function detectTrendTransitions(args: {
+  week: string;
+  currentEntries: TrendHistoryEntry[];
+  previousHistoryByEntity: Map<string, TrendHistoryEntry[]>;
+}): TrendTransitionEntry[] {
+  const { week, currentEntries, previousHistoryByEntity } = args;
+  const out: TrendTransitionEntry[] = [];
+  for (const entry of currentEntries) {
+    const previous = (previousHistoryByEntity.get(entry.entity) ?? [])
+      .filter((h) => h.week !== week)
+      .sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp))[0];
+    if (!previous) continue;
+    const maturityChanged = isMeaningfulMaturityTransition(previous.maturityState, entry.maturityState);
+    const stagePromotion = previous.stage === "about_to_hit" && entry.stage === "top5";
+    if (!maturityChanged && !stagePromotion) continue;
+    const scoreDelta = entry.score - previous.score;
+    out.push({
+      entity: entry.entity,
+      week,
+      timestamp: entry.timestamp,
+      fromState: previous.maturityState,
+      toState: entry.maturityState,
+      previousScore: previous.score,
+      currentScore: entry.score,
+      supportTypes: entry.supportTypes,
+      sourceMix: entry.sourceMix,
+      editorialContributionPct: entry.editorialContributionPct,
+      candidateOnly: entry.candidateOnly,
+      transitionReason: transitionReasonFor({
+        fromState: previous.maturityState,
+        toState: entry.maturityState,
+        fromStage: previous.stage,
+        toStage: entry.stage,
+        supportTypes: entry.supportTypes,
+        replacementBlocked: entry.replacementBlocked,
+        scoreDelta,
+      }),
+    });
+  }
+  const dedup = new Map<string, TrendTransitionEntry>();
+  for (const entry of out) {
+    const key = `${entry.entity}::${entry.week}::${entry.fromState}::${entry.toState}`;
+    if (!dedup.has(key)) dedup.set(key, entry);
+  }
+  return [...dedup.values()];
+}
+
 function toHistoryEntry(
   candidate: TrendCandidate,
   stage: TrendHistoryStage,
@@ -120,7 +260,28 @@ function toHistoryEntry(
   week: string,
   replacementBlocked: boolean,
   replacementReason: string | null,
+  previousHistory: TrendHistoryEntry[],
 ): TrendHistoryEntry {
+  const supportTypes = supportTypesForCandidate(candidate);
+  const maturity = classifyTrendMaturity({
+    entity: candidate.entity,
+    score: candidate.score,
+    stage,
+    candidateOnly: Boolean(candidate.candidateOnly),
+    primaryEligible: candidate.primaryEligible ?? true,
+    aboutToHitEligible: candidate.aboutToHitEligible ?? true,
+    supportingPublicationCount: candidate.supportingPublicationCount ?? 0,
+    sourceMix: candidate.sourceMix ?? {},
+    supportTypes,
+    editorialContributionPct: candidate.editorialContributionPct ?? 0,
+    replacementBlocked,
+    eligibilityReason: replacementReason ?? candidate.eligibilityReason ?? null,
+    previousHistory: previousHistory.map((h) => ({
+      stage: h.stage,
+      score: h.score,
+      timestamp: h.timestamp,
+    })),
+  });
   return {
     entity: candidate.entity,
     timestamp,
@@ -128,11 +289,16 @@ function toHistoryEntry(
     stage,
     score: candidate.score,
     sourceMix: candidate.sourceMix ?? {},
-    supportTypes: supportTypesForCandidate(candidate),
+    supportTypes,
     editorialContributionPct: candidate.editorialContributionPct ?? 0,
     candidateOnly: Boolean(candidate.candidateOnly),
     replacementBlocked,
     replacementReason,
+    maturityState: maturity.state,
+    maturityConfidence: Number(maturity.confidence.toFixed(2)),
+    maturityReason: maturity.maturityReason,
+    velocityHint: maturity.velocityHint,
+    riskFlags: maturity.riskFlags,
   };
 }
 
@@ -143,6 +309,7 @@ function buildTrendHistorySnapshot(args: {
   guardedTop5: TrendCandidate[];
   candidatePool: TrendCandidate[];
   replacementDecisions: ReplacementDecision[];
+  previousHistoryByEntity: Map<string, TrendHistoryEntry[]>;
 }): TrendHistoryEntry[] {
   const {
     timestamp,
@@ -151,6 +318,7 @@ function buildTrendHistorySnapshot(args: {
     guardedTop5,
     candidatePool,
     replacementDecisions,
+    previousHistoryByEntity,
   } = args;
   const out: TrendHistoryEntry[] = [];
   const currentTop5Set = new Set(currentTop5);
@@ -163,19 +331,49 @@ function buildTrendHistorySnapshot(args: {
   );
 
   for (const candidate of guardedTop5) {
-    out.push(toHistoryEntry(candidate, "top5", timestamp, week, false, null));
+    out.push(
+      toHistoryEntry(
+        candidate,
+        "top5",
+        timestamp,
+        week,
+        false,
+        null,
+        previousHistoryByEntity.get(candidate.entity) ?? [],
+      ),
+    );
   }
 
   for (const name of currentTop5Set) {
     if (guardedTop5Set.has(name)) continue;
     const candidate = byEntity.get(name);
     if (!candidate) continue;
-    out.push(toHistoryEntry(candidate, "fading", timestamp, week, false, null));
+    out.push(
+      toHistoryEntry(
+        candidate,
+        "fading",
+        timestamp,
+        week,
+        false,
+        null,
+        previousHistoryByEntity.get(candidate.entity) ?? [],
+      ),
+    );
   }
 
   for (const candidate of candidatePool) {
     if (!candidate.candidateOnly || !candidate.aboutToHitEligible) continue;
-    out.push(toHistoryEntry(candidate, "about_to_hit", timestamp, week, false, null));
+    out.push(
+      toHistoryEntry(
+        candidate,
+        "about_to_hit",
+        timestamp,
+        week,
+        false,
+        null,
+        previousHistoryByEntity.get(candidate.entity) ?? [],
+      ),
+    );
   }
 
   for (const candidate of candidatePool) {
@@ -188,6 +386,7 @@ function buildTrendHistorySnapshot(args: {
           week,
           true,
           candidate.eligibilityReason ?? "blocked",
+          previousHistoryByEntity.get(candidate.entity) ?? [],
         ),
       );
       continue;
@@ -204,6 +403,7 @@ function buildTrendHistorySnapshot(args: {
         week,
         true,
         blocked.replacementReason,
+        previousHistoryByEntity.get(candidate.entity) ?? [],
       ),
     );
   }
@@ -219,13 +419,16 @@ function buildTrendHistorySnapshot(args: {
 async function appendTrendHistory(
   entries: TrendHistoryEntry[],
   dryRun: boolean,
+  existingHistory?: TrendHistoryEntry[],
 ): Promise<{ wouldWrite: number; appended: number }> {
-  let existing: TrendHistoryEntry[] = [];
-  try {
-    const raw = await fs.readFile(TREND_HISTORY_FILE, "utf-8");
-    existing = parseTrendHistory(raw);
-  } catch {
-    existing = [];
+  let existing: TrendHistoryEntry[] = existingHistory ?? [];
+  if (!existingHistory) {
+    try {
+      const raw = await fs.readFile(TREND_HISTORY_FILE, "utf-8");
+      existing = parseTrendHistory(raw);
+    } catch {
+      existing = [];
+    }
   }
 
   const existingKeys = new Set(existing.map((row) => `${row.entity}::${row.week}`));
@@ -234,6 +437,51 @@ async function appendTrendHistory(
 
   const next = [...existing, ...toAppend];
   await fs.writeFile(TREND_HISTORY_FILE, `${JSON.stringify(next, null, 2)}\n`, "utf-8");
+  return { wouldWrite: toAppend.length, appended: toAppend.length };
+}
+
+async function readTrendHistoryEntries(): Promise<TrendHistoryEntry[]> {
+  try {
+    const raw = await fs.readFile(TREND_HISTORY_FILE, "utf-8");
+    return parseTrendHistory(raw);
+  } catch {
+    return [];
+  }
+}
+
+async function readTrendTransitionEntries(): Promise<TrendTransitionEntry[]> {
+  try {
+    const raw = await fs.readFile(TREND_TRANSITIONS_FILE, "utf-8");
+    return parseTrendTransitions(raw);
+  } catch {
+    return [];
+  }
+}
+
+async function appendTrendTransitions(
+  entries: TrendTransitionEntry[],
+  dryRun: boolean,
+  existingTransitions?: TrendTransitionEntry[],
+): Promise<{ wouldWrite: number; appended: number }> {
+  let existing: TrendTransitionEntry[] = existingTransitions ?? [];
+  if (!existingTransitions) {
+    try {
+      const raw = await fs.readFile(TREND_TRANSITIONS_FILE, "utf-8");
+      existing = parseTrendTransitions(raw);
+    } catch {
+      existing = [];
+    }
+  }
+  const existingKeys = new Set(
+    existing.map((row) => `${row.entity}::${row.week}::${row.fromState}::${row.toState}`),
+  );
+  const toAppend = entries.filter(
+    (row) => !existingKeys.has(`${row.entity}::${row.week}::${row.fromState}::${row.toState}`),
+  );
+  if (dryRun) return { wouldWrite: toAppend.length, appended: 0 };
+
+  const next = [...existing, ...toAppend];
+  await fs.writeFile(TREND_TRANSITIONS_FILE, `${JSON.stringify(next, null, 2)}\n`, "utf-8");
   return { wouldWrite: toAppend.length, appended: toAppend.length };
 }
 
@@ -354,6 +602,13 @@ async function main(): Promise<void> {
   const proposedTop5 = candidates.filter((c) => c.primaryEligible !== false).slice(0, 5);
   const guard = applyTop5PreservationGuard(currentTop5, candidates.filter((c) => c.primaryEligible !== false));
   const weekKey = isoWeekKey(new Date(lastUpdated));
+  const existingHistory = await readTrendHistoryEntries();
+  const previousHistoryByEntity = new Map<string, TrendHistoryEntry[]>();
+  for (const row of existingHistory) {
+    const arr = previousHistoryByEntity.get(row.entity) ?? [];
+    arr.push(row);
+    previousHistoryByEntity.set(row.entity, arr);
+  }
   const historySnapshot = buildTrendHistorySnapshot({
     timestamp: lastUpdated,
     week: weekKey,
@@ -365,8 +620,16 @@ async function main(): Promise<void> {
       ).values(),
     ],
     replacementDecisions: guard.decisions,
+    previousHistoryByEntity,
   });
-  const historyWrite = await appendTrendHistory(historySnapshot, dryRun);
+  const historyWrite = await appendTrendHistory(historySnapshot, dryRun, existingHistory);
+  const existingTransitions = await readTrendTransitionEntries();
+  const transitionSnapshot = detectTrendTransitions({
+    week: weekKey,
+    currentEntries: historySnapshot,
+    previousHistoryByEntity,
+  });
+  const transitionWrite = await appendTrendTransitions(transitionSnapshot, dryRun, existingTransitions);
   console.log(formatTopSignalCandidatesForConsole(candidates, 6));
   console.log(
     JSON.stringify({
@@ -384,7 +647,17 @@ async function main(): Promise<void> {
       week: weekKey,
       entriesWouldWrite: historyWrite.wouldWrite,
       dryRun,
-      sampleEntries: historySnapshot.slice(0, 8),
+      sampleEntries: historySnapshot.slice(0, 12),
+    }),
+  );
+  console.log(
+    JSON.stringify({
+      event: "trend-transition-preview",
+      jobType: "simulation",
+      week: weekKey,
+      entriesWouldWrite: transitionWrite.wouldWrite,
+      dryRun,
+      sampleTransitions: transitionSnapshot.slice(0, 12),
     }),
   );
   console.log(
@@ -392,8 +665,47 @@ async function main(): Promise<void> {
       event: "convergence-candidate-eligibility",
       jobType: "simulation",
       candidates: allCandidatesWithEligibility.slice(0, 16).map((candidate) => ({
+        ...(function () {
+          const maturity = classifyTrendMaturity({
+            entity: candidate.entity,
+            score: candidate.score,
+            stage: candidate.candidateOnly
+              ? candidate.aboutToHitEligible
+                ? "about_to_hit"
+                : "blocked"
+              : "top5",
+            candidateOnly: Boolean(candidate.candidateOnly),
+            primaryEligible: candidate.primaryEligible ?? true,
+            aboutToHitEligible: candidate.aboutToHitEligible ?? true,
+            supportingPublicationCount: candidate.supportingPublicationCount ?? 0,
+            sourceMix: candidate.sourceMix ?? {},
+            supportTypes: supportTypesForCandidate(candidate),
+            editorialContributionPct: candidate.editorialContributionPct ?? 0,
+            replacementBlocked: Boolean(
+              guard.decisions.find((d) => d.replacementCandidate === candidate.entity && !d.replacementAllowed),
+            ),
+            eligibilityReason: candidate.eligibilityReason ?? null,
+            previousHistory: (previousHistoryByEntity.get(candidate.entity) ?? []).map((h) => ({
+              stage: h.stage,
+              score: h.score,
+              timestamp: h.timestamp,
+            })),
+          });
+          return {
+            maturityState: maturity.state,
+            maturityConfidence: Number(maturity.confidence.toFixed(2)),
+            maturityReason: maturity.maturityReason,
+            velocityHint: maturity.velocityHint,
+            riskFlags: maturity.riskFlags,
+          };
+        })(),
         entity: candidate.entity,
         score: candidate.score,
+        stage: candidate.candidateOnly
+          ? candidate.aboutToHitEligible
+            ? "about_to_hit"
+            : "blocked"
+          : "top5",
         candidateOnly: Boolean(candidate.candidateOnly),
         editorialContributionPct: candidate.editorialContributionPct ?? 0,
         supportingPublicationCount: candidate.supportingPublicationCount ?? 0,
@@ -485,6 +797,9 @@ async function main(): Promise<void> {
       wroteTrendHistory: !dryRun && historyWrite.appended > 0,
       trendHistoryEntriesWouldWrite: historyWrite.wouldWrite,
       trendHistoryEntriesAppended: historyWrite.appended,
+      wroteTrendTransitions: !dryRun && transitionWrite.appended > 0,
+      transitionEntriesWouldWrite: transitionWrite.wouldWrite,
+      transitionEntriesAppended: transitionWrite.appended,
       dryRun,
       committed: false,
       commitSha: null,
