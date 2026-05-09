@@ -1,3 +1,10 @@
+import {
+  diffTrendSnapshots,
+  snapshotFromParsed,
+  type TrendsAuditDelta,
+  type TrendsAuditSnapshot,
+} from "@/lib/pipelineAudit";
+
 const TRENDS_PATH = "data/la-food-trends.json";
 
 function requireGitHubConfig(): {
@@ -177,6 +184,10 @@ export function applyWeekendRefreshToParsed(parsed: Record<string, unknown>): vo
 export type TrendsJsonWriteBackResult = {
   updatedAt: string;
   commitSha: string | null;
+  wroteJson: boolean;
+  before: TrendsAuditSnapshot;
+  after: TrendsAuditSnapshot;
+  changed: TrendsAuditDelta;
 };
 
 /**
@@ -198,12 +209,20 @@ export async function writeBackLaFoodTrendsJson(
     throw new Error("la-food-trends.json root must be an object");
   }
 
+  const before = snapshotFromParsed(parsed);
   await Promise.resolve(updater(parsed));
+  const after = snapshotFromParsed(parsed);
+  const changed = diffTrendSnapshots(before, after);
   const newText = `${JSON.stringify(parsed, null, 2)}\n`;
   const updatedAt =
     typeof parsed.lastUpdated === "string"
       ? parsed.lastUpdated
       : new Date().toISOString();
+
+  const wroteJson = newText !== text;
+  if (!wroteJson) {
+    return { updatedAt, commitSha: null, wroteJson, before, after, changed };
+  }
 
   const { commitSha } = await commitTrendsJsonToGitHub({
     text: newText,
@@ -211,7 +230,7 @@ export async function writeBackLaFoodTrendsJson(
     message: commitMessage,
   });
 
-  return { updatedAt, commitSha };
+  return { updatedAt, commitSha, wroteJson, before, after, changed };
 }
 
 export type GitHubWriteBackResult = TrendsJsonWriteBackResult;
