@@ -103,7 +103,9 @@ async function getBaseUrl(): Promise<string> {
 }
 
 async function fetchJson<T>(url: string): Promise<FetchResult<T>> {
-  const previewSecret = process.env.NEXT_PUBLIC_ADMIN_PREVIEW_SECRET ?? "";
+  // Server component fetch can safely fall back to non-public secret.
+  const previewSecret =
+    process.env.NEXT_PUBLIC_ADMIN_PREVIEW_SECRET ?? process.env.ADMIN_PREVIEW_SECRET ?? "";
   try {
     const res = await fetch(url, {
       cache: "no-store",

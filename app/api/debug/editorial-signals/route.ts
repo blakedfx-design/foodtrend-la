@@ -13,7 +13,10 @@ export const runtime = "nodejs";
 
 function allowPreviewAccess(req: NextRequest): boolean {
   if (process.env.NODE_ENV === "development") return true;
-  if ((process.env.VERCEL_ENV ?? "development") !== "production") return true;
+  if (process.env.VERCEL_ENV === "preview") return true;
+  const host = (req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? "").toLowerCase();
+  const isPreviewHost = host.endsWith(".vercel.app") && host.includes("-git-");
+  if (isPreviewHost) return true;
   const expected = process.env.ADMIN_PREVIEW_SECRET;
   if (!expected) return false;
   const received = req.headers.get("x-admin-preview") ?? "";
