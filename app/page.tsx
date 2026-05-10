@@ -428,6 +428,12 @@ export default async function HomePage() {
               Updated when the scout runs. Rankings are computed locally from open-web candidates—not
               paid placement.
             </p>
+            <p className="mt-2 text-[11px] text-[#8a8883]">
+              {/* TODO: Password protect /admin before public production use. */}
+              <Link href="/admin" className="opacity-70 hover:opacity-100">
+                Admin
+              </Link>
+            </p>
           </div>
 
             <div className="ft-sidebar-panel-host">
