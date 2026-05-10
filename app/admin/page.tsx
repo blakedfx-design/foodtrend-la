@@ -1,79 +1,17 @@
-import { headers } from "next/headers";
+import {
+  getPipelineHealthPayload,
+  type PipelineHealthPayload,
+} from "@/lib/debug/getPipelineHealth";
+import {
+  getEditorialSignalsDebugPayload,
+  type EditorialSignalsDebugPayload,
+} from "@/lib/debug/getEditorialSignals";
 
 export const dynamic = "force-dynamic";
 
 type Status = "green" | "yellow" | "red";
 
-type PipelineHealthPayload = {
-  generatedAt: string;
-  overallStatus: Status;
-  jobs: Record<
-    string,
-    {
-      lastRunAt: string | null;
-      lastSuccessAt: string | null;
-      durationMs: number | null;
-      status: Status;
-      errorMessage: string | null;
-    }
-  >;
-  sources: Record<
-    string,
-    {
-      status: Status;
-      enabled: boolean;
-      lastSuccessAt: string | null;
-      freshnessMinutes: number | null;
-      signalCount: number;
-      parseCount: number;
-      failureCount: number;
-      stale: boolean;
-      notes: string[];
-    }
-  >;
-  storage: Record<
-    string,
-    {
-      exists: boolean;
-      readable: boolean;
-      lastModified: string | null;
-      entryCount: number;
-      stale: boolean;
-      status: Status;
-      notes: string[];
-    }
-  >;
-  error?: string;
-};
-
-type EditorialPayload = {
-  now: string;
-  feedStatus: Record<string, "green" | "red" | "yellow">;
-  articleCountPerPublication: Record<string, number>;
-  topMatchedDishes: Array<{ entity: string; count: number }>;
-  topCandidateOnlyEntities: Array<{ entity: string; mentions: number }>;
-  suppressedNeighborhoodCandidates: Array<unknown>;
-  failedSources: Array<unknown>;
-  convergenceCandidateDebug: Array<{
-    entity: string;
-    score: number;
-    maturityState?: string;
-    maturityConfidence?: number;
-    candidateOnly: boolean;
-    editorialContributionPct: number;
-    supportingPublicationCount: number;
-    primaryEligible: boolean;
-    aboutToHitEligible: boolean;
-    eligibilityReason: string;
-    sourceMix: Record<string, number>;
-  }>;
-  error?: string;
-};
-
-type FetchResult<T> = {
-  data: T | null;
-  error: string | null;
-};
+type EditorialPayload = EditorialSignalsDebugPayload;
 
 function statusPillClass(status: string): string {
   if (status === "green") return "bg-green-100 text-green-800 border-green-200";
@@ -91,34 +29,6 @@ function fmtDate(iso: string | null): string {
 function sourceMixLabel(sourceMix: Record<string, number>): string {
   const parts = Object.entries(sourceMix).map(([k, v]) => `${k}:${v}`);
   return parts.length > 0 ? parts.join(", ") : "-";
-}
-
-async function getBaseUrl(): Promise<string> {
-  const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host");
-  const proto = h.get("x-forwarded-proto") ?? "http";
-  if (host) return `${proto}://${host}`;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return "http://localhost:3000";
-}
-
-async function fetchJson<T>(url: string): Promise<FetchResult<T>> {
-  // Server component fetch can safely fall back to non-public secret.
-  const previewSecret =
-    process.env.NEXT_PUBLIC_ADMIN_PREVIEW_SECRET ?? process.env.ADMIN_PREVIEW_SECRET ?? "";
-  try {
-    const res = await fetch(url, {
-      cache: "no-store",
-      headers: {
-        "x-admin-preview": previewSecret,
-      },
-    });
-    if (!res.ok) return { data: null, error: `HTTP ${res.status}` };
-    const data = (await res.json()) as T;
-    return { data, error: null };
-  } catch (e) {
-    return { data: null, error: e instanceof Error ? e.message : String(e) };
-  }
 }
 
 function computeReadiness(
@@ -154,11 +64,29 @@ function computeReadiness(
 }
 
 export default async function AdminPage() {
-  const baseUrl = await getBaseUrl();
-  const [pipelineRes, editorialRes] = await Promise.all([
-    fetchJson<PipelineHealthPayload>(`${baseUrl}/api/debug/pipeline-health`),
-    fetchJson<EditorialPayload>(`${baseUrl}/api/debug/editorial-signals`),
+  const [pipelineResult, editorialResult] = await Promise.allSettled([
+    getPipelineHealthPayload(),
+    getEditorialSignalsDebugPayload(),
   ]);
+
+  const pipelineRes = {
+    data: pipelineResult.status === "fulfilled" ? pipelineResult.value : null,
+    error:
+      pipelineResult.status === "rejected"
+        ? pipelineResult.reason instanceof Error
+          ? pipelineResult.reason.message
+          : String(pipelineResult.reason)
+        : null,
+  };
+  const editorialRes = {
+    data: editorialResult.status === "fulfilled" ? editorialResult.value : null,
+    error:
+      editorialResult.status === "rejected"
+        ? editorialResult.reason instanceof Error
+          ? editorialResult.reason.message
+          : String(editorialResult.reason)
+        : null,
+  };
 
   const pipeline = pipelineRes.data;
   const editorial = editorialRes.data;
