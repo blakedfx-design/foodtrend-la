@@ -103,8 +103,14 @@ async function getBaseUrl(): Promise<string> {
 }
 
 async function fetchJson<T>(url: string): Promise<FetchResult<T>> {
+  const previewSecret = process.env.NEXT_PUBLIC_ADMIN_PREVIEW_SECRET ?? "";
   try {
-    const res = await fetch(url, { cache: "no-store" });
+    const res = await fetch(url, {
+      cache: "no-store",
+      headers: {
+        "x-admin-preview": previewSecret,
+      },
+    });
     if (!res.ok) return { data: null, error: `HTTP ${res.status}` };
     const data = (await res.json()) as T;
     return { data, error: null };

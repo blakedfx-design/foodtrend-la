@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { readLaFoodTrendsDataFile } from "@/lib/laFoodTrendsData";
 import { buildTrendCandidates } from "@/lib/signals/buildTrendCandidates";
 import {
@@ -10,6 +10,15 @@ import { classifyTrendMaturity } from "@/lib/signals/trendMaturity";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+
+function allowPreviewAccess(req: NextRequest): boolean {
+  if (process.env.NODE_ENV === "development") return true;
+  if ((process.env.VERCEL_ENV ?? "development") !== "production") return true;
+  const expected = process.env.ADMIN_PREVIEW_SECRET;
+  if (!expected) return false;
+  const received = req.headers.get("x-admin-preview") ?? "";
+  return received === expected;
+}
 
 type EditorialSource = "eater" | "infatuation" | "latimes";
 
@@ -75,7 +84,10 @@ function supportTypesForCandidateSignals(signals: TrendSignal[]): string[] {
   return [...types];
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  if (!allowPreviewAccess(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const data = await readLaFoodTrendsDataFile();
     const nowIso = new Date().toISOString();

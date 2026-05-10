@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { LA_FOOD_TRENDS_DATA_FILE, readLaFoodTrendsDataFile } from "@/lib/laFoodTrendsData";
 import { envPresenceFlags } from "@/lib/pipelineAudit";
 import {
@@ -14,6 +14,15 @@ import { getReservationSignals } from "@/lib/signals/sources/reservationSignals"
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+
+function allowPreviewAccess(req: NextRequest): boolean {
+  if (process.env.NODE_ENV === "development") return true;
+  if ((process.env.VERCEL_ENV ?? "development") !== "production") return true;
+  const expected = process.env.ADMIN_PREVIEW_SECRET;
+  if (!expected) return false;
+  const received = req.headers.get("x-admin-preview") ?? "";
+  return received === expected;
+}
 
 type HealthStatus = "green" | "yellow" | "red";
 
@@ -164,9 +173,12 @@ function jobStatus(lastSuccessAt: string | null, thresholdMinutes: number): Heal
   return "green";
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const nowIso = new Date().toISOString();
   const nowMs = Date.now();
+  if (!allowPreviewAccess(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   try {
     const env = envPresenceFlags();
     const data = await readLaFoodTrendsDataFile();
