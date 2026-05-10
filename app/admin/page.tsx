@@ -6,6 +6,8 @@ import {
   getEditorialSignalsDebugPayload,
   type EditorialSignalsDebugPayload,
 } from "@/lib/debug/getEditorialSignals";
+import { getTrendTransitionTimelinePayload } from "@/lib/debug/getTrendTransitions";
+import { TrendTransitionTimeline } from "@/components/admin/TrendTransitionTimeline";
 
 export const dynamic = "force-dynamic";
 
@@ -64,9 +66,10 @@ function computeReadiness(
 }
 
 export default async function AdminPage() {
-  const [pipelineResult, editorialResult] = await Promise.allSettled([
+  const [pipelineResult, editorialResult, transitionResult] = await Promise.allSettled([
     getPipelineHealthPayload(),
     getEditorialSignalsDebugPayload(),
+    getTrendTransitionTimelinePayload(),
   ]);
 
   const pipelineRes = {
@@ -85,6 +88,15 @@ export default async function AdminPage() {
         ? editorialResult.reason instanceof Error
           ? editorialResult.reason.message
           : String(editorialResult.reason)
+        : null,
+  };
+  const transitionRes = {
+    data: transitionResult.status === "fulfilled" ? transitionResult.value : null,
+    error:
+      transitionResult.status === "rejected"
+        ? transitionResult.reason instanceof Error
+          ? transitionResult.reason.message
+          : String(transitionResult.reason)
         : null,
   };
 
@@ -301,6 +313,8 @@ export default async function AdminPage() {
           </div>
         )}
       </section>
+
+      <TrendTransitionTimeline payload={transitionRes.data} error={transitionRes.error} />
     </main>
   );
 }
