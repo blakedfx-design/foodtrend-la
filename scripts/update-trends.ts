@@ -23,6 +23,7 @@ import {
 import type { TrendCandidate } from "@/lib/signals/types";
 
 const TREND_HISTORY_FILE = "data/trend-history.json";
+const TREND_TRANSITIONS_FILE = "data/trend-transitions.json";
 
 function formatEditorialSignalsLog(signals: ReturnType<typeof buildTrendCandidates>, topN = 5): string {
   const lines: string[] = [];
@@ -62,6 +63,27 @@ type TrendHistoryEntry = {
   candidateOnly: boolean;
   replacementBlocked: boolean;
   replacementReason: string | null;
+};
+
+type TrendTransitionState =
+  | "weak_signal"
+  | "emerging"
+  | "accelerating"
+  | "peak"
+  | "stabilizing"
+  | "fading"
+  | "blocked";
+
+type TrendTransitionEntry = {
+  entity: string;
+  fromState: TrendTransitionState;
+  toState: TrendTransitionState;
+  timestamp: string;
+  week: string;
+  confidence: number;
+  sourceTypes: string[];
+  sourceCount: number;
+  transitionReason: string;
 };
 
 function supportTypesForCandidate(candidate: TrendCandidate): string[] {
@@ -108,6 +130,16 @@ function parseTrendHistory(raw: string): TrendHistoryEntry[] {
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return [];
     return parsed.filter((row) => isRecord(row) && typeof row.entity === "string") as TrendHistoryEntry[];
+  } catch {
+    return [];
+  }
+}
+
+function parseTrendTransitions(raw: string): TrendTransitionEntry[] {
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter((row) => isRecord(row) && typeof row.entity === "string") as TrendTransitionEntry[];
   } catch {
     return [];
   }
@@ -237,6 +269,141 @@ async function appendTrendHistory(
   return { wouldWrite: toAppend.length, appended: toAppend.length };
 }
 
+function sourceCountFromHistoryEntry(entry: TrendHistoryEntry): number {
+  const fromMix = Object.values(entry.sourceMix ?? {}).reduce((sum, n) => sum + (Number.isFinite(n) ? n : 0), 0);
+  if (fromMix > 0) return fromMix;
+  return entry.supportTypes.length;
+}
+
+function classifyTransitionState(entry: TrendHistoryEntry, previous: TrendHistoryEntry | null): TrendTransitionState {
+  if (entry.replacementBlocked || entry.stage === "blocked") return "blocked";
+  if (entry.stage === "fading") return "fading";
+  if (entry.stage === "top5") {
+    if (entry.supportTypes.length >= 2 && entry.score >= 60) return "peak";
+    if (previous && previous.stage === "top5" && previous.score - entry.score >= 4) return "stabilizing";
+    return "stabilizing";
+  }
+  if (entry.stage === "about_to_hit") {
+    if (entry.supportTypes.length >= 2 || entry.score >= 42) return "accelerating";
+    if (entry.supportTypes.length >= 1 || entry.score >= 24) return "emerging";
+    return "weak_signal";
+  }
+  return "weak_signal";
+}
+
+function clampConfidence(n: number): number {
+  return Math.max(0.45, Math.min(0.95, n));
+}
+
+function transitionConfidence(current: TrendHistoryEntry, previous: TrendHistoryEntry | null): number {
+  const sourceBoost = Math.min(0.2, sourceCountFromHistoryEntry(current) * 0.04);
+  const supportBoost = Math.min(0.15, current.supportTypes.length * 0.05);
+  const deltaBoost =
+    previous == null ? 0.05 : Math.min(0.12, Math.abs(current.score - previous.score) / 100);
+  return Number(clampConfidence(0.55 + sourceBoost + supportBoost + deltaBoost).toFixed(2));
+}
+
+function transitionReason(current: TrendHistoryEntry, previous: TrendHistoryEntry | null): string {
+  if (!previous) {
+    if (current.supportTypes.includes("editorial_overlap")) return "gained publication convergence";
+    if (current.supportTypes.includes("reddit")) return "gained Reddit support";
+    if (current.supportTypes.includes("reservation_or_review")) return "reservation growth increased";
+    return "gained multi-source support";
+  }
+  if (current.replacementBlocked) return "replacement blocked by preservation guard";
+  const currentSupports = new Set(current.supportTypes);
+  const previousSupports = new Set(previous?.supportTypes ?? []);
+  const gainedSupports = [...currentSupports].filter((s) => !previousSupports.has(s));
+  const lostSupports = [...previousSupports].filter((s) => !currentSupports.has(s));
+
+  if (gainedSupports.includes("editorial_overlap")) return "gained publication convergence";
+  if (gainedSupports.includes("reddit")) return "gained Reddit support";
+  if (gainedSupports.includes("reservation_or_review")) return "reservation growth increased";
+  if (lostSupports.includes("editorial_overlap")) return "lost editorial support";
+  if (lostSupports.length > 0) return "only single-source support remains";
+
+  if (previous && current.score < previous.score - 4) return "lost freshness";
+  if (previous && current.score > previous.score + 4) return "gained multi-source support";
+
+  return "state transition detected";
+}
+
+function loadPreviousByEntity(entries: TrendHistoryEntry[]): Map<string, TrendHistoryEntry> {
+  const sorted = [...entries].sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp));
+  const byEntity = new Map<string, TrendHistoryEntry>();
+  for (const row of sorted) {
+    if (!byEntity.has(row.entity)) byEntity.set(row.entity, row);
+  }
+  return byEntity;
+}
+
+function buildTrendTransitions(args: {
+  week: string;
+  currentEntries: TrendHistoryEntry[];
+  existingHistory: TrendHistoryEntry[];
+}): { entries: TrendTransitionEntry[]; promoted: string[]; fading: string[] } {
+  const { week, currentEntries, existingHistory } = args;
+  const previousByEntity = loadPreviousByEntity(existingHistory.filter((h) => h.week !== week));
+  const out: TrendTransitionEntry[] = [];
+  const promoted: string[] = [];
+  const fading: string[] = [];
+
+  for (const current of currentEntries) {
+    const previous = previousByEntity.get(current.entity) ?? null;
+    const fromState = previous ? classifyTransitionState(previous, null) : "weak_signal";
+    const toState = classifyTransitionState(current, previous);
+    if (fromState === toState) continue;
+
+    const transition: TrendTransitionEntry = {
+      entity: current.entity,
+      fromState,
+      toState,
+      timestamp: current.timestamp,
+      week: current.week,
+      confidence: transitionConfidence(current, previous),
+      sourceTypes: current.supportTypes,
+      sourceCount: sourceCountFromHistoryEntry(current),
+      transitionReason: transitionReason(current, previous),
+    };
+    out.push(transition);
+    if (previous?.stage === "about_to_hit" && current.stage === "top5") promoted.push(current.entity);
+    if (toState === "fading") fading.push(current.entity);
+  }
+
+  return { entries: out, promoted, fading };
+}
+
+async function appendTrendTransitions(
+  entries: TrendTransitionEntry[],
+  dryRun: boolean,
+): Promise<{ wouldWrite: number; appended: number; skippedDuplicates: number }> {
+  let existing: TrendTransitionEntry[] = [];
+  try {
+    const raw = await fs.readFile(TREND_TRANSITIONS_FILE, "utf-8");
+    existing = parseTrendTransitions(raw);
+  } catch {
+    existing = [];
+  }
+
+  const existingKeys = new Set(
+    existing.map((row) => `${row.entity}::${row.week}::${row.fromState}::${row.toState}`),
+  );
+  const dedupedIncoming = new Map<string, TrendTransitionEntry>();
+  for (const row of entries) {
+    const key = `${row.entity}::${row.week}::${row.fromState}::${row.toState}`;
+    if (!dedupedIncoming.has(key)) dedupedIncoming.set(key, row);
+  }
+  const toAppend = [...dedupedIncoming.entries()]
+    .filter(([key]) => !existingKeys.has(key))
+    .map(([, row]) => row);
+  const skippedDuplicates = entries.length - toAppend.length;
+  if (dryRun) return { wouldWrite: toAppend.length, appended: 0, skippedDuplicates };
+
+  const next = [...existing, ...toAppend].sort((a, b) => Date.parse(b.timestamp) - Date.parse(a.timestamp));
+  await fs.writeFile(TREND_TRANSITIONS_FILE, `${JSON.stringify(next, null, 2)}\n`, "utf-8");
+  return { wouldWrite: toAppend.length, appended: toAppend.length, skippedDuplicates };
+}
+
 function applyTop5PreservationGuard(
   currentTop5: string[],
   proposedTop5Candidates: TrendCandidate[],
@@ -290,6 +457,8 @@ function applyTop5PreservationGuard(
 
 async function main(): Promise<void> {
   const dryRun = process.env.DRY_RUN === "1" || process.env.DRY_RUN === "true";
+  const forceTransitionSimulation =
+    dryRun && (process.env.FORCE_TRANSITION_SIM === "1" || process.env.FORCE_TRANSITION_SIM === "true");
   const startedAt = new Date().toISOString();
   const beforeParsed = await readParsedTrendsJsonFromDisk();
   const before = beforeParsed ? snapshotFromParsed(beforeParsed) : null;
@@ -354,6 +523,12 @@ async function main(): Promise<void> {
   const proposedTop5 = candidates.filter((c) => c.primaryEligible !== false).slice(0, 5);
   const guard = applyTop5PreservationGuard(currentTop5, candidates.filter((c) => c.primaryEligible !== false));
   const weekKey = isoWeekKey(new Date(lastUpdated));
+  let existingHistory: TrendHistoryEntry[] = [];
+  try {
+    existingHistory = parseTrendHistory(await fs.readFile(TREND_HISTORY_FILE, "utf-8"));
+  } catch {
+    existingHistory = [];
+  }
   const historySnapshot = buildTrendHistorySnapshot({
     timestamp: lastUpdated,
     week: weekKey,
@@ -367,6 +542,17 @@ async function main(): Promise<void> {
     replacementDecisions: guard.decisions,
   });
   const historyWrite = await appendTrendHistory(historySnapshot, dryRun);
+  const shouldGenerateTransitions = data.refreshType === "weekly" || forceTransitionSimulation;
+  const generatedTransitions = shouldGenerateTransitions
+    ? buildTrendTransitions({
+        week: weekKey,
+        currentEntries: historySnapshot,
+        existingHistory,
+      })
+    : { entries: [] as TrendTransitionEntry[], promoted: [] as string[], fading: [] as string[] };
+  const transitionWrite = shouldGenerateTransitions
+    ? await appendTrendTransitions(generatedTransitions.entries, dryRun)
+    : { wouldWrite: 0, appended: 0, skippedDuplicates: 0 };
   console.log(formatTopSignalCandidatesForConsole(candidates, 6));
   console.log(
     JSON.stringify({
@@ -385,6 +571,21 @@ async function main(): Promise<void> {
       entriesWouldWrite: historyWrite.wouldWrite,
       dryRun,
       sampleEntries: historySnapshot.slice(0, 8),
+    }),
+  );
+  console.log(
+    JSON.stringify({
+      event: "trend-transition-preview",
+      jobType: "simulation",
+      week: weekKey,
+      enabled: shouldGenerateTransitions,
+      forcedByDryRunFlag: forceTransitionSimulation,
+      entriesWouldWrite: transitionWrite.wouldWrite,
+      skippedDuplicates: transitionWrite.skippedDuplicates,
+      entitiesPromoted: generatedTransitions.promoted,
+      entitiesFading: generatedTransitions.fading,
+      sampleTransitions: generatedTransitions.entries.slice(0, 8),
+      dryRun,
     }),
   );
   console.log(
@@ -485,6 +686,12 @@ async function main(): Promise<void> {
       wroteTrendHistory: !dryRun && historyWrite.appended > 0,
       trendHistoryEntriesWouldWrite: historyWrite.wouldWrite,
       trendHistoryEntriesAppended: historyWrite.appended,
+      wroteTrendTransitions: !dryRun && transitionWrite.appended > 0,
+      trendTransitionEntriesWouldWrite: transitionWrite.wouldWrite,
+      trendTransitionEntriesAppended: transitionWrite.appended,
+      trendTransitionSkippedDuplicates: transitionWrite.skippedDuplicates,
+      trendTransitionPromotedCount: generatedTransitions.promoted.length,
+      trendTransitionFadingCount: generatedTransitions.fading.length,
       dryRun,
       committed: false,
       commitSha: null,
