@@ -20,6 +20,8 @@ import {
   snapshotFromParsed,
   sourceInventory,
 } from "@/lib/pipelineAudit";
+import type { Trend } from "@/types/laFoodTrend";
+import { buildPersistedTrendConvergence, type TrendHistoryConvergenceEntry } from "@/lib/signals/convergence";
 import type { TrendCandidate } from "@/lib/signals/types";
 
 const TREND_HISTORY_FILE = "data/trend-history.json";
@@ -542,6 +544,21 @@ async function main(): Promise<void> {
     replacementDecisions: guard.decisions,
   });
   const historyWrite = await appendTrendHistory(historySnapshot, dryRun);
+  const historyForConvergence: TrendHistoryConvergenceEntry[] = [...existingHistory, ...historySnapshot].map((h) => ({
+    entity: h.entity,
+    timestamp: h.timestamp,
+    week: h.week,
+    stage: h.stage,
+    score: h.score,
+    sourceMix: h.sourceMix,
+    supportTypes: h.supportTypes,
+  }));
+  for (const trend of data.trends) {
+    (trend as Trend).convergence = buildPersistedTrendConvergence(trend as Trend, historyForConvergence, lastUpdated);
+  }
+  for (const trend of data.aboutToHit) {
+    (trend as Trend).convergence = buildPersistedTrendConvergence(trend as Trend, historyForConvergence, lastUpdated);
+  }
   const shouldGenerateTransitions = data.refreshType === "weekly" || forceTransitionSimulation;
   const generatedTransitions = shouldGenerateTransitions
     ? buildTrendTransitions({

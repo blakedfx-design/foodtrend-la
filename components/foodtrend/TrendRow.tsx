@@ -18,6 +18,10 @@ export type FtTrendRowProps = {
   momentumScore: number;
   popularityScore: number;
   moveCopy: string;
+  /** Overrides default “Why It’s Hitting” when convergence copy is present. */
+  whyEyebrow?: string;
+  /** Subtle editorial cue (e.g. quiet momentum); not a numeric score. */
+  signalCue?: string;
   heroImageUrl?: string;
   heroImageSource?: string;
   heroImageSourceUrl?: string;
@@ -165,6 +169,8 @@ export default function TrendRow({
   momentumScore,
   popularityScore,
   moveCopy,
+  whyEyebrow,
+  signalCue,
   heroImageUrl,
   heroImageSource,
   heroImageSourceUrl,
@@ -261,7 +267,10 @@ export default function TrendRow({
 
             <div className="ft-editorial-card__hairline ft-editorial-card__hairline--section ft-editorial-card__hairline--before-why" aria-hidden />
 
-            <p className="ft-editorial-card__eyebrow ft-editorial-card__eyebrow--why">Why It&apos;s Hitting</p>
+            <p className="ft-editorial-card__eyebrow ft-editorial-card__eyebrow--why">{whyEyebrow ?? "Why It's Hitting"}</p>
+            {signalCue?.trim() ? (
+              <p className="ft-editorial-card__why-cue">{signalCue.trim()}</p>
+            ) : null}
             <ul className="ft-editorial-card__why-list">
               {whyLines.map((line, i) => (
                 <li key={i} className="ft-editorial-card__why-row">

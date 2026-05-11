@@ -425,8 +425,8 @@ export default async function HomePage() {
             </section>
 
             <p className="ft-footer-note">
-              Updated when the scout runs. Rankings are computed locally from open-web candidates—not
-              paid placement.
+              Updated when the scout runs. Rankings are blended from open menus and local intel—not paid
+              placement.
             </p>
             <p className="mt-2 text-[11px] text-[#8a8883]">
               {/* TODO: Password protect /admin before public production use. */}
@@ -477,7 +477,7 @@ export default async function HomePage() {
                     </div>
                   ) : null}
                   <p className="ft-home-early-card__signal">
-                    Signal <span>{item.signalScore}</span> · {stageArrowFromConfidence(item.confidence)}
+                    Heat <span>{item.signalScore}</span> · {stageArrowFromConfidence(item.confidence)}
                   </p>
                 </article>
               );

@@ -11,7 +11,7 @@ import {
   readLaFoodTrendsDataFile,
   stageArrowFromConfidence,
 } from "@/lib/laFoodTrendsData";
-import { trendToEditorialCardProps } from "@/lib/editorialTrendCardProps";
+import { trendToEditorialCardProps, scrubPublicEditorialCardLines } from "@/lib/editorialTrendCardProps";
 import { whyLinesForEditorialCard } from "@/lib/trendText";
 
 export const dynamic = "force-dynamic";
@@ -75,7 +75,9 @@ export default async function LaFoodPage() {
               </header>
               <div className="ft-early__cards">
                 {aboutRows.map((trend) => {
-                  const bullets = whyLinesForEditorialCard(trend.whyItsEverywhere, trend.whyItWorks);
+                  const bullets = scrubPublicEditorialCardLines(
+                    whyLinesForEditorialCard(trend.whyItsEverywhere, trend.whyItWorks),
+                  );
                   const b0 = bullets[0] ?? "—";
                   const b1 = bullets[1] ?? b0;
                   const earlyThumbSrc =

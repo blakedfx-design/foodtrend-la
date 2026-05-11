@@ -2,6 +2,8 @@ import type {
   LaFoodTrendsDataFile,
   Trend,
   TrendConfidence,
+  TrendConvergencePersisted,
+  TrendConvergenceState,
   TrendRestaurant,
 } from "@/types/laFoodTrend";
 import type {
@@ -28,6 +30,67 @@ import {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+const CONVERGENCE_STATES: readonly TrendConvergenceState[] = [
+  "weak_signal",
+  "emerging",
+  "rising",
+  "stabilizing",
+  "mainstream",
+  "cooling",
+] as const;
+
+function parseTrendConvergencePersisted(r: Record<string, unknown>): TrendConvergencePersisted | undefined {
+  const raw = r.convergence;
+  if (!isRecord(raw)) return undefined;
+  const convergenceScore =
+    typeof raw.convergenceScore === "number" && Number.isFinite(raw.convergenceScore)
+      ? Math.round(raw.convergenceScore)
+      : NaN;
+  if (!Number.isFinite(convergenceScore)) return undefined;
+  const conf = raw.confidence;
+  if (conf !== "low" && conf !== "medium" && conf !== "high") return undefined;
+  const trendStateRaw = raw.trendState;
+  if (typeof trendStateRaw !== "string" || !CONVERGENCE_STATES.includes(trendStateRaw as TrendConvergenceState))
+    return undefined;
+  const strongestSources = Array.isArray(raw.strongestSources)
+    ? raw.strongestSources.filter((x): x is string => typeof x === "string")
+    : [];
+  const sourceDiversity =
+    typeof raw.sourceDiversity === "number" && Number.isFinite(raw.sourceDiversity) ? Math.round(raw.sourceDiversity) : 0;
+  const geoSpreadScore =
+    typeof raw.geoSpreadScore === "number" && Number.isFinite(raw.geoSpreadScore) ? Math.round(raw.geoSpreadScore) : 0;
+  const persistenceScore =
+    typeof raw.persistenceScore === "number" && Number.isFinite(raw.persistenceScore) ? Math.round(raw.persistenceScore) : 0;
+  const reasons = Array.isArray(raw.reasons) ? raw.reasons.filter((x): x is string => typeof x === "string") : [];
+  const nar = raw.whyItsEverywhereNarrative;
+  if (!isRecord(nar)) return undefined;
+  const headlineReason = typeof nar.headlineReason === "string" ? nar.headlineReason : "";
+  const supportReasons = Array.isArray(nar.supportReasons)
+    ? nar.supportReasons.filter((x): x is string => typeof x === "string")
+    : [];
+  const pub = raw.publicNarrative;
+  if (!isRecord(pub)) return undefined;
+  const primaryLine = typeof pub.primaryLine === "string" ? pub.primaryLine : "";
+  const supportingLines = Array.isArray(pub.supportingLines)
+    ? pub.supportingLines.filter((x): x is string => typeof x === "string")
+    : [];
+  const computedAt = typeof raw.computedAt === "string" ? raw.computedAt.trim() : "";
+  if (!computedAt) return undefined;
+  return {
+    convergenceScore,
+    confidence: conf,
+    trendState: trendStateRaw as TrendConvergenceState,
+    strongestSources,
+    sourceDiversity,
+    geoSpreadScore,
+    persistenceScore,
+    reasons,
+    whyItsEverywhereNarrative: { headlineReason, supportReasons },
+    publicNarrative: { primaryLine, supportingLines },
+    computedAt,
+  };
 }
 
 function parseListingsNeighborhoodClusters(raw: unknown): ListingsNeighborhoodCluster[] {
@@ -573,6 +636,8 @@ export function normalizeTrendRow(row: unknown): Trend {
       ? Math.min(100, Math.max(0, Math.round(rawPop)))
       : derivePopularityScore(signalScore);
 
+  const convergence = parseTrendConvergencePersisted(r);
+
   return {
     id,
     name,
@@ -609,6 +674,7 @@ export function normalizeTrendRow(row: unknown): Trend {
     [TREND_WORTH_SPLURGE]: worth,
     [TREND_EASY_ENTRY]: easy,
     [TREND_WHY_WORKS]: worksRaw,
+    ...(convergence ? { convergence } : {}),
   };
 }
 
@@ -666,6 +732,23 @@ export function trendToJsonObject(t: Trend): Record<string, unknown> {
     ...(t.heroImageSource ? { heroImageSource: t.heroImageSource } : {}),
     ...(t.heroImageSourceUrl ? { heroImageSourceUrl: t.heroImageSourceUrl } : {}),
     ...(t.heroImageCredit ? { heroImageCredit: t.heroImageCredit } : {}),
+    ...(t.convergence
+      ? {
+          convergence: {
+            convergenceScore: t.convergence.convergenceScore,
+            confidence: t.convergence.confidence,
+            trendState: t.convergence.trendState,
+            strongestSources: t.convergence.strongestSources,
+            sourceDiversity: t.convergence.sourceDiversity,
+            geoSpreadScore: t.convergence.geoSpreadScore,
+            persistenceScore: t.convergence.persistenceScore,
+            reasons: t.convergence.reasons,
+            whyItsEverywhereNarrative: t.convergence.whyItsEverywhereNarrative,
+            publicNarrative: t.convergence.publicNarrative,
+            computedAt: t.convergence.computedAt,
+          },
+        }
+      : {}),
   };
 }
 

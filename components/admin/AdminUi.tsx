@@ -42,9 +42,9 @@ export function AdminScaffold(props: {
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-[#f5f1e8] px-4 py-5 text-[#1f2937] md:px-6 md:py-6">
-      <div className="mx-auto grid w-full max-w-[1520px] grid-cols-1 gap-6 lg:grid-cols-[238px_minmax(0,1fr)]">
-        <aside className="rounded-2xl border border-[#e8e1d3] bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <main className="min-h-screen bg-[#f5f1e8] px-3 py-4 text-[#1f2937] sm:px-4 md:py-5 lg:px-6 xl:px-8 2xl:px-10">
+      <div className="mx-auto grid w-full max-w-[1920px] grid-cols-1 gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8 2xl:max-w-[2200px]">
+        <aside className="rounded-2xl border border-[#e8e1d3] bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] lg:p-5">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7d7465]">
             Foodtrend LA Admin
           </p>
@@ -70,15 +70,15 @@ export function AdminScaffold(props: {
           </nav>
         </aside>
 
-        <section className="space-y-5">
-          <header className="rounded-2xl border border-[#e8e1d3] bg-white px-4 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] md:px-6">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#968b77]">
+        <section className="min-w-0 space-y-6">
+          <header className="rounded-2xl border border-[#e8e1d3] bg-white px-4 py-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:px-6">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a6f5c]">
               {props.breadcrumb}
             </p>
             <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
-                <h1 className="text-[1.58rem] font-semibold tracking-tight text-[#17202b]">{props.title}</h1>
-                <p className="mt-1 text-[13px] leading-5 text-[#7a7f88]">{props.subtitle}</p>
+                <h1 className="text-[1.65rem] font-semibold tracking-tight text-[#17202b] md:text-[1.75rem]">{props.title}</h1>
+                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[#5c6570]">{props.subtitle}</p>
               </div>
               {props.actions ? <div className="flex flex-wrap gap-2">{props.actions}</div> : null}
             </div>
@@ -90,14 +90,24 @@ export function AdminScaffold(props: {
   );
 }
 
-export function Card(props: { title: string; subtitle?: string; children: React.ReactNode; className?: string }) {
+export function Card(props: {
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+  className?: string;
+  /** Tighter padding and type — operations/footer density */
+  compact?: boolean;
+}) {
+  const compact = props.compact === true;
   return (
     <section
-      className={`rounded-2xl border border-[#e8e1d3] bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] ${props.className ?? ""}`}
+      className={`rounded-2xl border border-[#e8e1d3] bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] ${compact ? "p-3" : "p-5"} ${props.className ?? ""}`}
     >
-      <div className="mb-3.5">
-        <h2 className="text-[14px] font-semibold tracking-tight text-[#1f2937]">{props.title}</h2>
-        {props.subtitle ? <p className="mt-1 text-[11px] leading-4.5 text-[#848995]">{props.subtitle}</p> : null}
+      <div className={compact ? "mb-2" : "mb-4"}>
+        <h2 className={`${compact ? "text-[13px]" : "text-[15px]"} font-semibold tracking-tight text-[#1f2937]`}>{props.title}</h2>
+        {props.subtitle ? (
+          <p className={`${compact ? "mt-0.5 text-[10px] leading-snug" : "mt-1.5 text-xs leading-relaxed"} text-[#5c6570]`}>{props.subtitle}</p>
+        ) : null}
       </div>
       {props.children}
     </section>
@@ -132,10 +142,10 @@ export function MiniSparkline(props: { values: number[]; tone?: "green" | "neutr
       return `${x},${y}`;
     })
     .join(" ");
-  const stroke = props.tone === "green" ? "#2f8f5b" : "#4b5563";
+  const stroke = props.tone === "green" ? "#166534" : "#1f2937";
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="h-9 w-full max-w-[120px]" aria-hidden>
-      <polyline fill="none" stroke={stroke} strokeWidth="2.2" points={points} strokeLinecap="round" />
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-[2.65rem] w-full max-w-[132px]" aria-hidden>
+      <polyline fill="none" stroke={stroke} strokeWidth="3.5" opacity={0.95} points={points} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

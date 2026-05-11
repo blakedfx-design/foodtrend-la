@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "scout": "tsx scripts/scout-la-food.ts",
     "update-trends": "tsx scripts/update-trends.ts",
-    "pipeline-health": "tsx scripts/pipeline-health-snapshot.ts"
+    "pipeline-health": "tsx scripts/pipeline-health-snapshot.ts",
+    "test": "tsx --test lib/signals/convergence.test.ts"
   },
   "private": true,
   "dependencies": {

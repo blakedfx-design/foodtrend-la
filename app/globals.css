@@ -725,6 +725,15 @@ a:hover {
   color: var(--ec-rust);
 }
 
+.ft-editorial-card__why-cue {
+  margin: -0.35rem 0 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ec-navy) 42%, #78716c);
+}
+
 .ft-editorial-card__eyebrow--venues {
   text-transform: uppercase;
   letter-spacing: 0.12em;

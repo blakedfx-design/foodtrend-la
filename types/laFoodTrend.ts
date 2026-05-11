@@ -2,6 +2,43 @@ import type { ListingsSignal } from "@/types/listingsSignal";
 import type { TrendReservationSignal } from "@/types/reservationSignal";
 import type { ManualSocialSignals, TrendSocialSignal } from "@/types/socialSignal";
 
+/** Mirrors scoring module — kept here to avoid circular imports with `lib/signals/convergence`. */
+export type TrendConvergenceConfidence = "low" | "medium" | "high";
+
+export type TrendConvergenceState =
+  | "weak_signal"
+  | "emerging"
+  | "rising"
+  | "stabilizing"
+  | "mainstream"
+  | "cooling";
+
+export type TrendConvergenceNarrative = {
+  headlineReason: string;
+  supportReasons: string[];
+};
+
+/** Food-editorial lines for public cards (no dashboard phrasing). */
+export type TrendConvergencePublicNarrative = {
+  primaryLine: string;
+  supportingLines: string[];
+};
+
+/** Written by `scripts/update-trends.ts`; avoids recomputing convergence on the homepage. */
+export type TrendConvergencePersisted = {
+  convergenceScore: number;
+  confidence: TrendConvergenceConfidence;
+  trendState: TrendConvergenceState;
+  strongestSources: string[];
+  sourceDiversity: number;
+  geoSpreadScore: number;
+  persistenceScore: number;
+  reasons: string[];
+  whyItsEverywhereNarrative: TrendConvergenceNarrative;
+  publicNarrative: TrendConvergencePublicNarrative;
+  computedAt: string;
+};
+
 export type TrendConfidence = "low" | "medium" | "high";
 
 /**
@@ -45,6 +82,9 @@ export type TrendEditorialFields = {
 export type Trend = {
   id: string;
   name: string;
+  /** When set, used for “Why it’s everywhere” copy instead of parsing legacy whyItsEverywhere only. */
+  convergence?: TrendConvergencePersisted;
+
   /** Mirrors `short descriptor` after load. */
   description: string;
   /** Mirrors `WHY IT'S HITTING` after load. */

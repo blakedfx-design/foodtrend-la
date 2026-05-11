@@ -1,1 +1,552 @@
-[]
+[
+  {
+    "entity": "Sonoran-Style Breakfast Burritos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "top5",
+    "score": 63,
+    "sourceMix": {
+      "manual_editorial": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 0,
+    "candidateOnly": false,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "Hainan Chicken Lunch Counters",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "top5",
+    "score": 62,
+    "sourceMix": {
+      "manual_editorial": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 0,
+    "candidateOnly": false,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "Natural Wine “Martini” Hour",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "top5",
+    "score": 61,
+    "sourceMix": {
+      "manual_editorial": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 0,
+    "candidateOnly": false,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "Aguachile on Ice",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "top5",
+    "score": 61,
+    "sourceMix": {
+      "manual_editorial": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 0,
+    "candidateOnly": false,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "Korean Ssam Bar Snacks",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "top5",
+    "score": 61,
+    "sourceMix": {
+      "manual_editorial": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 0,
+    "candidateOnly": false,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "mariscos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 11,
+    "sourceMix": {
+      "infatuation": 3,
+      "latimes": 1
+    },
+    "supportTypes": [
+      "editorial_overlap"
+    ],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "tacos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 11,
+    "sourceMix": {
+      "eater": 1,
+      "infatuation": 2,
+      "latimes": 1
+    },
+    "supportTypes": [
+      "editorial_overlap"
+    ],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "ceviche",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 11,
+    "sourceMix": {
+      "infatuation": 2,
+      "latimes": 1
+    },
+    "supportTypes": [
+      "editorial_overlap"
+    ],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "sandwiches",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 11,
+    "sourceMix": {
+      "infatuation": 2,
+      "latimes": 3
+    },
+    "supportTypes": [
+      "editorial_overlap"
+    ],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "matcha",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 10,
+    "sourceMix": {
+      "eater": 1,
+      "infatuation": 1
+    },
+    "supportTypes": [
+      "editorial_overlap"
+    ],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "sushi",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 10,
+    "sourceMix": {
+      "infatuation": 4
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "sandwich",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 9,
+    "sourceMix": {
+      "latimes": 2
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "mexican",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 9,
+    "sourceMix": {
+      "eater": 1,
+      "infatuation": 1
+    },
+    "supportTypes": [
+      "editorial_overlap"
+    ],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "pizza",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 8,
+    "sourceMix": {
+      "infatuation": 1,
+      "latimes": 1
+    },
+    "supportTypes": [
+      "editorial_overlap"
+    ],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "italian",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "about_to_hit",
+    "score": 7,
+    "sourceMix": {
+      "infatuation": 1,
+      "latimes": 1
+    },
+    "supportTypes": [
+      "editorial_overlap"
+    ],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": false,
+    "replacementReason": null
+  },
+  {
+    "entity": "a side of sushi",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 9,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "of sushi",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 9,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "armenian",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 8,
+    "sourceMix": {
+      "latimes": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "featuring ceviches fish tacos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 8,
+    "sourceMix": {
+      "latimes": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "fish tacos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 8,
+    "sourceMix": {
+      "latimes": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "Ceviche Project Ceviche",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 8,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "Project Ceviche",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 8,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "Sky s Gourmet Tacos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 8,
+    "sourceMix": {
+      "eater": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "Gourmet Tacos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 8,
+    "sourceMix": {
+      "eater": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "chicken lomo saltado sandwiches",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 8,
+    "sourceMix": {
+      "latimes": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "saltado sandwiches",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 8,
+    "sourceMix": {
+      "latimes": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "basturma brisket sandwich",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 7,
+    "sourceMix": {
+      "latimes": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "brisket sandwich",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 7,
+    "sourceMix": {
+      "latimes": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "From Mexican shrimp tacos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 7,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "shrimp tacos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 7,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "tacos to Peruvian ceviche",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 7,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "Peruvian ceviche",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 7,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "session and casual sushi",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 7,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "casual sushi",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 7,
+    "sourceMix": {
+      "infatuation": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  },
+  {
+    "entity": "day breakfast tacos",
+    "timestamp": "2026-05-11T06:00:09.003Z",
+    "week": "2026-W20",
+    "stage": "blocked",
+    "score": 7,
+    "sourceMix": {
+      "eater": 1
+    },
+    "supportTypes": [],
+    "editorialContributionPct": 25,
+    "candidateOnly": true,
+    "replacementBlocked": true,
+    "replacementReason": "blocked: requires >=2 supporting signals"
+  }
+]
