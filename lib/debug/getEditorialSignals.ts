@@ -7,7 +7,13 @@ import {
 import type { TrendSignal } from "@/lib/signals/types";
 import { classifyTrendMaturity } from "@/lib/signals/trendMaturity";
 
-type EditorialSource = "eater" | "infatuation" | "latimes";
+type EditorialSource =
+  | "eater"
+  | "infatuation"
+  | "latimes"
+  | "resy_la"
+  | "timeout_la"
+  | "bonappetit";
 
 export type EditorialSignalsDebugPayload = {
   now: string;
@@ -67,6 +73,25 @@ export type EditorialSignalsDebugPayload = {
     matchedPhrase: string | null;
     candidateOnly: boolean;
   }>;
+  sourceSignalFunnel: Record<
+    string,
+    {
+      fetchedItems: number;
+      laRelevantItems: number;
+      normalizedArticles: number;
+      articlesWithExtractableEntities: number;
+      extractedEntities: number;
+      candidateSignals: number;
+      candidateTrends: number;
+      finalSignals: number;
+      rejectedByRelevance: number;
+      rejectedByCategory: number;
+      rejectedByConfidence: number;
+      rejectedByDeduplication: number;
+      rejectedItems: number;
+      rejectReasons: Record<string, number>;
+    }
+  >;
 };
 
 function countByEntity(
@@ -105,6 +130,9 @@ function feedStatus(scannedBySource: Record<EditorialSource, number>): Record<Ed
     eater: scannedBySource.eater > 0 ? "green" : "red",
     infatuation: scannedBySource.infatuation > 0 ? "green" : "red",
     latimes: scannedBySource.latimes > 0 ? "green" : "red",
+    resy_la: scannedBySource.resy_la > 0 ? "green" : "red",
+    timeout_la: scannedBySource.timeout_la > 0 ? "green" : "red",
+    bonappetit: scannedBySource.bonappetit > 0 ? "green" : "red",
   };
 }
 
@@ -118,7 +146,14 @@ function supportTypesForCandidateSignals(signals: TrendSignal[]): string[] {
     if (signal.source === "google_places") hasGooglePlaces = true;
     if (signal.source === "reddit") hasReddit = true;
     if (signal.source === "reservation") hasReservation = true;
-    if (signal.source === "eater" || signal.source === "infatuation" || signal.source === "latimes") {
+    if (
+      signal.source === "eater" ||
+      signal.source === "infatuation" ||
+      signal.source === "latimes" ||
+      signal.source === "resy_la" ||
+      signal.source === "timeout_la" ||
+      signal.source === "bonappetit"
+    ) {
       const publication =
         typeof signal.metadata?.publication === "string" ? signal.metadata.publication : signal.source;
       editorialPublications.add(publication);
@@ -136,7 +171,13 @@ export async function getEditorialSignalsDebugPayload(): Promise<EditorialSignal
   const nowIso = new Date().toISOString();
   const allSignals = await getEditorialSignals(data, nowIso);
   const editorialSignals = allSignals.filter(
-    (signal) => signal.source === "eater" || signal.source === "infatuation" || signal.source === "latimes",
+    (signal) =>
+      signal.source === "eater" ||
+      signal.source === "infatuation" ||
+      signal.source === "latimes" ||
+      signal.source === "resy_la" ||
+      signal.source === "timeout_la" ||
+      signal.source === "bonappetit",
   );
   const editorialCandidates = buildTrendCandidates(editorialSignals, {
     minScore: 8,
@@ -224,5 +265,6 @@ export async function getEditorialSignalsDebugPayload(): Promise<EditorialSignal
       matchedPhrase: typeof signal.metadata?.matchedPhrase === "string" ? signal.metadata.matchedPhrase : null,
       candidateOnly: Boolean(signal.metadata?.candidateOnly),
     })),
+    sourceSignalFunnel: stats.sourceSignalFunnel,
   };
 }

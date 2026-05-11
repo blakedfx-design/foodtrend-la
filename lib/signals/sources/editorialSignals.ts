@@ -6,7 +6,13 @@ import {
 import type { SignalSource, TrendSignal } from "@/lib/signals/types";
 import type { LaFoodTrendsDataFile, Trend } from "@/types/laFoodTrend";
 
-type PublicationSource = "eater" | "infatuation" | "latimes";
+type PublicationSource =
+  | "eater"
+  | "infatuation"
+  | "latimes"
+  | "resy_la"
+  | "timeout_la"
+  | "bonappetit";
 
 type FeedConfig = {
   source: PublicationSource;
@@ -39,6 +45,13 @@ export type EditorialFeedDiagnostic = {
     droppedMissingTitle: number;
     droppedMissingLink: number;
     droppedCdataTitleLikely: number;
+  };
+  sourceDiagnostics: {
+    fetchedItems: number;
+    laRelevantItems: number;
+    normalizedArticles: number;
+    rejectedItems: number;
+    rejectReasons: Record<string, number>;
   };
   fetchedAt: string;
 };
@@ -88,18 +101,43 @@ export type EditorialIngestionStats = {
   suppressedNeighborhoodCandidates: SuppressedNeighborhoodCandidate[];
   ignoredGenericMatches: IgnoredGenericMatch[];
   failedSources: PublicationSource[];
+  sourceSignalFunnel: Record<
+    PublicationSource,
+    {
+      fetchedItems: number;
+      laRelevantItems: number;
+      normalizedArticles: number;
+      articlesWithExtractableEntities: number;
+      extractedEntities: number;
+      candidateSignals: number;
+      candidateTrends: number;
+      finalSignals: number;
+      rejectedByRelevance: number;
+      rejectedByCategory: number;
+      rejectedByConfidence: number;
+      rejectedByDeduplication: number;
+      rejectedItems: number;
+      rejectReasons: Record<string, number>;
+    }
+  >;
 };
 
 const FEED_CONFIGS: FeedConfig[] = [
   { source: "eater", feedUrl: "https://la.eater.com/rss/index.xml" },
   { source: "infatuation", feedUrl: "https://www.theinfatuation.com/los-angeles/feed" },
   { source: "latimes", feedUrl: "https://www.latimes.com/food/rss2.0.xml" },
+  { source: "resy_la", feedUrl: "https://blog.resy.com/city/los-angeles/feed/" },
+  { source: "timeout_la", feedUrl: "https://www.timeout.com/los-angeles/restaurants" },
+  { source: "bonappetit", feedUrl: "https://www.bonappetit.com/feed/rss" },
 ];
 
 const EDITORIAL_SOURCE_WEIGHTS: Record<PublicationSource, number> = {
   eater: 0.25,
   infatuation: 0.22,
   latimes: 0.3,
+  resy_la: 0.2,
+  timeout_la: 0.2,
+  bonappetit: 0.19,
 };
 
 const FEED_CACHE_TTL_MS = 15 * 60 * 1000;
@@ -112,8 +150,16 @@ const feedDiagnosticsCache = new Map<
   string,
   { expiresAt: number; diagnostic: EditorialFeedDiagnostic; articles: EditorialArticle[] }
 >();
+const articleRelevanceCache = new Map<string, { expiresAt: number; keep: boolean; reason: string }>();
 let lastIngestionStats: EditorialIngestionStats = {
-  scannedBySource: { eater: 0, infatuation: 0, latimes: 0 },
+  scannedBySource: {
+    eater: 0,
+    infatuation: 0,
+    latimes: 0,
+    resy_la: 0,
+    timeout_la: 0,
+    bonappetit: 0,
+  },
   scannedTotal: 0,
   entitiesExtracted: 0,
   overlapEntities: [],
@@ -126,6 +172,104 @@ let lastIngestionStats: EditorialIngestionStats = {
   suppressedNeighborhoodCandidates: [],
   ignoredGenericMatches: [],
   failedSources: [],
+  sourceSignalFunnel: {
+    eater: {
+      fetchedItems: 0,
+      laRelevantItems: 0,
+      normalizedArticles: 0,
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      candidateSignals: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+      rejectedByRelevance: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      rejectedItems: 0,
+      rejectReasons: {},
+    },
+    infatuation: {
+      fetchedItems: 0,
+      laRelevantItems: 0,
+      normalizedArticles: 0,
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      candidateSignals: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+      rejectedByRelevance: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      rejectedItems: 0,
+      rejectReasons: {},
+    },
+    latimes: {
+      fetchedItems: 0,
+      laRelevantItems: 0,
+      normalizedArticles: 0,
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      candidateSignals: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+      rejectedByRelevance: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      rejectedItems: 0,
+      rejectReasons: {},
+    },
+    resy_la: {
+      fetchedItems: 0,
+      laRelevantItems: 0,
+      normalizedArticles: 0,
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      candidateSignals: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+      rejectedByRelevance: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      rejectedItems: 0,
+      rejectReasons: {},
+    },
+    timeout_la: {
+      fetchedItems: 0,
+      laRelevantItems: 0,
+      normalizedArticles: 0,
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      candidateSignals: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+      rejectedByRelevance: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      rejectedItems: 0,
+      rejectReasons: {},
+    },
+    bonappetit: {
+      fetchedItems: 0,
+      laRelevantItems: 0,
+      normalizedArticles: 0,
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      candidateSignals: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+      rejectedByRelevance: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      rejectedItems: 0,
+      rejectReasons: {},
+    },
+  },
 };
 
 function trendRestaurants(trend: Trend): string[] {
@@ -143,6 +287,74 @@ function decodeHtmlEntities(input: string): string {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/&apos;/g, "'");
+}
+
+const LA_RELEVANCE_HINT =
+  /\b(los angeles|la\b|southern california|socal|dtla|koreatown|silver lake|echo park|pasadena|venice|santa monica|west hollywood|arts district|highland park|culver city|sawtelle|thai town|boyle heights|fairfax|inglewood|long beach)\b/i;
+const BON_APPETIT_LA_RESTAURANT_HINT =
+  /\b(holbox|bestia|bavel|gjelina|jon\s*&\s*vinny'?s|saffy'?s|anajak thai|pijja palace|republique|night\s*\+\s*market|found oyster|sushi\s+note|birdie\s*g'?s)\b/i;
+
+type SourceFilterDecision = {
+  keep: boolean;
+  reason: string;
+};
+
+function evaluateSourceFilter(source: PublicationSource, article: EditorialArticle): SourceFilterDecision {
+  if (source !== "bonappetit") return { keep: true, reason: "accepted_default" };
+  const blob = `${article.title} ${article.subhead} ${article.link}`.toLowerCase();
+  if (LA_RELEVANCE_HINT.test(blob)) return { keep: true, reason: "accepted_la_text_match" };
+  if (BON_APPETIT_LA_RESTAURANT_HINT.test(blob)) return { keep: true, reason: "accepted_la_restaurant_match" };
+  return { keep: false, reason: "rejected_not_la_relevant" };
+}
+
+function absoluteUrl(url: string, baseUrl: string): string {
+  if (!url) return "";
+  if (/^https?:\/\//i.test(url)) return url;
+  try {
+    return new URL(url, baseUrl).toString();
+  } catch {
+    return "";
+  }
+}
+
+async function bonAppetitBodyRelevance(article: EditorialArticle): Promise<SourceFilterDecision> {
+  const cacheKey = article.link;
+  const cached = articleRelevanceCache.get(cacheKey);
+  const now = Date.now();
+  if (cached && cached.expiresAt > now) return { keep: cached.keep, reason: cached.reason };
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 4500);
+  try {
+    const res = await fetch(article.link, {
+      signal: controller.signal,
+      cache: "no-store",
+      headers: {
+        "User-Agent": "FoodTrendLA-EditorialSignals/1.0 (+https://foodtrend-la.vercel.app)",
+        Accept: "text/html",
+      },
+    });
+    if (!res.ok) {
+      const out = { keep: false, reason: `rejected_article_fetch_http_${res.status}` };
+      articleRelevanceCache.set(cacheKey, { ...out, expiresAt: now + FEED_CACHE_TTL_MS });
+      return out;
+    }
+    const body = await res.text();
+    const bodyText = stripHtml(body).toLowerCase();
+    const keep =
+      LA_RELEVANCE_HINT.test(bodyText) || BON_APPETIT_LA_RESTAURANT_HINT.test(bodyText);
+    const out = {
+      keep,
+      reason: keep ? "accepted_la_body_match" : "rejected_not_la_relevant",
+    };
+    articleRelevanceCache.set(cacheKey, { ...out, expiresAt: now + FEED_CACHE_TTL_MS });
+    return out;
+  } catch {
+    const out = { keep: false, reason: "rejected_article_fetch_failed" };
+    articleRelevanceCache.set(cacheKey, { ...out, expiresAt: now + FEED_CACHE_TTL_MS });
+    return out;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function unwrapCdata(input: string): string {
@@ -304,6 +516,46 @@ function rawItemCountForMode(
   return (text.match(/<article\b/gi) ?? []).length;
 }
 
+function parseTimeoutHtmlArticles(html: string): {
+  articles: EditorialArticle[];
+  candidateItemCount: number;
+  rejectReasons: Record<string, number>;
+} {
+  const cards =
+    html.match(/<article\b[\s\S]*?<\/article>/gi) ??
+    html.match(/<li\b[^>]*class="[^"]*(?:tile|card|feature-item)[^"]*"[\s\S]*?<\/li>/gi) ??
+    [];
+  const out: EditorialArticle[] = [];
+  const rejectReasons: Record<string, number> = {};
+  for (const card of cards) {
+    const titleRaw =
+      card.match(/<h[23][^>]*>([\s\S]*?)<\/h[23]>/i)?.[1] ??
+      card.match(/<a[^>]*>([\s\S]*?)<\/a>/i)?.[1] ??
+      "";
+    const title = stripHtml(titleRaw);
+    const hrefRaw = card.match(/<a[^>]*href=["']([^"']+)["']/i)?.[1] ?? "";
+    const link = absoluteUrl(stripHtml(hrefRaw), "https://www.timeout.com");
+    const subheadRaw =
+      card.match(/<p[^>]*>([\s\S]*?)<\/p>/i)?.[1] ??
+      card.match(/<div[^>]*class="[^"]*excerpt[^"]*"[^>]*>([\s\S]*?)<\/div>/i)?.[1] ??
+      "";
+    const subhead = stripHtml(subheadRaw);
+    const publishedAt =
+      stripHtml(card.match(/<time[^>]*datetime=["']([^"']+)["']/i)?.[1] ?? "") ||
+      stripHtml(card.match(/<time[^>]*>([\s\S]*?)<\/time>/i)?.[1] ?? "");
+    if (!title) {
+      rejectReasons["missing_title"] = (rejectReasons["missing_title"] ?? 0) + 1;
+      continue;
+    }
+    if (!link) {
+      rejectReasons["missing_link"] = (rejectReasons["missing_link"] ?? 0) + 1;
+      continue;
+    }
+    out.push({ source: "timeout_la", title, link, publishedAt, subhead });
+  }
+  return { articles: out.slice(0, MAX_ARTICLES_PER_SOURCE), candidateItemCount: cards.length, rejectReasons };
+}
+
 async function fetchTextWithMeta(url: string): Promise<{
   statusCode: number | null;
   contentType: string | null;
@@ -345,9 +597,21 @@ function parseArticlesByMode(
   droppedMissingTitle: number;
   droppedMissingLink: number;
   droppedCdataTitleLikely: number;
+  rejectReasons?: Record<string, number>;
 } {
   if (mode === "rss") return parseRssItemsWithDiagnostics(text, source);
   if (mode === "atom") return parseAtomEntriesWithDiagnostics(text, source);
+  if (mode === "html_fallback" && source === "timeout_la") {
+    const parsed = parseTimeoutHtmlArticles(text);
+    return {
+      articles: parsed.articles,
+      candidateItemCount: parsed.candidateItemCount,
+      droppedMissingTitle: 0,
+      droppedMissingLink: 0,
+      droppedCdataTitleLikely: 0,
+      rejectReasons: parsed.rejectReasons,
+    };
+  }
   const parsed = parseFeedItems(text, source);
   return {
     articles: parsed,
@@ -359,6 +623,7 @@ function parseArticlesByMode(
 }
 
 function deriveFailureReason(
+  source: PublicationSource,
   statusCode: number | null,
   parserMode: EditorialFeedDiagnostic["parserMode"],
   rawItemCount: number,
@@ -369,6 +634,7 @@ function deriveFailureReason(
 ): string | null {
   if (statusCode == null) return "network-error-or-timeout";
   if (statusCode >= 400) return `http-${statusCode}`;
+  if (source === "timeout_la") return null;
   if (responseByteLength === 0) return "empty-response-body";
   if (rawItemCount === 0 && parserMode === "html_fallback") return "html-response-no-rss-or-atom-items";
   if (rawItemCount === 0 && parserMode === "json") return "json-feed-without-supported-items";
@@ -397,7 +663,33 @@ async function fetchFeedArticles(config: FeedConfig): Promise<EditorialArticle[]
         droppedCdataTitleLikely: 0,
       };
   const rawItemCount = parsed.candidateItemCount;
-  const articles = parsed.articles;
+  const filteredDecisions = await Promise.all(
+    parsed.articles.map(async (article) => {
+      const initialDecision = evaluateSourceFilter(config.source, article);
+      if (config.source !== "bonappetit" || initialDecision.keep) {
+        return { article, decision: initialDecision };
+      }
+      const bodyDecision = await bonAppetitBodyRelevance(article);
+      return { article, decision: bodyDecision };
+    }),
+  );
+  const laRelevantItems = filteredDecisions.filter((row) => row.decision.keep).length;
+  const rejectedByFilter = filteredDecisions.length - laRelevantItems;
+  const rejectReasons: Record<string, number> = { ...(parsed.rejectReasons ?? {}) };
+  for (const row of filteredDecisions) {
+    if (row.decision.keep) continue;
+    rejectReasons[row.decision.reason] = (rejectReasons[row.decision.reason] ?? 0) + 1;
+  }
+  const articles = filteredDecisions
+    .filter((row) => row.decision.keep)
+    .map((row) => row.article);
+  const sourceDiagnostics = {
+    fetchedItems: rawItemCount,
+    laRelevantItems,
+    normalizedArticles: articles.length,
+    rejectedItems: rejectedByFilter + Object.values(parsed.rejectReasons ?? {}).reduce((sum, v) => sum + v, 0),
+    rejectReasons,
+  };
   const diagnostic: EditorialFeedDiagnostic = {
     source: config.source,
     url: config.feedUrl,
@@ -411,6 +703,7 @@ async function fetchFeedArticles(config: FeedConfig): Promise<EditorialArticle[]
     sampleTitles: articles.slice(0, 3).map((a) => a.title),
     first10Titles: articles.slice(0, 10).map((a) => a.title),
     failureReason: deriveFailureReason(
+      config.source,
       statusCode,
       parserMode,
       rawItemCount,
@@ -425,6 +718,7 @@ async function fetchFeedArticles(config: FeedConfig): Promise<EditorialArticle[]
       droppedMissingLink: parsed.droppedMissingLink,
       droppedCdataTitleLikely: parsed.droppedCdataTitleLikely,
     },
+    sourceDiagnostics,
     fetchedAt: new Date().toISOString(),
   };
   feedCache.set(key, { articles, expiresAt: now + FEED_CACHE_TTL_MS });
@@ -464,6 +758,13 @@ export async function getEditorialFeedDiagnostics(): Promise<EditorialFeedDiagno
           droppedMissingTitle: 0,
           droppedMissingLink: 0,
           droppedCdataTitleLikely: 0,
+        },
+        sourceDiagnostics: {
+          fetchedItems: 0,
+          laRelevantItems: 0,
+          normalizedArticles: 0,
+          rejectedItems: 0,
+          rejectReasons: {},
         },
         fetchedAt: new Date().toISOString(),
       } as EditorialFeedDiagnostic;
@@ -667,6 +968,186 @@ function confidenceForMatch(
   return inTitle ? 0.74 : 0.62;
 }
 
+const GENERIC_ENTITY_STOPWORDS = new Set([
+  "restaurant",
+  "restaurants",
+  "los angeles",
+  "la",
+  "food",
+  "best",
+  "cheap",
+  "easy",
+  "where to eat",
+  "new restaurants",
+]);
+const DISH_HEADWORDS = [
+  "taco",
+  "tacos",
+  "tostada",
+  "tostadas",
+  "ramen",
+  "pho",
+  "dumpling",
+  "dumplings",
+  "sandwich",
+  "sandwiches",
+  "burger",
+  "burgers",
+  "pizza",
+  "sushi",
+  "pasta",
+  "birria",
+  "aguachile",
+  "ceviche",
+  "burrito",
+  "burritos",
+];
+const INGREDIENT_TERMS = ["tuna", "matcha", "miso", "chile", "corn", "pork", "beef", "shrimp"];
+const CUISINE_TERMS = [
+  "korean",
+  "thai",
+  "mexican",
+  "japanese",
+  "filipino",
+  "vietnamese",
+  "chinese",
+  "italian",
+  "armenian",
+  "persian",
+];
+
+type HeuristicEntity = {
+  entity: string;
+  entityType: LexiconEntityType;
+  category: EditorialLexiconCategory;
+  confidence: number;
+  matchScope: "title" | "subhead";
+  matchReason: string;
+};
+
+function cleanEntityText(value: string): string {
+  return value
+    .replace(/[^\w\s'-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function isGenericEntity(value: string): boolean {
+  const lower = value.toLowerCase().trim();
+  return !lower || GENERIC_ENTITY_STOPWORDS.has(lower);
+}
+
+function extractHeuristicEntitiesFromText(text: string, scope: "title" | "subhead"): HeuristicEntity[] {
+  const cleaned = cleanEntityText(text);
+  const lower = cleaned.toLowerCase();
+  const out: HeuristicEntity[] = [];
+  for (const dish of DISH_HEADWORDS) {
+    const re = new RegExp(`\\b([a-z]+\\s+){0,3}${dish}\\b`, "ig");
+    const matches = cleaned.match(re) ?? [];
+    for (const m of matches) {
+      const entity = cleanEntityText(m).replace(/^(the|these|those|best|new)\s+/i, "");
+      if (isGenericEntity(entity)) continue;
+      const pushDish = (dishEntity: string) =>
+        out.push({
+          entity: dishEntity,
+          entityType: "dish",
+          category: "dish",
+          confidence: scope === "title" ? 0.58 : 0.5,
+          matchScope: scope,
+          matchReason: "title_pattern_dish",
+        });
+      pushDish(entity);
+      const words = entity.split(/\s+/).filter(Boolean);
+      if (words.length >= 2) {
+        const lastTwo = `${words[words.length - 2]} ${words[words.length - 1]}`;
+        if (!isGenericEntity(lastTwo)) pushDish(lastTwo);
+      }
+      if (!isGenericEntity(dish)) {
+        pushDish(dish);
+      }
+    }
+  }
+  for (const ingredient of INGREDIENT_TERMS) {
+    const re = new RegExp(`\\b${ingredient}\\b`, "i");
+    if (!re.test(lower)) continue;
+    out.push({
+      entity: ingredient,
+      entityType: "ingredient",
+      category: "ingredient",
+      confidence: scope === "title" ? 0.44 : 0.38,
+      matchScope: scope,
+      matchReason: "ingredient_term",
+    });
+  }
+  for (const cuisine of CUISINE_TERMS) {
+    const re = new RegExp(`\\b${cuisine}\\b`, "i");
+    if (!re.test(lower)) continue;
+    out.push({
+      entity: cuisine,
+      entityType: "cuisine",
+      category: "cuisine",
+      confidence: 0.34,
+      matchScope: scope,
+      matchReason: "cuisine_term",
+    });
+  }
+  const restaurantMatches = text.match(/(?:\bat\s+|\bfrom\s+)([A-Z][A-Za-z0-9'&.-]*(?:\s+[A-Z][A-Za-z0-9'&.-]*){0,3})/g) ?? [];
+  for (const raw of restaurantMatches) {
+    const entity = cleanEntityText(raw.replace(/^(at|from)\s+/i, ""));
+    if (!entity || isGenericEntity(entity)) continue;
+    out.push({
+      entity,
+      entityType: "restaurant",
+      category: "restaurant_format",
+      confidence: scope === "title" ? 0.34 : 0.31,
+      matchScope: scope,
+      matchReason: "restaurant_name_heuristic",
+    });
+  }
+  return out;
+}
+
+function isGenericListicleHeadline(title: string): boolean {
+  const lower = title.toLowerCase();
+  return (
+    /\bbest restaurants?\b/.test(lower) ||
+    /\bwhere to eat\b/.test(lower) ||
+    /\bnew restaurants?\b/.test(lower)
+  );
+}
+
+type CandidateFilterDecision = {
+  keep: boolean;
+  rejectedBy: "category" | "confidence" | null;
+};
+
+function candidateFilterDecision(
+  signal: TrendSignal,
+  repeatedAcrossPublications: boolean,
+): CandidateFilterDecision {
+  if (!signal.metadata?.candidateOnly) return { keep: true, rejectedBy: null };
+  const category = signal.metadata?.matchedCategory;
+  const scope = signal.metadata?.matchScope;
+  const titleMatch = scope === "title" || scope === "title+subhead";
+  const allowedCategory =
+    category === "dish" || category === "ingredient" || category === "restaurant_format";
+  if (!allowedCategory && !titleMatch && !repeatedAcrossPublications) {
+    return { keep: false, rejectedBy: "category" };
+  }
+  const minConfidence =
+    category === "dish"
+      ? 0.45
+      : category === "ingredient"
+        ? 0.38
+        : category === "restaurant_format"
+          ? 0.34
+          : 0.32;
+  if (!repeatedAcrossPublications && signal.confidence < minConfidence) {
+    return { keep: false, rejectedBy: "confidence" };
+  }
+  return { keep: true, rejectedBy: null };
+}
+
 function extractSignalsFromArticle(
   article: EditorialArticle,
   lexicon: LexiconEntry[],
@@ -678,6 +1159,7 @@ function extractSignalsFromArticle(
   ignoredGenericMatches: IgnoredGenericMatch[];
   suppressedNeighborhoodCandidates: SuppressedNeighborhoodCandidate[];
   neighborhoodMentionsAttached: number;
+  dedupeRejectedCount: number;
 } {
   const titleNorm = safeNormalize(article.title);
   const subheadNorm = safeNormalize(article.subhead);
@@ -688,6 +1170,7 @@ function extractSignalsFromArticle(
       ignoredGenericMatches: [],
       suppressedNeighborhoodCandidates: [],
       neighborhoodMentionsAttached: 0,
+      dedupeRejectedCount: 0,
     };
   }
 
@@ -696,6 +1179,7 @@ function extractSignalsFromArticle(
   const ignoredGenericMatches: IgnoredGenericMatch[] = [];
   const suppressedNeighborhoodCandidates: SuppressedNeighborhoodCandidate[] = [];
   const seen = new Set<string>();
+  let dedupeRejectedCount = 0;
   const matches = lexicon
     .map((entry) => {
       const inTitle = normalizedContains(titleNorm, entry.normalized);
@@ -754,7 +1238,10 @@ function extractSignalsFromArticle(
       continue;
     }
     const dedupeKey = `${article.source}:${article.link}:${entry.normalized}`;
-    if (seen.has(dedupeKey)) continue;
+    if (seen.has(dedupeKey)) {
+      dedupeRejectedCount += 1;
+      continue;
+    }
     seen.add(dedupeKey);
 
     const confidence = confidenceForMatch(entry, inTitle, inSubhead);
@@ -788,11 +1275,56 @@ function extractSignalsFromArticle(
     });
   }
 
+  const genericListicle = article.source === "timeout_la" && isGenericListicleHeadline(article.title);
+  const heuristicEntities = [
+    ...extractHeuristicEntitiesFromText(article.title, "title"),
+    ...extractHeuristicEntitiesFromText(article.subhead, "subhead"),
+  ];
+  for (const heuristic of heuristicEntities) {
+    if (genericListicle && heuristic.matchReason === "title_pattern_dish" && heuristic.matchScope === "title") {
+      continue;
+    }
+    const normalized = safeNormalize(heuristic.entity);
+    if (!normalized || isGenericEntity(heuristic.entity)) continue;
+    const dedupeKey = `${article.source}:${article.link}:heuristic:${normalized}`;
+    if (seen.has(dedupeKey)) {
+      dedupeRejectedCount += 1;
+      continue;
+    }
+    seen.add(dedupeKey);
+    out.push({
+      id: `editorial:${article.source}:${safeNormalize(article.link)}:heuristic:${normalized}`,
+      source: toPublicationSource(article.source),
+      entityType: heuristic.entityType,
+      entity: heuristic.entity,
+      confidence: heuristic.confidence,
+      velocity: 0.48,
+      timestamp: articleTimestamp(article, nowIso),
+      metadata: {
+        publication: article.source,
+        articleTitle: article.title,
+        articleUrl: article.link,
+        articleId: `${article.source}:${article.link}`,
+        sourceWeight: EDITORIAL_SOURCE_WEIGHTS[article.source],
+        trendId: `candidate:${normalized}`,
+        aboutToHit: false,
+        candidateOnly: true,
+        matchScope: heuristic.matchScope,
+        matchedPhrase: heuristic.entity,
+        matchedCategory: heuristic.category,
+        matchReason: heuristic.matchReason,
+        restaurants: [],
+        neighborhoods: foundNeighborhoods,
+      },
+    });
+  }
+
   return {
     signals: out,
     ignoredGenericMatches,
     suppressedNeighborhoodCandidates,
     neighborhoodMentionsAttached: foundNeighborhoods.length,
+    dedupeRejectedCount,
   };
 }
 
@@ -830,16 +1362,47 @@ function manualSignalsForTrend(trend: Trend, aboutToHit: boolean, nowIso: string
 function computeIngestionStats(
   articles: EditorialArticle[],
   signals: TrendSignal[],
+  candidateSignals: TrendSignal[],
+  feedDiagnostics: EditorialFeedDiagnostic[],
+  dedupeRejectedBySource: Record<PublicationSource, number>,
+  sourceExtractionFunnel: Record<
+    PublicationSource,
+    {
+      articlesWithExtractableEntities: number;
+      extractedEntities: number;
+      rejectedByCategory: number;
+      rejectedByConfidence: number;
+      rejectedByDeduplication: number;
+      candidateTrends: number;
+      finalSignals: number;
+    }
+  >,
   ignoredGenericMatches: IgnoredGenericMatch[],
   suppressedNeighborhoodCandidates: SuppressedNeighborhoodCandidate[],
   neighborhoodMentionsAttached: number,
 ): EditorialIngestionStats {
-  const scannedBySource: Record<PublicationSource, number> = { eater: 0, infatuation: 0, latimes: 0 };
+  const scannedBySource: Record<PublicationSource, number> = {
+    eater: 0,
+    infatuation: 0,
+    latimes: 0,
+    resy_la: 0,
+    timeout_la: 0,
+    bonappetit: 0,
+  };
   for (const article of articles) scannedBySource[article.source] += 1;
 
   const byEntity = new Map<string, { mentions: number; sources: Set<PublicationSource> }>();
   for (const signal of signals) {
-    if (signal.source !== "eater" && signal.source !== "infatuation" && signal.source !== "latimes") continue;
+    if (
+      signal.source !== "eater" &&
+      signal.source !== "infatuation" &&
+      signal.source !== "latimes" &&
+      signal.source !== "resy_la" &&
+      signal.source !== "timeout_la" &&
+      signal.source !== "bonappetit"
+    ) {
+      continue;
+    }
     const key = safeNormalize(signal.entity);
     const current = byEntity.get(key) ?? { mentions: 0, sources: new Set<PublicationSource>() };
     current.mentions += 1;
@@ -883,6 +1446,63 @@ function computeIngestionStats(
   };
 
   const failedSources = FEED_CONFIGS.map((cfg) => cfg.source).filter((src) => scannedBySource[src] === 0);
+  const candidateSignalsBySource: Record<PublicationSource, number> = {
+    eater: 0,
+    infatuation: 0,
+    latimes: 0,
+    resy_la: 0,
+    timeout_la: 0,
+    bonappetit: 0,
+  };
+  const finalSignalsBySource: Record<PublicationSource, number> = {
+    eater: 0,
+    infatuation: 0,
+    latimes: 0,
+    resy_la: 0,
+    timeout_la: 0,
+    bonappetit: 0,
+  };
+  for (const signal of candidateSignals) {
+    if (signal.source in candidateSignalsBySource) {
+      const key = signal.source as PublicationSource;
+      candidateSignalsBySource[key] += 1;
+    }
+  }
+  for (const signal of signals) {
+    if (signal.source in finalSignalsBySource) {
+      const key = signal.source as PublicationSource;
+      finalSignalsBySource[key] += 1;
+    }
+  }
+  const diagnosticsBySource = new Map(feedDiagnostics.map((diag) => [diag.source, diag]));
+  const sourceSignalFunnel = FEED_CONFIGS.reduce(
+    (acc, cfg) => {
+      const diag = diagnosticsBySource.get(cfg.source);
+      const candidateCount = candidateSignalsBySource[cfg.source] ?? 0;
+      const finalCount = finalSignalsBySource[cfg.source] ?? 0;
+      acc[cfg.source] = {
+        fetchedItems: diag?.sourceDiagnostics.fetchedItems ?? 0,
+        laRelevantItems: diag?.sourceDiagnostics.laRelevantItems ?? 0,
+        normalizedArticles: diag?.sourceDiagnostics.normalizedArticles ?? 0,
+        articlesWithExtractableEntities:
+          sourceExtractionFunnel[cfg.source]?.articlesWithExtractableEntities ?? 0,
+        extractedEntities: sourceExtractionFunnel[cfg.source]?.extractedEntities ?? 0,
+        candidateSignals: candidateCount,
+        candidateTrends: sourceExtractionFunnel[cfg.source]?.candidateTrends ?? 0,
+        finalSignals: sourceExtractionFunnel[cfg.source]?.finalSignals ?? finalCount,
+        rejectedByRelevance: Math.max(0, candidateCount - finalCount),
+        rejectedByCategory: sourceExtractionFunnel[cfg.source]?.rejectedByCategory ?? 0,
+        rejectedByConfidence: sourceExtractionFunnel[cfg.source]?.rejectedByConfidence ?? 0,
+        rejectedByDeduplication:
+          (sourceExtractionFunnel[cfg.source]?.rejectedByDeduplication ?? 0) +
+          (dedupeRejectedBySource[cfg.source] ?? 0),
+        rejectedItems: diag?.sourceDiagnostics.rejectedItems ?? 0,
+        rejectReasons: diag?.sourceDiagnostics.rejectReasons ?? {},
+      };
+      return acc;
+    },
+    {} as EditorialIngestionStats["sourceSignalFunnel"],
+  );
 
   return {
     scannedBySource,
@@ -898,6 +1518,7 @@ function computeIngestionStats(
     suppressedNeighborhoodCandidates: suppressedNeighborhoodCandidates.slice(0, 24),
     ignoredGenericMatches: ignoredGenericMatches.slice(0, 24),
     failedSources,
+    sourceSignalFunnel,
   };
 }
 
@@ -983,28 +1604,160 @@ export async function getEditorialSignals(
   const extracted = allArticles.map((article) =>
     extractSignalsFromArticle(article, entries, neighborhoodTerms, genericSingleWordTerms, nowIso),
   );
+  const sourceExtractionFunnel = {
+    eater: {
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+    },
+    infatuation: {
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+    },
+    latimes: {
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+    },
+    resy_la: {
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+    },
+    timeout_la: {
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+    },
+    bonappetit: {
+      articlesWithExtractableEntities: 0,
+      extractedEntities: 0,
+      rejectedByCategory: 0,
+      rejectedByConfidence: 0,
+      rejectedByDeduplication: 0,
+      candidateTrends: 0,
+      finalSignals: 0,
+    },
+  } satisfies Record<
+    PublicationSource,
+    {
+      articlesWithExtractableEntities: number;
+      extractedEntities: number;
+      rejectedByCategory: number;
+      rejectedByConfidence: number;
+      rejectedByDeduplication: number;
+      candidateTrends: number;
+      finalSignals: number;
+    }
+  >;
+  for (let idx = 0; idx < extracted.length; idx += 1) {
+    const source = allArticles[idx]?.source;
+    if (!source) continue;
+    const row = extracted[idx];
+    if (row.signals.length > 0) sourceExtractionFunnel[source].articlesWithExtractableEntities += 1;
+    sourceExtractionFunnel[source].extractedEntities += row.signals.length;
+    sourceExtractionFunnel[source].rejectedByDeduplication += row.dedupeRejectedCount;
+  }
   const prefilteredEditorialSignals = extracted.flatMap((row) => row.signals);
   const candidatePublicationCounts = new Map<string, Set<PublicationSource>>();
   for (const signal of prefilteredEditorialSignals) {
     if (!signal.metadata?.candidateOnly) continue;
     const key = safeNormalize(signal.entity);
     const set = candidatePublicationCounts.get(key) ?? new Set<PublicationSource>();
-    if (signal.source === "eater" || signal.source === "infatuation" || signal.source === "latimes") {
+    if (
+      signal.source === "eater" ||
+      signal.source === "infatuation" ||
+      signal.source === "latimes" ||
+      signal.source === "resy_la" ||
+      signal.source === "timeout_la" ||
+      signal.source === "bonappetit"
+    ) {
       set.add(signal.source);
     }
     candidatePublicationCounts.set(key, set);
   }
-  const editorialSignals = prefilteredEditorialSignals.filter((signal) => {
-    if (!signal.metadata?.candidateOnly) return true;
-    const category = signal.metadata?.matchedCategory;
-    const scope = signal.metadata?.matchScope;
-    const titleMatch = scope === "title" || scope === "title+subhead";
-    const allowedCategory =
-      category === "dish" || category === "ingredient" || category === "restaurant_format";
+  const editorialSignals: TrendSignal[] = [];
+  const postFilterSeen = new Set<string>();
+  for (const signal of prefilteredEditorialSignals) {
+    const src = signal.source as PublicationSource;
+    const signalKey = `${signal.source}:${signal.metadata?.articleId ?? ""}:${safeNormalize(signal.entity)}`;
+    if (postFilterSeen.has(signalKey)) {
+      sourceExtractionFunnel[src].rejectedByDeduplication += 1;
+      continue;
+    }
+    postFilterSeen.add(signalKey);
+    if (!signal.metadata?.candidateOnly) {
+      editorialSignals.push(signal);
+      sourceExtractionFunnel[src].finalSignals += 1;
+      continue;
+    }
     const repeatedAcrossPublications =
       (candidatePublicationCounts.get(safeNormalize(signal.entity))?.size ?? 0) >= 2;
-    return allowedCategory || titleMatch || repeatedAcrossPublications;
+    const decision = candidateFilterDecision(signal, repeatedAcrossPublications);
+    if (!decision.keep && decision.rejectedBy === "category") {
+      sourceExtractionFunnel[src].rejectedByCategory += 1;
+      continue;
+    }
+    if (!decision.keep && decision.rejectedBy === "confidence") {
+      sourceExtractionFunnel[src].rejectedByConfidence += 1;
+      continue;
+    }
+    editorialSignals.push(signal);
+    sourceExtractionFunnel[src].finalSignals += 1;
+  }
+  const candidateEntitySets = {
+    eater: new Set<string>(),
+    infatuation: new Set<string>(),
+    latimes: new Set<string>(),
+    resy_la: new Set<string>(),
+    timeout_la: new Set<string>(),
+    bonappetit: new Set<string>(),
+  } as Record<PublicationSource, Set<string>>;
+  for (const signal of editorialSignals) {
+    const src = signal.source as PublicationSource;
+    candidateEntitySets[src].add(safeNormalize(signal.entity));
+  }
+  (Object.keys(candidateEntitySets) as PublicationSource[]).forEach((src) => {
+    sourceExtractionFunnel[src].candidateTrends = candidateEntitySets[src].size;
   });
+  const dedupeRejectedBySource = extracted.reduce(
+    (acc, row, idx) => {
+      const source = allArticles[idx]?.source;
+      if (!source) return acc;
+      acc[source] = (acc[source] ?? 0) + row.dedupeRejectedCount;
+      return acc;
+    },
+    {
+      eater: 0,
+      infatuation: 0,
+      latimes: 0,
+      resy_la: 0,
+      timeout_la: 0,
+      bonappetit: 0,
+    } as Record<PublicationSource, number>,
+  );
+  const feedDiagnostics = await getEditorialFeedDiagnostics();
   const ignoredGenericMatches = extracted.flatMap((row) => row.ignoredGenericMatches);
   const suppressedNeighborhoodCandidates = extracted.flatMap((row) => row.suppressedNeighborhoodCandidates);
   const neighborhoodMentionsAttached = extracted.reduce(
@@ -1015,9 +1768,21 @@ export async function getEditorialSignals(
   lastIngestionStats = computeIngestionStats(
     allArticles,
     editorialSignals,
+    prefilteredEditorialSignals,
+    feedDiagnostics,
+    dedupeRejectedBySource,
+    sourceExtractionFunnel,
     ignoredGenericMatches,
     suppressedNeighborhoodCandidates,
     neighborhoodMentionsAttached,
   );
   return [...manual, ...editorialSignals];
 }
+
+export const editorialSourceTestUtils = {
+  parseTimeoutHtmlArticles,
+  evaluateSourceFilter,
+  extractHeuristicEntitiesFromText,
+  isGenericListicleHeadline,
+  candidateFilterDecision,
+};

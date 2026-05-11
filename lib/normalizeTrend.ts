@@ -4,11 +4,20 @@ import type {
   TrendConfidence,
   TrendRestaurant,
 } from "@/types/laFoodTrend";
-import type { TrendSocialSignal, TrendSocialSignalLabel } from "@/types/socialSignal";
+import type {
+  ManualSocialSignals,
+  TrendSocialSignal,
+  TrendSocialSignalLabel,
+} from "@/types/socialSignal";
 import type {
   ListingsNeighborhoodCluster,
   ListingsSignal,
 } from "@/types/listingsSignal";
+import type {
+  ReservationSignalSource,
+  ReservationSignalStatus,
+  TrendReservationSignal,
+} from "@/types/reservationSignal";
 import { isLikelyGoogleMapsUrl, type WherePick } from "@/components/foodtrend/wherePick";
 import {
   WHERE_SHOWING_PICKS,
@@ -98,6 +107,21 @@ const SOCIAL_LABELS = new Set<TrendSocialSignalLabel>([
   "Reddit mention",
 ]);
 
+const RESERVATION_SIGNAL_SOURCES = new Set<ReservationSignalSource>([
+  "resy",
+  "opentable",
+  "tock",
+  "manual",
+]);
+
+const RESERVATION_SIGNAL_STATUSES = new Set<ReservationSignalStatus>([
+  "hard_to_book",
+  "sold_out",
+  "limited_availability",
+  "new_drop",
+  "event",
+]);
+
 function defaultSocialLabel(platform: "instagram" | "tiktok" | "reddit"): TrendSocialSignalLabel {
   if (platform === "instagram") {
     return "Creator Reel";
@@ -135,6 +159,78 @@ function parseTrendSocialSignals(r: Record<string, unknown>): TrendSocialSignal[
       continue;
     }
     out.push({ platform, label, url, strength });
+  }
+  return out.length > 0 ? out : undefined;
+}
+
+function parseManualSocialSignals(r: Record<string, unknown>): ManualSocialSignals | undefined {
+  const rawSignals =
+    r.socialSignals ?? r.social_signals ?? r.manualSocialSignals ?? r.manual_social_signals;
+  if (!isRecord(rawSignals) || Array.isArray(rawSignals)) {
+    return undefined;
+  }
+  const tiktokSpotted = rawSignals.tiktokSpotted === true || rawSignals.tiktok_spotted === true;
+  const instagramSpotted =
+    rawSignals.instagramSpotted === true || rawSignals.instagram_spotted === true;
+  if (!tiktokSpotted && !instagramSpotted) {
+    return undefined;
+  }
+  const sourceNotesRaw =
+    typeof rawSignals.sourceNotes === "string"
+      ? rawSignals.sourceNotes.trim()
+      : typeof rawSignals.source_notes === "string"
+        ? rawSignals.source_notes.trim()
+        : "";
+  const observedAtRaw =
+    typeof rawSignals.observedAt === "string"
+      ? rawSignals.observedAt.trim()
+      : typeof rawSignals.observed_at === "string"
+        ? rawSignals.observed_at.trim()
+        : "";
+  return {
+    tiktokSpotted,
+    instagramSpotted,
+    ...(sourceNotesRaw ? { sourceNotes: sourceNotesRaw } : {}),
+    ...(observedAtRaw ? { observedAt: observedAtRaw } : {}),
+  };
+}
+
+function parseTrendReservationSignals(
+  r: Record<string, unknown>,
+): TrendReservationSignal[] | undefined {
+  const rawSignals = r.reservationSignals ?? r.reservation_signals;
+  if (!Array.isArray(rawSignals) || rawSignals.length === 0) {
+    return undefined;
+  }
+  const out: TrendReservationSignal[] = [];
+  for (const el of rawSignals) {
+    if (!isRecord(el)) continue;
+    const source = typeof el.source === "string" ? el.source.trim().toLowerCase() : "";
+    if (!RESERVATION_SIGNAL_SOURCES.has(source as ReservationSignalSource)) continue;
+    const statusRaw = typeof el.status === "string" ? el.status.trim().toLowerCase() : "";
+    const status = RESERVATION_SIGNAL_STATUSES.has(statusRaw as ReservationSignalStatus)
+      ? (statusRaw as ReservationSignalStatus)
+      : undefined;
+    const sourceUrl = optionalHttpsUrl(el.sourceUrl ?? el.source_url);
+    const sourceNotes =
+      typeof el.sourceNotes === "string"
+        ? el.sourceNotes.trim()
+        : typeof el.source_notes === "string"
+          ? el.source_notes.trim()
+          : "";
+    const observedAt =
+      typeof el.observedAt === "string"
+        ? el.observedAt.trim()
+        : typeof el.observed_at === "string"
+          ? el.observed_at.trim()
+          : "";
+    out.push({
+      source: source as ReservationSignalSource,
+      ...(status ? { status } : {}),
+      ...(sourceUrl ? { sourceUrl } : {}),
+      ...(sourceNotes ? { sourceNotes } : {}),
+      ...(observedAt ? { observedAt } : {}),
+    });
   }
   return out.length > 0 ? out : undefined;
 }
@@ -450,6 +546,8 @@ export function normalizeTrendRow(row: unknown): Trend {
 
   const listingsSignals = parseTrendListingsSignals(r);
   const socialSignals = parseTrendSocialSignals(r);
+  const manualSocialSignals = parseManualSocialSignals(r);
+  const reservationSignals = parseTrendReservationSignals(r);
 
   const signalScore = Number(r.signalScore ?? 0);
   const cuisineOrigin = readOptionalTrimmedString(r, "cuisineOrigin", "cuisine_origin");
@@ -492,6 +590,8 @@ export function normalizeTrendRow(row: unknown): Trend {
     sourceCount,
     ...(listingsSignals != null ? { listingsSignals } : {}),
     ...(socialSignals != null ? { socialSignals } : {}),
+    ...(manualSocialSignals != null ? { manualSocialSignals } : {}),
+    ...(reservationSignals != null ? { reservationSignals } : {}),
     ...(cuisineOrigin ? { cuisineOrigin } : {}),
     ...(mealType ? { mealType } : {}),
     ...(mealMoment ? { mealMoment } : {}),
@@ -539,6 +639,22 @@ export function trendToJsonObject(t: Trend): Record<string, unknown> {
       : {}),
     ...(t.socialSignals != null && t.socialSignals.length > 0
       ? { socialSignals: t.socialSignals }
+      : t.manualSocialSignals != null
+        ? {
+            socialSignals: {
+              tiktokSpotted: t.manualSocialSignals.tiktokSpotted,
+              instagramSpotted: t.manualSocialSignals.instagramSpotted,
+              ...(t.manualSocialSignals.sourceNotes
+                ? { sourceNotes: t.manualSocialSignals.sourceNotes }
+                : {}),
+              ...(t.manualSocialSignals.observedAt
+                ? { observedAt: t.manualSocialSignals.observedAt }
+                : {}),
+            },
+          }
+        : {}),
+    ...(t.reservationSignals != null && t.reservationSignals.length > 0
+      ? { reservationSignals: t.reservationSignals }
       : {}),
     ...(t.cuisineOrigin ? { cuisineOrigin: t.cuisineOrigin } : {}),
     ...(t.mealType ? { mealType: t.mealType } : {}),

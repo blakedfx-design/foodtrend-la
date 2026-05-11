@@ -9,8 +9,13 @@ export async function gatherSignals(data: LaFoodTrendsDataFile, nowIso: string):
   const [editorial, reddit, places, reservations] = await Promise.all([
     getEditorialSignals(data, nowIso),
     getRedditSignals(),
-    getGooglePlacesSignals(),
-    getReservationSignals(),
+    getGooglePlacesSignals({
+      corroboratedEntities: [
+        ...(data.trends ?? []).map((trend) => trend.name),
+        ...(data.aboutToHit ?? []).map((trend) => trend.name),
+      ],
+    }),
+    getReservationSignals(data),
   ]);
   return [...editorial, ...reddit, ...places, ...reservations];
 }

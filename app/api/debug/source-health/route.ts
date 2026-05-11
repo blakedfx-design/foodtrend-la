@@ -41,6 +41,8 @@ export async function GET() {
       environmentFlags: {
         onVercel: flags.onVercel,
         nodeEnv: flags.nodeEnv,
+        runtimeTarget: process.env.VERCEL_ENV || (process.env.NODE_ENV === "production" ? "production" : "development"),
+        googlePlacesEnabled: flags.hasGooglePlacesKey,
         hasCronSecret: flags.hasCronSecret,
         hasGooglePlacesKey: flags.hasGooglePlacesKey,
         hasRedditCredentials: flags.hasRedditClient,
