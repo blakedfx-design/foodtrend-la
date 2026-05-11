@@ -7,7 +7,8 @@
     "start": "next start",
     "lint": "eslint .",
     "scout": "tsx scripts/scout-la-food.ts",
-    "update-trends": "tsx scripts/update-trends.ts"
+    "update-trends": "tsx scripts/update-trends.ts",
+    "pipeline-health": "tsx scripts/pipeline-health-snapshot.ts"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +24,7 @@
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "dotenv": "^17.4.2",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.4",
     "tsx": "^4.21.0",

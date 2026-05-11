@@ -4,6 +4,9 @@ export type SignalSource =
   | "eater"
   | "infatuation"
   | "latimes"
+  | "resy_la"
+  | "timeout_la"
+  | "bonappetit"
   | "manual_editorial"
   | "reservation"
   | "instagram_reference";

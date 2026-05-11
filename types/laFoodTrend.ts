@@ -1,5 +1,6 @@
 import type { ListingsSignal } from "@/types/listingsSignal";
-import type { TrendSocialSignal } from "@/types/socialSignal";
+import type { TrendReservationSignal } from "@/types/reservationSignal";
+import type { ManualSocialSignals, TrendSocialSignal } from "@/types/socialSignal";
 
 export type TrendConfidence = "low" | "medium" | "high";
 
@@ -67,6 +68,10 @@ export type Trend = {
   listingsSignals?: ListingsSignal[];
   /** Curated social cues for the trend (reels, posts, threads). */
   socialSignals?: TrendSocialSignal[];
+  /** Manual social proxy tags (no scraping/API calls). */
+  manualSocialSignals?: ManualSocialSignals;
+  /** Manual/editorial reservation demand signals (no external API calls). */
+  reservationSignals?: TrendReservationSignal[];
   /** Insight rail — editorial cuisine label */
   cuisineOrigin?: string;
   mealType?: string;

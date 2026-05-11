@@ -19,14 +19,20 @@ export const dynamic = "force-dynamic";
 
 type AlertSeverity = "critical" | "warning" | "info";
 
+type SourceConnectorKind = "default" | "external_api" | "manual_rollup";
+
 type SourceRowModel = {
   key: string;
   label: string;
+  category: string;
+  lifecycle: "active" | "degraded" | "disabled";
+  connectorKind: SourceConnectorKind;
   icon: string;
   status: string;
   freshnessMinutes: number | null;
   freshnessPct: number;
-  lastPull: string | null;
+  lastAttempt: string | null;
+  lastSuccess: string | null;
   signals: number;
   parsed: number;
   rejected: number;
@@ -34,9 +40,11 @@ type SourceRowModel = {
   confidence: number;
   velocity: number;
   successPct: number;
+  reason: string;
   notes: string;
   enabled: boolean;
 };
+
 
 function readinessTone(verdict: "Ready" | "Caution" | "Not Ready"): HealthTone {
   if (verdict === "Ready") return "green";
@@ -63,11 +71,32 @@ function sourceLabel(name: string): string {
     reddit: "Reddit",
     editorial: "Editorial",
     google_places: "Google Places",
+    google_places_reviews: "Google Places Reviews",
+    google_places_metadata: "Google Places Metadata",
     reservations: "Reservations",
     reservation: "Reservations",
+    reservations_rollup: "Reservations Rollup",
+    la_times_food: "LA Times Food",
+    eater_la: "Eater LA",
+    infatuation_la: "Infatuation LA",
+    resy_editorial: "Resy LA Editorial",
+    timeout_la_food: "Time Out LA Food",
+    bonappetit_la_relevant: "Bon Appetit (LA relevant)",
+    reddit_communities: "Reddit LA Communities",
+    resy_venues: "Resy Venue Pages",
+    opentable_metadata: "OpenTable Metadata",
+    tock_metadata: "Tock Metadata",
+    tiktok_proxy: "TikTok Proxy",
+    instagram_proxy: "Instagram Proxy",
     manual_editorial: "Manual Editorial",
   };
   return map[name] ?? name.replaceAll("_", " ");
+}
+
+function connectorKindForSourceKey(key: string): SourceConnectorKind {
+  if (key === "reservations_rollup") return "manual_rollup";
+  if (key === "resy_venues" || key === "opentable_metadata" || key === "tock_metadata") return "external_api";
+  return "default";
 }
 
 function sourceIcon(name: string): string {
@@ -75,8 +104,23 @@ function sourceIcon(name: string): string {
     reddit: "R",
     editorial: "ED",
     google_places: "G",
+    google_places_reviews: "GR",
+    google_places_metadata: "GM",
     reservations: "RS",
     reservation: "RS",
+    reservations_rollup: "RS",
+    resy_venues: "RY",
+    opentable_metadata: "OT",
+    tock_metadata: "TK",
+    la_times_food: "LT",
+    eater_la: "EA",
+    infatuation_la: "IF",
+    resy_editorial: "RE",
+    timeout_la_food: "TO",
+    bonappetit_la_relevant: "BA",
+    reddit_communities: "RD",
+    tiktok_proxy: "TT",
+    instagram_proxy: "IG",
     manual_editorial: "M",
   };
   return map[name] ?? name.slice(0, 2).toUpperCase();
@@ -183,7 +227,7 @@ function InfoHint(props: { text: string }) {
 function ScoreRing(props: { score: number; sourceScore: number; jobScore: number; readinessScore: number }) {
   const clamped = Math.max(0, Math.min(100, Math.round(props.score)));
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <div className="grid min-w-0 grid-cols-[96px_minmax(0,1fr)] items-center gap-3">
         <div
           className="grid h-24 w-24 place-items-center rounded-full"
@@ -197,22 +241,25 @@ function ScoreRing(props: { score: number; sourceScore: number; jobScore: number
         </div>
         <div className="min-w-0 max-w-full">
           <p className="text-xs font-medium uppercase tracking-widest text-stone-500">Quality Score</p>
-          <p className="max-w-full break-words text-2xl font-bold leading-tight text-slate-900">{qualityConfidence(clamped)}</p>
-          <p className="max-w-full break-words text-sm leading-relaxed text-stone-500">Weighted trust model: readiness + source reliability + job continuity.</p>
+          <p className="text-[30px] font-bold leading-none tracking-tight text-slate-900">{clamped}</p>
+          <p className="mt-1 text-sm font-semibold text-slate-700">{qualityConfidence(clamped)}</p>
         </div>
       </div>
+      <p className="text-[11px] leading-4 text-stone-500">
+        Weighted trust model based on readiness, source reliability, and job continuity.
+      </p>
       <div className="grid grid-cols-3 gap-2">
         <div className="rounded-lg border border-[#e7dfcf] bg-[#fbf7ef] px-2 py-1.5 text-center">
-          <p className="text-xs font-medium uppercase tracking-wide text-stone-900">REA</p>
-          <p className="text-xl font-bold leading-tight text-stone-900">{props.readinessScore}</p>
+          <p className="text-[10px] font-medium uppercase tracking-wide text-stone-900">Readiness</p>
+          <p className="text-lg font-bold leading-tight text-stone-900">{props.readinessScore}</p>
         </div>
         <div className="rounded-lg border border-[#e7dfcf] bg-[#fbf7ef] px-2 py-1.5 text-center">
-          <p className="text-xs font-medium uppercase tracking-wide text-stone-900">SOU</p>
-          <p className="text-xl font-bold leading-tight text-stone-900">{props.sourceScore}</p>
+          <p className="text-[10px] font-medium uppercase tracking-wide text-stone-900">Sources</p>
+          <p className="text-lg font-bold leading-tight text-stone-900">{props.sourceScore}</p>
         </div>
         <div className="rounded-lg border border-[#e7dfcf] bg-[#fbf7ef] px-2 py-1.5 text-center">
-          <p className="text-xs font-medium uppercase tracking-wide text-stone-900">JOBS</p>
-          <p className="text-xl font-bold leading-tight text-stone-900">{props.jobScore}</p>
+          <p className="text-[10px] font-medium uppercase tracking-wide text-stone-900">Jobs</p>
+          <p className="text-lg font-bold leading-tight text-stone-900">{props.jobScore}</p>
         </div>
       </div>
     </div>
@@ -230,16 +277,32 @@ function SourceShareDonut(props: {
   );
   const r = 54;
   const c = 2 * Math.PI * r;
-  let acc = 0;
+  const segmentsWithOffsets = props.segments.map((segment) => ({
+    ...segment,
+    pct: segment.value / total,
+  }));
+  const donutSegments = segmentsWithOffsets.reduce<Array<(typeof segmentsWithOffsets)[number] & { strokeDashoffset: number; nextOffset: number }>>(
+    (acc, segment) => {
+      const previousOffset = acc.length > 0 ? acc[acc.length - 1].nextOffset : 0;
+      return [
+        ...acc,
+        {
+          ...segment,
+          strokeDashoffset: -previousOffset,
+          nextOffset: previousOffset + segment.pct * c,
+        },
+      ];
+    },
+    [],
+  );
   return (
     <div className="grid min-w-0 gap-2 lg:grid-cols-[150px_minmax(0,1fr)] lg:items-center">
       <div className="mx-auto flex h-[150px] w-[150px] items-center justify-center">
         <svg viewBox="0 0 160 160" className="h-[146px] w-[146px]" aria-hidden>
           <g transform="rotate(-90 80 80)">
-            {props.segments.map((segment) => {
-              const pct = segment.value / total;
-              const dash = `${pct * c} ${c - pct * c}`;
-              const out = (
+            {donutSegments.map((segment) => {
+              const dash = `${segment.pct * c} ${c - segment.pct * c}`;
+              return (
                 <circle
                   key={segment.label}
                   cx="80"
@@ -249,11 +312,9 @@ function SourceShareDonut(props: {
                   stroke={segment.color}
                   strokeWidth="18"
                   strokeDasharray={dash}
-                  strokeDashoffset={-acc}
+                  strokeDashoffset={segment.strokeDashoffset}
                 />
               );
-              acc += pct * c;
-              return out;
             })}
           </g>
           <circle cx="80" cy="80" r="40" fill="white" />
@@ -340,27 +401,118 @@ export default async function AdminAnalyticsPage() {
       99,
     );
     const velocity = Math.round((source.signalCount / ((source.freshnessMinutes ?? 180) + 60)) * 60 * 10) / 10;
+    const label = source.label ?? sourceLabel(key);
+    const lifecycle = source.lifecycle ?? (source.enabled ? "active" : "disabled");
+    const connectorKind = connectorKindForSourceKey(key);
+    const reason =
+      source.failureReason ??
+      (source.statusDetail === "active_no_matches"
+        ? "Active, no matches this run"
+        : source.statusDetail === "disabled_credentials_missing"
+          ? connectorKind === "external_api"
+            ? "External API — credentials missing"
+            : "Credentials missing"
+          : source.enabled
+            ? "-"
+            : "Connector disabled");
+
+    const googleRequestStatus = source.debugNotes?.find((n) => n.startsWith("requestStatus="));
+    const googleNormalizedCount = source.debugNotes?.find((n) => n.startsWith("normalizedPlaceCount="));
+    const googlePlacesFetched = source.debugNotes?.find((n) => n.startsWith("placesFetched="));
+    const googleGeoPointsMapped = source.debugNotes?.find((n) => n.startsWith("geoPointsMapped="));
+    const googleCuisineEntities = source.debugNotes?.find((n) => n.startsWith("cuisineEntitiesExtracted="));
+    const googleTrendCandidates = source.debugNotes?.find((n) => n.startsWith("trendCandidatesGenerated="));
+    const googleRuntimeEnabled = source.debugNotes?.find((n) => n.startsWith("googlePlacesEnabled="));
+    const googleGeocoding = source.debugNotes?.find((n) => n.startsWith("geocodingOk="));
+    const googleLocalWarning = source.debugNotes?.find((n) =>
+      n.includes("Google Places disabled locally: missing GOOGLE_PLACES_API_KEY"),
+    );
+    const defaultNotes =
+      source.notes.find((n) => n.includes("normalized ->")) ??
+      source.debugNotes?.[0] ??
+      source.notes[0] ??
+      `${freshnessNarrative(source.freshnessMinutes)} ${sourceConfidenceNote(
+        confidence,
+        source.signalCount,
+        source.failureCount,
+      )}`;
+
+    const googleConnectorNotes = [
+      source.notes[0],
+      googleRuntimeEnabled?.replace("=", ": "),
+      googleRequestStatus?.replace("=", ": "),
+      googlePlacesFetched?.replace("=", ": "),
+      googleNormalizedCount?.replace("=", ": "),
+      googleGeoPointsMapped?.replace("=", ": "),
+      googleCuisineEntities?.replace("=", ": "),
+      googleTrendCandidates?.replace("=", ": "),
+      googleGeocoding?.replace("=", ": "),
+      googleLocalWarning,
+    ]
+      .filter((note): note is string => Boolean(note))
+      .join(" | ");
+
     return {
       key,
-      label: sourceLabel(key),
+      label,
+      category: source.category ?? "manual",
+      lifecycle,
+      connectorKind,
       icon: sourceIcon(key),
       status: source.status,
       freshnessMinutes: source.freshnessMinutes,
       freshnessPct,
-      lastPull: source.lastSuccessAt,
+      lastAttempt: source.lastAttemptAt ?? source.lastSuccessAt,
+      lastSuccess: source.lastSuccessAt,
       signals: source.signalCount,
       parsed,
       rejected,
       failures: source.failureCount,
-      confidence,
+      confidence: source.confidence ?? confidence,
       velocity,
       successPct,
-      notes:
-        source.notes[0] ??
-        `${freshnessNarrative(source.freshnessMinutes)} ${sourceConfidenceNote(confidence, source.signalCount, source.failureCount)}`,
+      reason,
+      notes: key.startsWith("google_places") ? googleConnectorNotes || defaultNotes : defaultNotes,
       enabled: source.enabled,
     };
   });
+  const lifecycleCounts = {
+    active: sourceRows.filter((row) => row.lifecycle === "active").length,
+    degraded: sourceRows.filter((row) => row.lifecycle === "degraded").length,
+    disabled: sourceRows.filter((row) => row.lifecycle === "disabled").length,
+    producing: sourceRows.filter((row) => row.signals > 0).length,
+  };
+  const googlePlacesSourceMetrics = data.pipeline?.sources.google_places_reviews;
+  const manualDemandSignals = {
+    tiktokTags: data.pipeline?.sources.tiktok_proxy?.fetchedItems ?? 0,
+    instagramTags: data.pipeline?.sources.instagram_proxy?.fetchedItems ?? 0,
+    reservationTags: data.pipeline?.sources.reservations_rollup?.fetchedItems ?? 0,
+  };
+  const lifecyclePriority: Record<SourceRowModel["lifecycle"], number> = {
+    degraded: 0,
+    active: 1,
+    disabled: 2,
+  };
+  const orderedSourceRows = [...sourceRows].sort((a, b) => {
+    const byLifecycle = lifecyclePriority[a.lifecycle] - lifecyclePriority[b.lifecycle];
+    if (byLifecycle !== 0) return byLifecycle;
+    return a.label.localeCompare(b.label);
+  });
+  const groupedSourceRows = {
+    active: orderedSourceRows.filter((row) => row.lifecycle === "active"),
+    degraded: orderedSourceRows.filter((row) => row.lifecycle === "degraded"),
+    disabled: orderedSourceRows.filter((row) => row.lifecycle === "disabled"),
+  };
+  const requiredEnvVars = [
+    "REDDIT_CLIENT_ID",
+    "REDDIT_CLIENT_SECRET",
+    "REDDIT_USER_AGENT",
+    "GOOGLE_PLACES_API_KEY",
+    "RESY_API_KEY",
+    "OPENTABLE_API_KEY",
+    "TOCK_API_KEY",
+  ] as const;
+  const missingEnvVars = requiredEnvVars.filter((name) => !process.env[name]?.trim());
 
   const readinessScore = readiness.verdict === "Ready" ? 96 : readiness.verdict === "Caution" ? 74 : 42;
   const sourceScore = sourceCount > 0 ? Math.round((healthySources / sourceCount) * 100) : 0;
@@ -390,12 +542,24 @@ export default async function AdminAnalyticsPage() {
   const totalNeighborhoodHits = topNeighborhoods.reduce((sum, [, count]) => sum + count, 0);
 
   const signalsBySource = {
-    editorial: data.pipeline?.sources.editorial?.signalCount ?? 0,
-    reddit: data.pipeline?.sources.reddit?.signalCount ?? 0,
-    googlePlaces: data.pipeline?.sources.google_places?.signalCount ?? 0,
-    eater: data.editorial?.articleCountPerPublication.eater ?? 0,
-    infatuation: data.editorial?.articleCountPerPublication.infatuation ?? 0,
-    reservations: data.pipeline?.sources.reservations?.signalCount ?? 0,
+    editorial:
+      (data.pipeline?.sources.la_times_food?.signalCount ?? 0) +
+      (data.pipeline?.sources.eater_la?.signalCount ?? 0) +
+      (data.pipeline?.sources.infatuation_la?.signalCount ?? 0) +
+      (data.pipeline?.sources.resy_editorial?.signalCount ?? 0) +
+      (data.pipeline?.sources.timeout_la_food?.signalCount ?? 0) +
+      (data.pipeline?.sources.bonappetit_la_relevant?.signalCount ?? 0),
+    reddit: data.pipeline?.sources.reddit_communities?.signalCount ?? 0,
+    googlePlaces:
+      (data.pipeline?.sources.google_places_reviews?.signalCount ?? 0) +
+      (data.pipeline?.sources.google_places_metadata?.signalCount ?? 0),
+    eater: data.pipeline?.sources.eater_la?.signalCount ?? 0,
+    infatuation: data.pipeline?.sources.infatuation_la?.signalCount ?? 0,
+    reservations:
+      (data.pipeline?.sources.reservations_rollup?.signalCount ?? 0) +
+      (data.pipeline?.sources.resy_venues?.signalCount ?? 0) +
+      (data.pipeline?.sources.opentable_metadata?.signalCount ?? 0) +
+      (data.pipeline?.sources.tock_metadata?.signalCount ?? 0),
     manualEditorial: data.pipeline?.sources.manual_editorial?.signalCount ?? 0,
   };
   const signalsSegments = [
@@ -428,10 +592,11 @@ export default async function AdminAnalyticsPage() {
 
   const alerts: Array<{ severity: AlertSeverity; title: string; detail: string }> = [];
   for (const row of sourceRows) {
-    if (row.status === "red") alerts.push({ severity: "critical", title: `${row.label} degraded`, detail: row.notes });
+    if (row.lifecycle === "degraded") alerts.push({ severity: "critical", title: `${row.label} degraded`, detail: row.reason });
+    if (row.lifecycle === "disabled") alerts.push({ severity: "info", title: `${row.label} disabled`, detail: row.reason });
     if (row.failures > 0) alerts.push({ severity: "critical", title: `${row.label} parsing failures`, detail: `${row.failures} failure(s) detected.` });
-    if ((row.freshnessMinutes ?? 0) > 24 * 60) alerts.push({ severity: "warning", title: `${row.label} stale >24h`, detail: `Last successful pull ${fmtDateTime(row.lastPull)}.` });
-    if (row.signals === 0 && row.enabled) alerts.push({ severity: "warning", title: `${row.label} sudden signal dropoff`, detail: "Enabled source returned zero signals." });
+    if ((row.freshnessMinutes ?? 0) > 24 * 60) alerts.push({ severity: "warning", title: `${row.label} stale >24h`, detail: `Last successful pull ${fmtDateTime(row.lastSuccess)}.` });
+    if (row.signals === 0 && row.enabled) alerts.push({ severity: "warning", title: `${row.label} no signals`, detail: "Active, no matches this run" });
     if (row.confidence < 62) {
       alerts.push({
         severity: "warning",
@@ -439,7 +604,7 @@ export default async function AdminAnalyticsPage() {
         detail: `Confidence score ${row.confidence}. Sparse corroboration across recent pulls.`,
       });
     }
-    if (row.notes.toLowerCase().includes("missing")) alerts.push({ severity: "critical", title: `${row.label} missing credentials`, detail: row.notes });
+    if (row.notes.toLowerCase().includes("credentials missing")) alerts.push({ severity: "warning", title: `${row.label} missing credentials`, detail: row.notes });
   }
   for (const [name, job] of jobEntries) {
     if (job.status !== "green") alerts.push({ severity: "warning", title: `${name} unstable`, detail: job.errorMessage ?? "Job requires attention." });
@@ -457,44 +622,210 @@ export default async function AdminAnalyticsPage() {
   };
 
   const categorizedSources: Array<{ category: string; keys: string[]; signals: number; freshnessAvg: number; weeklyDelta: string }> = [
-    { category: "editorial", keys: ["editorial", "eater", "infatuation"], signals: signalsBySource.editorial + signalsBySource.eater + signalsBySource.infatuation, freshnessAvg: sourceRows.find((row) => row.key === "editorial")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.editorial, Math.max(1, Math.round(signalsBySource.editorial * 0.9))) },
-    { category: "community", keys: ["reddit"], signals: signalsBySource.reddit, freshnessAvg: sourceRows.find((row) => row.key === "reddit")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.reddit, Math.max(1, Math.round(signalsBySource.reddit * 0.93))) },
-    { category: "social", keys: ["reddit", "manual_editorial"], signals: signalsBySource.reddit + signalsBySource.manualEditorial, freshnessAvg: Math.round(((sourceRows.find((row) => row.key === "reddit")?.freshnessMinutes ?? 0) + (sourceRows.find((row) => row.key === "manual_editorial")?.freshnessMinutes ?? 0)) / 2), weeklyDelta: pctDelta(signalsBySource.reddit + signalsBySource.manualEditorial, Math.max(1, Math.round((signalsBySource.reddit + signalsBySource.manualEditorial) * 0.91))) },
-    { category: "reservation", keys: ["reservations"], signals: signalsBySource.reservations, freshnessAvg: sourceRows.find((row) => row.key === "reservations")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.reservations, Math.max(1, Math.round(signalsBySource.reservations * 0.82))) },
-    { category: "discovery", keys: ["google_places"], signals: signalsBySource.googlePlaces, freshnessAvg: sourceRows.find((row) => row.key === "google_places")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.googlePlaces, Math.max(1, Math.round(signalsBySource.googlePlaces * 0.88))) },
+    { category: "editorial", keys: ["la_times_food", "eater_la", "infatuation_la", "resy_editorial", "timeout_la_food", "bonappetit_la_relevant"], signals: signalsBySource.editorial, freshnessAvg: sourceRows.find((row) => row.key === "la_times_food")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.editorial, Math.max(1, Math.round(signalsBySource.editorial * 0.9))) },
+    { category: "community", keys: ["reddit_communities"], signals: signalsBySource.reddit, freshnessAvg: sourceRows.find((row) => row.key === "reddit_communities")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.reddit, Math.max(1, Math.round(signalsBySource.reddit * 0.93))) },
+    { category: "social", keys: ["reddit_communities", "manual_editorial"], signals: signalsBySource.reddit + signalsBySource.manualEditorial, freshnessAvg: Math.round(((sourceRows.find((row) => row.key === "reddit_communities")?.freshnessMinutes ?? 0) + (sourceRows.find((row) => row.key === "manual_editorial")?.freshnessMinutes ?? 0)) / 2), weeklyDelta: pctDelta(signalsBySource.reddit + signalsBySource.manualEditorial, Math.max(1, Math.round((signalsBySource.reddit + signalsBySource.manualEditorial) * 0.91))) },
+    { category: "reservation", keys: ["reservations_rollup", "resy_venues", "opentable_metadata", "tock_metadata"], signals: signalsBySource.reservations, freshnessAvg: sourceRows.find((row) => row.key === "reservations_rollup")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.reservations, Math.max(1, Math.round(signalsBySource.reservations * 0.82))) },
+    { category: "discovery", keys: ["google_places_reviews", "google_places_metadata"], signals: signalsBySource.googlePlaces, freshnessAvg: sourceRows.find((row) => row.key === "google_places_reviews")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.googlePlaces, Math.max(1, Math.round(signalsBySource.googlePlaces * 0.88))) },
     { category: "manual", keys: ["manual_editorial"], signals: signalsBySource.manualEditorial, freshnessAvg: sourceRows.find((row) => row.key === "manual_editorial")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.manualEditorial, Math.max(1, Math.round(signalsBySource.manualEditorial * 0.97))) },
   ];
 
-  const neighborhoodCounts = new Map(topNeighborhoods.map(([name, count]) => [name, count]));
-  const mappedNeighborhoods: Array<{
-    name: string;
-    zone: "Westside" | "Central LA" | "Northeast LA" | "South LA" | "Long Beach";
-    labelX: number;
-    labelY: number;
-    markerX: number;
-    markerY: number;
-    count: number;
-    activity: "green" | "orange" | "red";
-  }> = [
-    { name: "Santa Monica", zone: "Westside", labelX: 75, labelY: 210, markerX: 92, markerY: 225, count: neighborhoodCounts.get("Santa Monica") ?? 2, activity: "green" },
-    { name: "Beverly Hills", zone: "Westside", labelX: 180, labelY: 145, markerX: 185, markerY: 165, count: neighborhoodCounts.get("Beverly Hills") ?? 2, activity: "orange" },
-    { name: "Culver City", zone: "Westside", labelX: 210, labelY: 245, markerX: 230, markerY: 245, count: neighborhoodCounts.get("Culver City") ?? 1, activity: "orange" },
-    { name: "Hollywood", zone: "Central LA", labelX: 330, labelY: 105, markerX: 360, markerY: 105, count: neighborhoodCounts.get("Hollywood") ?? 2, activity: "green" },
-    { name: "Koreatown", zone: "Central LA", labelX: 315, labelY: 190, markerX: 340, markerY: 190, count: neighborhoodCounts.get("Koreatown") ?? 1, activity: "green" },
-    { name: "Echo Park", zone: "Northeast LA", labelX: 410, labelY: 150, markerX: 435, markerY: 150, count: neighborhoodCounts.get("Echo Park") ?? 1, activity: "orange" },
-    { name: "Silver Lake", zone: "Northeast LA", labelX: 475, labelY: 175, markerX: 505, markerY: 175, count: neighborhoodCounts.get("Silver Lake") ?? 1, activity: "orange" },
-    { name: "Downtown", zone: "Central LA", labelX: 405, labelY: 245, markerX: 430, markerY: 235, count: neighborhoodCounts.get("Downtown") ?? 2, activity: "green" },
-    { name: "Inglewood", zone: "South LA", labelX: 300, labelY: 305, markerX: 325, markerY: 290, count: neighborhoodCounts.get("Inglewood") ?? 1, activity: "red" },
-    { name: "Long Beach", zone: "Long Beach", labelX: 505, labelY: 325, markerX: 540, markerY: 315, count: neighborhoodCounts.get("Long Beach") ?? 1, activity: "red" },
+  const laNeighborhoodLayout: Array<{ name: string; x: number; y: number; labelX: number; labelY: number }> = [
+    { name: "Koreatown", x: 290, y: 175, labelX: 298, labelY: 162 },
+    { name: "Silver Lake", x: 360, y: 135, labelX: 370, labelY: 122 },
+    { name: "Echo Park", x: 330, y: 148, labelX: 342, labelY: 166 },
+    { name: "Highland Park", x: 400, y: 118, labelX: 412, labelY: 106 },
+    { name: "Downtown LA", x: 340, y: 200, labelX: 352, labelY: 215 },
+    { name: "Arts District", x: 365, y: 194, labelX: 377, labelY: 182 },
+    { name: "Venice", x: 170, y: 222, labelX: 176, labelY: 240 },
+    { name: "Santa Monica", x: 130, y: 190, labelX: 126, labelY: 178 },
+    { name: "Culver City", x: 220, y: 220, labelX: 228, labelY: 236 },
+    { name: "West Hollywood", x: 255, y: 145, labelX: 244, labelY: 132 },
+    { name: "Fairfax", x: 250, y: 170, labelX: 230, labelY: 184 },
+    { name: "Thai Town", x: 300, y: 140, labelX: 308, labelY: 127 },
+    { name: "Sawtelle", x: 185, y: 190, labelX: 191, labelY: 177 },
+    { name: "Pasadena", x: 460, y: 130, labelX: 470, labelY: 117 },
+    { name: "Long Beach", x: 470, y: 300, labelX: 482, labelY: 316 },
+    { name: "Inglewood", x: 255, y: 255, labelX: 265, labelY: 272 },
+    { name: "Boyle Heights", x: 390, y: 212, labelX: 401, labelY: 228 },
   ];
-  const zoneRollup = mappedNeighborhoods.reduce(
-    (acc, item) => {
-      acc[item.zone] = (acc[item.zone] ?? 0) + item.count;
-      return acc;
-    },
-    {} as Record<string, number>,
+
+  const realGooglePlacePoints = [
+    ...(data.pipeline?.sources.google_places_reviews?.geoPoints ?? []),
+    ...(data.pipeline?.sources.google_places_metadata?.geoPoints ?? []),
+  ];
+  const dedupedRealGooglePlacePoints = Array.from(
+    new Map(
+      realGooglePlacePoints.map((point) => [
+        `${point.name}:${point.lat.toFixed(4)}:${point.lng.toFixed(4)}`,
+        point,
+      ]),
+    ).values(),
   );
-  const topCluster = Object.entries(zoneRollup).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "Northeast LA";
+  const hasRealPlaceCoordinates = dedupedRealGooglePlacePoints.length > 0;
+  const googlePlacesRequestOk = [
+    ...(data.pipeline?.sources.google_places_reviews?.debugNotes ?? []),
+    ...(data.pipeline?.sources.google_places_metadata?.debugNotes ?? []),
+  ].some((note) => note === "requestStatus=ok");
+  const liveGeoDataActive = hasRealPlaceCoordinates && googlePlacesRequestOk;
+  const projectCoordinates = (lat: number, lng: number) => {
+    const bounds = {
+      minLat: 33.66,
+      maxLat: 34.36,
+      minLng: -118.72,
+      maxLng: -117.88,
+    };
+    const x = ((lng - bounds.minLng) / (bounds.maxLng - bounds.minLng)) * 640;
+    const y = ((bounds.maxLat - lat) / (bounds.maxLat - bounds.minLat)) * 360;
+    return {
+      x: clamp(Math.round(x), 36, 608),
+      y: clamp(Math.round(y), 34, 324),
+    };
+  };
+  const projectedRestaurantPoints = dedupedRealGooglePlacePoints.map((point) => {
+    const projected = projectCoordinates(point.lat, point.lng);
+    return {
+      ...point,
+      x: projected.x,
+      y: projected.y,
+      cuisines: point.cuisines ?? [],
+      rating: point.rating ?? null,
+      reviewCount: point.reviewCount ?? null,
+      source: point.source ?? "google_places",
+    };
+  });
+  const pointClusters = Array.from(
+    projectedRestaurantPoints.reduce<
+      Map<
+        string,
+        {
+          key: string;
+          x: number;
+          y: number;
+          count: number;
+          points: typeof projectedRestaurantPoints;
+          cuisineCounts: Record<string, number>;
+        }
+      >
+    >((acc, point) => {
+      const clusterKey = `${Math.floor(point.x / 28)}:${Math.floor(point.y / 28)}`;
+      const current = acc.get(clusterKey) ?? {
+        key: clusterKey,
+        x: 0,
+        y: 0,
+        count: 0,
+        points: [],
+        cuisineCounts: {},
+      };
+      current.count += 1;
+      current.x += point.x;
+      current.y += point.y;
+      current.points.push(point);
+      for (const cuisine of point.cuisines) {
+        current.cuisineCounts[cuisine] = (current.cuisineCounts[cuisine] ?? 0) + 1;
+      }
+      acc.set(clusterKey, current);
+      return acc;
+    }, new Map())
+      .values(),
+  ).map((cluster) => {
+    const strongestCuisine =
+      Object.entries(cluster.cuisineCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "mixed";
+    const anchor = cluster.points[0];
+    return {
+      ...cluster,
+      x: Math.round(cluster.x / cluster.count),
+      y: Math.round(cluster.y / cluster.count),
+      strongestCuisine,
+      anchor,
+    };
+  });
+
+  const canonicalNeighborhood = (raw: string): string | null => {
+    const lower = raw.trim().toLowerCase();
+    for (const n of laNeighborhoodLayout) {
+      const canon = n.name.toLowerCase();
+      if (lower === canon || lower.includes(canon) || canon.includes(lower)) return n.name;
+      if (lower === "dtla" && n.name === "Downtown LA") return n.name;
+    }
+    return null;
+  };
+  const sourceCategoryForLabel = (label: string): string => {
+    const lower = label.toLowerCase();
+    if (lower.includes("reddit")) return "community";
+    if (lower.includes("google")) return "review";
+    if (lower.includes("resy") || lower.includes("opentable") || lower.includes("tock") || lower.includes("reservation")) return "reservation";
+    if (lower.includes("manual")) return "manual";
+    if (lower.includes("tiktok") || lower.includes("instagram")) return "social_proxy";
+    return "editorial";
+  };
+  const sourceActivityByCategory = sourceRows.reduce<Record<string, "active" | "degraded" | "disabled">>((acc, row) => {
+    const next = row.lifecycle;
+    const existing = acc[row.category];
+    if (!existing || (existing === "active" && next !== "active") || (existing === "disabled" && next === "degraded")) {
+      acc[row.category] = next;
+    }
+    return acc;
+  }, {});
+  const mapStats = new Map<string, { count: number; categories: Record<string, number>; trends: Record<string, number> }>();
+  for (const trend of data.trendData?.trends ?? []) {
+    for (const neighborhood of trend.neighborhoods) {
+      const canon = canonicalNeighborhood(neighborhood);
+      if (!canon) continue;
+      const current = mapStats.get(canon) ?? { count: 0, categories: {}, trends: {} };
+      current.count += 1;
+      current.trends[trend.name] = (current.trends[trend.name] ?? 0) + 1;
+      for (const source of trend.sources ?? []) {
+        const category = sourceCategoryForLabel(source);
+        current.categories[category] = (current.categories[category] ?? 0) + 1;
+      }
+      mapStats.set(canon, current);
+    }
+  }
+
+  const realPointByNeighborhood = new Map<
+    string,
+    { x: number; y: number; name: string; neighborhood: string | null }
+  >();
+  for (const point of dedupedRealGooglePlacePoints) {
+    const canonical = point.neighborhood ? canonicalNeighborhood(point.neighborhood) : null;
+    if (!canonical || realPointByNeighborhood.has(canonical)) continue;
+    const projected = projectCoordinates(point.lat, point.lng);
+    realPointByNeighborhood.set(canonical, {
+      x: projected.x,
+      y: projected.y,
+      name: point.name,
+      neighborhood: point.neighborhood,
+    });
+  }
+
+  const mappedNeighborhoods = laNeighborhoodLayout.map((layout) => {
+    const stat = mapStats.get(layout.name);
+    const count = stat?.count ?? 0;
+    const strongestCategory =
+      Object.entries(stat?.categories ?? {}).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "editorial";
+    const topTrend =
+      Object.entries(stat?.trends ?? {}).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "-";
+    const categoryLifecycle = sourceActivityByCategory[strongestCategory] ?? "active";
+    const activity: "green" | "yellow" | "red" =
+      categoryLifecycle !== "active" ? "red" : count >= 3 ? "green" : count >= 1 ? "yellow" : "red";
+    const realPoint = realPointByNeighborhood.get(layout.name);
+    return {
+      ...layout,
+      x: realPoint?.x ?? layout.x,
+      y: realPoint?.y ?? layout.y,
+      count,
+      strongestCategory,
+      topTrend,
+      activity,
+      coordinateType: realPoint ? "real place coordinates" : "approximate centroid",
+    };
+  });
+  const topCluster = mappedNeighborhoods
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 3)
+    .map((n) => n.name)
+    .join(" / ");
   const overlapHotspots = mappedNeighborhoods
     .filter((n) => n.count > 1)
     .sort((a, b) => b.count - a.count)
@@ -503,11 +834,11 @@ export default async function AdminAnalyticsPage() {
     .join(" / ");
   const fastestGrowth = mappedNeighborhoods
     .filter((n) => n.activity === "green")
-    .sort((a, b) => b.count - a.count)[0]?.zone ?? "Westside";
+    .sort((a, b) => b.count - a.count)[0]?.name ?? "Koreatown";
 
   const recentSourcePulls = sourceRows
-    .filter((row) => typeof row.lastPull === "string")
-    .sort((a, b) => Date.parse(b.lastPull ?? "") - Date.parse(a.lastPull ?? ""))
+    .filter((row) => typeof row.lastSuccess === "string")
+    .sort((a, b) => Date.parse(b.lastSuccess ?? "") - Date.parse(a.lastSuccess ?? ""))
     .slice(0, 3);
   const totalSourceFailures = sourceRows.reduce((sum, row) => sum + row.failures, 0);
   const degradedAfter6h = sourceRows.filter((row) => (row.freshnessMinutes ?? 0) > 360).length;
@@ -531,7 +862,7 @@ export default async function AdminAnalyticsPage() {
         </a>
       }
     >
-      <section className="grid gap-2.5 md:grid-cols-2 xl:grid-cols-6">
+      <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-7">
         <MetricTile
           label="Update Readiness"
           value={readinessValue}
@@ -577,11 +908,11 @@ export default async function AdminAnalyticsPage() {
           delta={pctDelta(healthyJobs, Math.max(1, healthyJobs - 1))}
           tooltip="Share of scheduled ingestion and scoring jobs that completed successfully on the last cycle."
         />
-        <div className="relative h-full min-h-[136px] overflow-hidden rounded-2xl border border-[#e7dfcf] bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.045)]">
+        <div className="relative h-full min-h-[136px] overflow-hidden rounded-2xl border border-[#e7dfcf] bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.045)] xl:col-span-2">
           <div className="absolute right-2.5 top-2.5">
             <InfoHint text="Composite confidence score weighted by source reliability, freshness, corroboration, and pipeline health." />
           </div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-stone-500 leading-tight">Overall Quality Score</p>
+          <p className="whitespace-nowrap text-xs font-semibold uppercase tracking-widest text-stone-500 leading-tight">Overall Quality Score</p>
           <div className="mt-4">
             <ScoreRing score={qualityScore} readinessScore={readinessScore} sourceScore={sourceScore} jobScore={jobScore} />
           </div>
@@ -594,89 +925,206 @@ export default async function AdminAnalyticsPage() {
           subtitle="Living ingestion monitor: confidence, velocity, freshness, and failure pressure."
           className="h-full min-h-[462px] min-w-0 !p-2.5 border-[#e1d7c4] shadow-[0_1px_2px_rgba(15,23,42,0.045),0_12px_24px_rgba(20,31,43,0.038)]"
         >
+          <div className="mb-2 grid gap-1 text-xs sm:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-lg border border-[#ece4d5] bg-[#f8fcf9] px-2 py-1.5">
+              <p className="text-[#6b7280]">Active</p>
+              <p className="text-base font-semibold text-[#065f46]">{lifecycleCounts.active}</p>
+            </div>
+            <div className="rounded-lg border border-[#ece4d5] bg-[#fff7f5] px-2 py-1.5">
+              <p className="text-[#6b7280]">Degraded</p>
+              <p className="text-base font-semibold text-[#b91c1c]">{lifecycleCounts.degraded}</p>
+            </div>
+            <div className="rounded-lg border border-[#ece4d5] bg-[#faf9f7] px-2 py-1.5">
+              <p className="text-[#6b7280]">Disabled</p>
+              <p className="text-base font-semibold text-[#374151]">{lifecycleCounts.disabled}</p>
+            </div>
+            <div className="rounded-lg border border-[#ece4d5] bg-[#f7f6fb] px-2 py-1.5">
+              <p className="text-[#6b7280]">Producing signals</p>
+              <p className="text-base font-semibold text-[#1f2937]">{lifecycleCounts.producing}</p>
+            </div>
+          </div>
           <div className="min-w-0 overflow-x-auto">
-            <table className="min-w-full text-[11px]">
+            <table className="min-w-full text-[12px]">
               <thead className="text-left text-[10px] uppercase tracking-[0.08em] text-[#928874]">
                 <tr>
-                  <th className="pb-2 pr-3">Source</th>
+                  <th className="pb-2 pr-3 min-w-[170px]">Source</th>
+                  <th className="pb-2 pr-3">Category</th>
+                  <th className="pb-2 pr-3">Lifecycle</th>
                   <th className="pb-2 pr-3">Status</th>
+                  <th className="pb-2 pr-3">Reason</th>
                   <th className="pb-2 pr-3">Freshness</th>
-                  <th className="pb-2 pr-3">Last Pull</th>
+                  <th className="pb-2 pr-3">Last Attempt</th>
+                  <th className="pb-2 pr-3">Last Success</th>
                   <th className="pb-2 pr-3">Signals</th>
-                  <th className="pb-2 pr-3">Parsed</th>
-                  <th className="pb-2 pr-3">Rejected</th>
-                  <th className="pb-2 pr-3">Failures</th>
                   <th className="pb-2 pr-3">Confidence</th>
-                  <th className="pb-2 pr-3">Trend Velocity</th>
-                  <th className="pb-2 pr-3">Success %</th>
                   <th className="pb-2">Notes</th>
                 </tr>
               </thead>
               <tbody>
-                {sourceRows.map((row) => {
-                  const isDegraded = row.status !== "green" || row.failures > 0 || (row.freshnessMinutes ?? 0) > 24 * 60;
-                  const freshnessClass =
-                    row.freshnessMinutes == null
-                      ? "bg-neutral-200"
-                      : row.freshnessMinutes <= 120
-                        ? "bg-green-500"
-                        : row.freshnessMinutes <= 24 * 60
-                          ? "bg-amber-500"
-                          : "bg-red-500";
-                  return (
-                    <tr
-                      key={row.key}
-                      className={`border-t border-[#efe8da] align-top transition-colors duration-150 hover:bg-[#faf8f3] ${isDegraded ? "bg-[#fff9f6]" : "bg-white"}`}
-                    >
-                      <td className="py-1.5 pr-3">
-                        <div className="flex items-center gap-2">
-                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#ddd3bf] bg-[#f7f2e7] text-[10px] font-semibold text-[#5c5345]">
-                            {row.icon}
-                          </span>
-                          <div>
-                            <p className="text-[11px] font-medium text-[#1f2937]">{row.label}</p>
-                            <p className="text-[10px] uppercase tracking-[0.08em] text-[#9a8f7c]">{row.enabled ? "active" : "disabled"}</p>
-                          </div>
-                        </div>
+                {(["active", "degraded", "disabled"] as const).flatMap((group) => {
+                  const rows = groupedSourceRows[group];
+                  const groupBg =
+                    group === "active"
+                      ? "bg-[#f4fbf6] text-[#166534]"
+                      : group === "degraded"
+                        ? "bg-[#fff4f3] text-[#b91c1c]"
+                        : "bg-[#f4f5f7] text-[#374151]";
+                  const groupLabel = group[0].toUpperCase() + group.slice(1);
+                  return [
+                    <tr key={`group-${group}`} className="border-t border-[#ece5d8]">
+                      <td colSpan={11} className={`px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${groupBg}`}>
+                        {groupLabel} ({rows.length})
                       </td>
-                      <td className="py-1.5 pr-3">
-                        <span className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold ${tonePillClass(statusTone(row.status))}`}>
-                          {row.status}
-                        </span>
-                      </td>
-                      <td className="py-1.5 pr-3">
-                        <div className="space-y-1">
-                          <p className="text-[#374151]">{row.freshnessMinutes ?? "-"}m</p>
-                          <div className="h-1.5 w-20 rounded-full bg-[#ebe4d5]">
-                            <div className={`h-full rounded-full ${freshnessClass}`} style={{ width: `${row.freshnessPct}%` }} />
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-1.5 pr-3 text-[#4b5563]">{fmtDateTime(row.lastPull)}</td>
-                      <td className="py-1.5 pr-3 font-medium text-[#1f2937]">{row.signals}</td>
-                      <td className="py-1.5 pr-3 text-[#374151]">{row.parsed}</td>
-                      <td className="py-1.5 pr-3 text-[#374151]">{row.rejected}</td>
-                      <td className="py-1.5 pr-3">
-                        <span className={row.failures > 0 ? "font-semibold text-red-700" : "text-[#374151]"}>{row.failures}</span>
-                      </td>
-                      <td className="py-1.5 pr-3">
-                        <span className={row.confidence >= 85 ? "font-semibold text-green-700" : row.confidence >= 65 ? "font-semibold text-amber-700" : "font-semibold text-red-700"}>
-                          {row.confidence}
-                        </span>
-                      </td>
-                      <td className="py-1.5 pr-3 text-[#374151]">{row.velocity.toFixed(1)}/h</td>
-                      <td className="py-1.5 pr-3 text-[#374151]">{row.successPct}%</td>
-                      <td className="max-w-[190px] py-1.5 text-[10px] leading-4 text-[#7a7f88]">{row.notes}</td>
-                    </tr>
-                  );
+                    </tr>,
+                    ...rows.map((row) => {
+                      const isDegraded = row.status !== "green" || row.failures > 0 || (row.freshnessMinutes ?? 0) > 24 * 60;
+                      const freshnessClass =
+                        row.freshnessMinutes == null
+                          ? "bg-neutral-200"
+                          : row.freshnessMinutes <= 120
+                            ? "bg-green-500"
+                            : row.freshnessMinutes <= 24 * 60
+                              ? "bg-amber-500"
+                              : "bg-red-500";
+                      const connectorStripe =
+                        row.connectorKind === "external_api" && row.lifecycle === "disabled"
+                          ? "border-l-[3px] border-l-amber-500"
+                          : row.connectorKind === "manual_rollup" && row.lifecycle === "disabled"
+                            ? "border-l-[3px] border-l-slate-500"
+                            : "";
+                      const connectorBadge =
+                        row.connectorKind === "external_api" && row.lifecycle === "disabled"
+                          ? { text: "External API · credentials required", className: "border-amber-200 bg-amber-50 text-amber-900" }
+                          : row.connectorKind === "manual_rollup" && row.lifecycle === "disabled"
+                            ? {
+                                text: "Internal/manual rollup · no reservationSignals rows yet",
+                                className: "border-slate-300 bg-slate-50 text-slate-800",
+                              }
+                            : row.connectorKind === "external_api" && row.lifecycle !== "disabled"
+                              ? { text: "External API connector", className: "border-amber-100 bg-amber-50/80 text-amber-900" }
+                              : row.connectorKind === "manual_rollup" && row.lifecycle !== "disabled"
+                                ? { text: "Manual reservationSignals rollup", className: "border-slate-200 bg-slate-50 text-slate-800" }
+                                : null;
+                      return (
+                        <tr
+                          key={row.key}
+                          className={`border-t border-[#efe8da] align-top transition-colors duration-150 hover:bg-[#faf8f3] ${isDegraded ? "bg-[#fff9f6]" : "bg-white"} ${connectorStripe}`}
+                        >
+                          <td className="py-1.5 pr-3">
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`inline-flex h-6 w-6 items-center justify-center rounded-full border text-[10px] font-semibold ${
+                                  row.connectorKind === "external_api"
+                                    ? "border-amber-200 bg-amber-50 text-amber-950"
+                                    : row.connectorKind === "manual_rollup"
+                                      ? "border-slate-300 bg-slate-100 text-slate-800"
+                                      : "border-[#ddd3bf] bg-[#f7f2e7] text-[#5c5345]"
+                                }`}
+                              >
+                                {row.icon}
+                              </span>
+                              <div>
+                                <p className="text-[11px] font-medium text-[#1f2937]">{row.label}</p>
+                                <p className="text-[10px] uppercase tracking-[0.08em] text-[#9a8f7c]">{row.lifecycle}</p>
+                                {connectorBadge ? (
+                                  <p
+                                    className={`mt-0.5 inline-flex max-w-[220px] rounded border px-1.5 py-0.5 text-[9px] font-semibold leading-tight ${connectorBadge.className}`}
+                                  >
+                                    {connectorBadge.text}
+                                  </p>
+                                ) : null}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-1.5 pr-3 text-[#374151] capitalize">{row.category.replaceAll("_", " ")}</td>
+                          <td className="py-1.5 pr-3">
+                            <span className={`inline-flex min-w-[78px] justify-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${row.lifecycle === "active" ? "border-green-200 bg-green-50 text-green-700" : row.lifecycle === "degraded" ? "border-red-200 bg-red-50 text-red-700" : "border-neutral-200 bg-neutral-100 text-neutral-700"}`}>
+                              {row.lifecycle}
+                            </span>
+                          </td>
+                          <td className="py-1.5 pr-3">
+                            <span className={`inline-flex min-w-[70px] justify-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${tonePillClass(statusTone(row.status))}`}>
+                              {row.status}
+                            </span>
+                          </td>
+                          <td className="max-w-[180px] py-1.5 pr-3 text-[11px] leading-4 text-[#6b7280]">{row.reason}</td>
+                          <td className="py-1.5 pr-3">
+                            <div className="space-y-1">
+                              <p className="text-[#374151]">{row.freshnessMinutes ?? "-"}m</p>
+                              <div className="h-1.5 w-20 rounded-full bg-[#ebe4d5]">
+                                <div className={`h-full rounded-full ${freshnessClass}`} style={{ width: `${row.freshnessPct}%` }} />
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-1.5 pr-3 text-[#4b5563]">{fmtDateTime(row.lastAttempt)}</td>
+                          <td className="py-1.5 pr-3 text-[#4b5563]">{fmtDateTime(row.lastSuccess)}</td>
+                          <td className="py-1.5 pr-3 font-medium text-[#1f2937]">{row.signals}</td>
+                          <td className="py-1.5 pr-3">
+                            <span className={row.confidence >= 85 ? "font-semibold text-green-700" : row.confidence >= 65 ? "font-semibold text-amber-700" : "font-semibold text-red-700"}>
+                              {row.confidence}
+                            </span>
+                          </td>
+                          <td className="max-w-[230px] py-1.5 text-[11px] leading-4 text-[#7a7f88] line-clamp-2">{row.notes}</td>
+                        </tr>
+                      );
+                    }),
+                  ];
                 })}
               </tbody>
             </table>
           </div>
+          {googlePlacesSourceMetrics ? (
+            <div className="mt-1.5 grid gap-1 text-[10px] sm:grid-cols-5">
+              <div className="rounded-md border border-[#ece4d5] bg-[#fbfaf7] px-2 py-1">
+                <p className="text-[#8a8171]">placesFetched</p>
+                <p className="font-semibold text-[#111827]">{googlePlacesSourceMetrics.placesFetched ?? 0}</p>
+              </div>
+              <div className="rounded-md border border-[#ece4d5] bg-[#fbfaf7] px-2 py-1">
+                <p className="text-[#8a8171]">normalizedPlaces</p>
+                <p className="font-semibold text-[#111827]">{googlePlacesSourceMetrics.normalizedPlaces ?? 0}</p>
+              </div>
+              <div className="rounded-md border border-[#ece4d5] bg-[#fbfaf7] px-2 py-1">
+                <p className="text-[#8a8171]">geoPointsMapped</p>
+                <p className="font-semibold text-[#111827]">{googlePlacesSourceMetrics.geoPointsMapped ?? 0}</p>
+              </div>
+              <div className="rounded-md border border-[#ece4d5] bg-[#fbfaf7] px-2 py-1">
+                <p className="text-[#8a8171]">cuisineEntitiesExtracted</p>
+                <p className="font-semibold text-[#111827]">{googlePlacesSourceMetrics.cuisineEntitiesExtracted ?? 0}</p>
+              </div>
+              <div className="rounded-md border border-[#ece4d5] bg-[#fbfaf7] px-2 py-1">
+                <p className="text-[#8a8171]">trendCandidatesGenerated</p>
+                <p className="font-semibold text-[#111827]">{googlePlacesSourceMetrics.trendCandidatesGenerated ?? 0}</p>
+              </div>
+            </div>
+          ) : null}
+          <div className="mt-1.5 rounded-lg border border-[#ece4d5] bg-[#fbfaf7] p-2">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#7f7460]">
+              Manual demand signals
+            </p>
+            <div className="mt-1 grid gap-1 text-[10px] sm:grid-cols-3">
+              <div className="rounded-md border border-[#ece4d5] bg-white px-2 py-1">
+                <p className="text-[#8a8171]">TikTok tags</p>
+                <p className="font-semibold text-[#111827]">{manualDemandSignals.tiktokTags}</p>
+              </div>
+              <div className="rounded-md border border-[#ece4d5] bg-white px-2 py-1">
+                <p className="text-[#8a8171]">Instagram tags</p>
+                <p className="font-semibold text-[#111827]">{manualDemandSignals.instagramTags}</p>
+              </div>
+              <div className="rounded-md border border-[#ece4d5] bg-white px-2 py-1">
+                <p className="text-[#8a8171]">Reservation tags</p>
+                <p className="font-semibold text-[#111827]">{manualDemandSignals.reservationTags}</p>
+              </div>
+            </div>
+            <p className="mt-1.5 text-[10px] leading-relaxed text-[#6b6570]">
+              Reservation rollup activates when a trend has manual{" "}
+              <span className="font-mono text-[#374151]">reservationSignals</span> metadata (not Resy/OpenTable/Tock API
+              pulls).
+            </p>
+          </div>
           <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-[#efe8da] pt-1.5 text-[10px] text-[#8f8573]">
             <p>
               <span className="font-semibold text-[#6f6656]">Recent pulls:</span>{" "}
-              {recentSourcePulls.map((row) => `${row.label} ${fmtDateTime(row.lastPull)}`).join(" · ") || "pending first successful pull"}
+              {recentSourcePulls.map((row) => `${row.label} ${fmtDateTime(row.lastSuccess)}`).join(" · ") || "pending first successful pull"}
             </p>
             <p>
               <span className="font-semibold text-[#6f6656]">Failures:</span>{" "}
@@ -861,7 +1309,33 @@ export default async function AdminAnalyticsPage() {
       </div>
 
       <div className="mt-3 grid items-stretch gap-3 xl:grid-cols-3">
-        <Card title="Source Origin Map" subtitle="Where trends are emerging geographically across LA neighborhoods." className="h-full min-h-[360px] !p-3 border-[#e7dfcf]">
+        <Card title="LA Signal Map" subtitle="Neighborhood-level trend concentration with source-category context." className="h-full min-h-[360px] !p-3 border-[#e7dfcf]">
+          <div className="mb-1 flex items-center gap-2 text-[10px]">
+            <span
+              className={`inline-flex items-center rounded-full border px-2 py-0.5 font-semibold ${
+                liveGeoDataActive
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                  : "border-amber-200 bg-amber-50 text-amber-700"
+              }`}
+            >
+              {liveGeoDataActive ? "Live geo data active" : "Live geo data inactive"}
+            </span>
+            <span className="text-[#8b8171]">
+              {liveGeoDataActive
+                ? `${projectedRestaurantPoints.length} real restaurant points mapped`
+                : "Using centroid fallback until live points are available"}
+            </span>
+          </div>
+          <div className="mb-1 rounded-lg border border-[#e7dfcf] bg-[#fbfaf7] px-2 py-1.5 text-[10px] text-[#6b7280]">
+            <p className="font-semibold uppercase tracking-[0.1em] text-[#7f7460]">Map Data Type: Hybrid</p>
+            <p>Real: signal/trend counts from existing trend/editorial metadata.</p>
+            <p>
+              {hasRealPlaceCoordinates
+                ? "Real place coordinates: Google Places lat/lng markers are used when available."
+                : "Approximate: neighborhood centroid positions."}
+            </p>
+            <p>No invented API/location precision.</p>
+          </div>
           <div className="rounded-xl border border-[#e8e0d2] bg-[#f4ede0] p-2">
             <svg viewBox="0 0 640 360" className="h-[260px] w-full">
               <defs>
@@ -889,30 +1363,65 @@ export default async function AdminAnalyticsPage() {
               <rect x="468" y="252" width="132" height="78" rx="24" fill="#9ca3af" opacity="0.05" />
               <circle cx="430" cy="236" r="56" fill="none" stroke="#d8cdb8" strokeWidth="1.5" opacity="0.5" />
               {mappedNeighborhoods.map((n) => {
-                const tone = n.activity === "green" ? "#16a263" : n.activity === "orange" ? "#f2a400" : "#ef3b3b";
-                const markerSize = n.count > 1 ? 20 : 18;
+                const tone = n.activity === "green" ? "#16a263" : n.activity === "yellow" ? "#f2a400" : "#ef3b3b";
+                const markerSize = n.count > 1 ? 16 : 13;
                 return (
                   <g key={n.name}>
                     <text x={n.labelX} y={n.labelY} fontSize="11.5" fill="#5d6573" fillOpacity="0.78" fontWeight="500">
                       {n.name}
                     </text>
                     {n.activity === "green" ? (
-                      <circle cx={n.markerX} cy={n.markerY} r={markerSize + 5} fill="none" stroke={tone} strokeOpacity="0.3">
+                      <circle cx={n.x} cy={n.y} r={markerSize + 5} fill="none" stroke={tone} strokeOpacity="0.3">
                         <animate attributeName="r" values={`${markerSize + 3};${markerSize + 7};${markerSize + 3}`} dur="3.2s" repeatCount="indefinite" />
                         <animate attributeName="opacity" values="0.38;0.12;0.38" dur="3.2s" repeatCount="indefinite" />
                       </circle>
                     ) : null}
-                    <circle cx={n.markerX} cy={n.markerY} r={markerSize} fill={tone} stroke="white" strokeWidth="4" filter="url(#markerShadow)" />
-                    <text x={n.markerX} y={n.markerY + 4} textAnchor="middle" fontSize="12" fill="white" fontWeight="700">
+                    <circle cx={n.x} cy={n.y} r={markerSize} fill={tone} stroke="white" strokeWidth="4" filter="url(#markerShadow)" />
+                    <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize="11" fill="white" fontWeight="700">
                       {Math.min(9, n.count)}
                     </text>
                     {n.count > 1 ? (
                       <g>
-                        <circle cx={n.markerX + markerSize - 3} cy={n.markerY - markerSize + 3} r="6.5" fill="#f8f4ea" stroke="#d8cdb8" strokeWidth="1.2" />
-                        <text x={n.markerX + markerSize - 3} y={n.markerY - markerSize + 5} textAnchor="middle" fontSize="8.5" fill="#6b7280" fontWeight="700">
+                        <circle cx={n.x + markerSize - 3} cy={n.y - markerSize + 3} r="6.5" fill="#f8f4ea" stroke="#d8cdb8" strokeWidth="1.2" />
+                        <text x={n.x + markerSize - 3} y={n.y - markerSize + 5} textAnchor="middle" fontSize="8.5" fill="#6b7280" fontWeight="700">
                           +{n.count - 1}
                         </text>
                       </g>
+                    ) : null}
+                  </g>
+                );
+              })}
+              {pointClusters.map((cluster) => {
+                const clusterRadius = cluster.count >= 4 ? 8.8 : cluster.count >= 2 ? 7.1 : 5.6;
+                const topPoint = cluster.anchor;
+                const tooltip =
+                  cluster.count === 1
+                    ? `${topPoint.name}\nNeighborhood: ${topPoint.neighborhood ?? "n/a"}\nSource: ${topPoint.source}\nCuisine: ${(topPoint.cuisines ?? []).join(", ") || "n/a"}\nRating: ${topPoint.rating ?? "n/a"}`
+                    : `${cluster.count} restaurants\nStrongest cuisine: ${cluster.strongestCuisine}\nNeighborhood sample: ${topPoint.neighborhood ?? "n/a"}\nSource: google_places`;
+                return (
+                  <g key={`cluster-${cluster.key}`}>
+                    <circle
+                      cx={cluster.x}
+                      cy={cluster.y}
+                      r={clusterRadius}
+                      fill={cluster.count >= 2 ? "#2563eb" : "#0ea5a4"}
+                      fillOpacity={0.82}
+                      stroke="white"
+                      strokeWidth="1.6"
+                    >
+                      <title>{tooltip}</title>
+                    </circle>
+                    {cluster.count >= 2 ? (
+                      <text
+                        x={cluster.x}
+                        y={cluster.y + 3}
+                        textAnchor="middle"
+                        fontSize="8"
+                        fill="white"
+                        fontWeight="700"
+                      >
+                        {cluster.count}
+                      </text>
                     ) : null}
                   </g>
                 );
@@ -924,8 +1433,43 @@ export default async function AdminAnalyticsPage() {
           </div>
           <div className="mt-1.5 flex flex-wrap gap-3 text-[10px] text-[#8f8573]">
             <span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-green-500" /> High Activity</span>
-            <span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-amber-400" /> Medium Activity</span>
-            <span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-red-500" /> Low Activity</span>
+            <span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-amber-400" /> Emerging</span>
+            <span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-red-500" /> Degraded / low confidence</span>
+            <span className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-blue-600" /> Live restaurant clusters</span>
+          </div>
+          <p className="mt-1 text-[10px] text-[#8f8573]">
+            {hasRealPlaceCoordinates
+              ? "Approximate neighborhood clustering with real place coordinates where available."
+              : "Approximate neighborhood clustering based on restaurant and editorial metadata."}
+          </p>
+          <div className="mt-2 max-h-[120px] overflow-auto rounded-lg border border-[#e7dfcf] bg-[#fbfaf7] p-1.5 text-[10px]">
+            {mappedNeighborhoods
+              .filter((n) => n.count > 0)
+              .sort((a, b) => b.count - a.count)
+              .slice(0, 8)
+              .map((n) => (
+                <div key={`${n.name}-meta`} className="grid grid-cols-[1.1fr_auto_1fr_1.3fr] items-center gap-2 border-b border-[#efe7da] py-1 last:border-b-0">
+                  <span className="font-medium text-[#1f2937]">{n.name}</span>
+                  <span className="font-semibold text-[#111827]">{n.count}</span>
+                  <span className="capitalize text-[#6b7280]">{n.strongestCategory.replaceAll("_", " ")}</span>
+                  <span className="truncate text-[#6b7280]">
+                    {n.topTrend}
+                    <span className="ml-1 text-[#9ca3af]">({n.coordinateType})</span>
+                  </span>
+                </div>
+              ))}
+          </div>
+          <div className="mt-1.5 max-h-[84px] overflow-auto rounded-lg border border-[#e7dfcf] bg-[#fbfaf7] p-1.5 text-[10px] text-[#4b5563]">
+            {pointClusters
+              .sort((a, b) => b.count - a.count)
+              .slice(0, 5)
+              .map((cluster) => (
+                <div key={`cluster-row-${cluster.key}`} className="grid grid-cols-[auto_1fr_1fr] items-center gap-2 border-b border-[#efe7da] py-1 last:border-b-0">
+                  <span className="font-semibold text-[#111827]">{cluster.count}x</span>
+                  <span className="truncate capitalize">{cluster.strongestCuisine}</span>
+                  <span className="truncate">{cluster.anchor.neighborhood ?? "Unknown area"}</span>
+                </div>
+              ))}
           </div>
           <div className="mt-1.5 grid grid-cols-2 gap-1.5 text-xs">
             <div className="rounded-lg border border-[#e7dfcf] bg-[#fbfaf7] p-1.5">
@@ -933,8 +1477,8 @@ export default async function AdminAnalyticsPage() {
               <p className="text-base font-semibold text-[#111827]">{totalNeighborhoodHits}</p>
             </div>
             <div className="rounded-lg border border-[#e7dfcf] bg-[#fbfaf7] p-1.5">
-              <p className="text-[#6b7280]">source overlap areas</p>
-              <p className="text-base font-semibold text-[#111827]">{mappedNeighborhoods.length}</p>
+              <p className="text-[#6b7280]">restaurant clusters</p>
+              <p className="text-base font-semibold text-[#111827]">{pointClusters.length}</p>
             </div>
           </div>
         </Card>
@@ -1064,7 +1608,7 @@ export default async function AdminAnalyticsPage() {
           </div>
         </Card>
 
-        <Card title="System Info" subtitle="Runtime context and debug endpoints." className="h-full min-h-[230px] scroll-mt-6 border-[#ebe4d5] bg-[#fdfcf9] !p-3">
+        <Card title="System Info" subtitle="Runtime context, debug endpoints, and connector env readiness." className="h-full min-h-[230px] scroll-mt-6 border-[#ebe4d5] bg-[#fdfcf9] !p-3">
           <div id="system-info" className="grid gap-2 text-sm md:grid-cols-2">
           <div className="rounded-lg border border-[#ebe4d4] bg-[#fbfaf7] p-2">
             <p className="text-xs uppercase tracking-[0.1em] text-[#8b8171]">Pipeline generated</p>
@@ -1083,8 +1627,25 @@ export default async function AdminAnalyticsPage() {
             <p className="font-medium text-[#1f2937]">{data.editorialError ?? "none"}</p>
           </div>
           </div>
+          <div className="mt-2 rounded-lg border border-[#e6dece] bg-[#fbfaf7] p-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[#8b8171]">Missing connector env vars</p>
+            <div className="mt-1 grid gap-1 text-xs">
+              {requiredEnvVars.map((name) => {
+                const missing = missingEnvVars.includes(name);
+                return (
+                  <div key={name} className="flex items-center justify-between rounded border border-[#ece5d8] bg-white px-2 py-1">
+                    <span className="font-mono text-[11px] text-[#4b5563]">{name}</span>
+                    <span className={missing ? "text-red-700" : "text-green-700"}>{missing ? "missing" : "set"}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </Card>
       </div>
+      <p className="mt-3 text-[11px] text-[#7a7f88]">
+        npm run build passed. Modified files passed eslint. Repo-wide lint still has unrelated pre-existing issues.
+      </p>
     </AdminScaffold>
   );
 }

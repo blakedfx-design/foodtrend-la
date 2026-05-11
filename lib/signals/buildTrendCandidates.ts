@@ -15,7 +15,14 @@ function collectFromMetadata(signal: TrendSignal, key: string): string[] {
     .filter(Boolean);
 }
 
-const EDITORIAL_SOURCES = new Set<SignalSource>(["eater", "infatuation", "latimes"]);
+const EDITORIAL_SOURCES = new Set<SignalSource>([
+  "eater",
+  "infatuation",
+  "latimes",
+  "resy_la",
+  "timeout_la",
+  "bonappetit",
+]);
 
 function sourceWeight(signal: TrendSignal): number {
   const fromMeta = signal.metadata?.sourceWeight;
@@ -23,6 +30,9 @@ function sourceWeight(signal: TrendSignal): number {
   if (signal.source === "eater") return 0.25;
   if (signal.source === "infatuation") return 0.22;
   if (signal.source === "latimes") return 0.3;
+  if (signal.source === "resy_la") return 0.2;
+  if (signal.source === "timeout_la") return 0.2;
+  if (signal.source === "bonappetit") return 0.19;
   if (signal.source === "google_places") return 0.24;
   if (signal.source === "manual_editorial") return 0.18;
   return 0.2;

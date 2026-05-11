@@ -10,3 +10,10 @@ export type TrendSocialSignal = {
   url: string;
   strength: SocialSignalStrength;
 };
+
+export type ManualSocialSignals = {
+  tiktokSpotted: boolean;
+  instagramSpotted: boolean;
+  sourceNotes?: string;
+  observedAt?: string;
+};
