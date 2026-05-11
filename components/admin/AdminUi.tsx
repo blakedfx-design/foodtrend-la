@@ -42,13 +42,13 @@ export function AdminScaffold(props: {
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-[#f5f1e8] px-3 py-4 text-[#1f2937] sm:px-4 md:py-5 lg:px-6 xl:px-8 2xl:px-10">
-      <div className="mx-auto grid w-full max-w-[1920px] grid-cols-1 gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8 2xl:max-w-[2200px]">
-        <aside className="rounded-2xl border border-[#e8e1d3] bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] lg:p-5">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7d7465]">
+    <main className="min-h-screen bg-[#f5f1e8] px-3 py-4 text-[#1f2937] sm:px-4 md:py-4 lg:px-6 xl:px-7 2xl:px-9">
+      <div className="mx-auto grid w-full max-w-[1920px] grid-cols-1 gap-5 lg:grid-cols-[212px_minmax(0,1fr)] lg:gap-6 2xl:max-w-[2200px]">
+        <aside className="h-fit rounded-2xl border border-[#e8e1d3] bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] lg:sticky lg:top-4 lg:p-4">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#6b6358]">
             Foodtrend LA Admin
           </p>
-          <p className="mt-1 text-xs text-[#8b8171]">Internal newsroom control room</p>
+          <p className="mt-1 text-xs leading-snug text-[#7a7165]">Internal newsroom control room</p>
           <nav className="mt-5 space-y-1">
             {NAV_ITEMS.map((item) => {
               const active = props.navKey === item.key;
@@ -70,15 +70,15 @@ export function AdminScaffold(props: {
           </nav>
         </aside>
 
-        <section className="min-w-0 space-y-6">
-          <header className="rounded-2xl border border-[#e8e1d3] bg-white px-4 py-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:px-6">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a6f5c]">
+        <section className="min-w-0 space-y-5 lg:border-l lg:border-[#e3dcc9] lg:pl-6 xl:pl-7">
+          <header className="rounded-2xl border border-[#e8e1d3] bg-white px-4 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:px-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6b6358]">
               {props.breadcrumb}
             </p>
-            <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div className="mt-2.5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
-                <h1 className="text-[1.65rem] font-semibold tracking-tight text-[#17202b] md:text-[1.75rem]">{props.title}</h1>
-                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[#5c6570]">{props.subtitle}</p>
+                <h1 className="text-[1.6rem] font-semibold tracking-tight text-[#17202b] md:text-[1.7rem]">{props.title}</h1>
+                <p className="mt-2 max-w-3xl text-[13px] leading-relaxed text-[#4b5563]">{props.subtitle}</p>
               </div>
               {props.actions ? <div className="flex flex-wrap gap-2">{props.actions}</div> : null}
             </div>
@@ -101,12 +101,12 @@ export function Card(props: {
   const compact = props.compact === true;
   return (
     <section
-      className={`rounded-2xl border border-[#e8e1d3] bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] ${compact ? "p-3" : "p-5"} ${props.className ?? ""}`}
+      className={`rounded-2xl border border-[#e8e1d3] bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] ${compact ? "p-3" : "p-4 sm:p-5"} ${props.className ?? ""}`}
     >
-      <div className={compact ? "mb-2" : "mb-4"}>
+      <div className={compact ? "mb-2" : "mb-3.5"}>
         <h2 className={`${compact ? "text-[13px]" : "text-[15px]"} font-semibold tracking-tight text-[#1f2937]`}>{props.title}</h2>
         {props.subtitle ? (
-          <p className={`${compact ? "mt-0.5 text-[10px] leading-snug" : "mt-1.5 text-xs leading-relaxed"} text-[#5c6570]`}>{props.subtitle}</p>
+          <p className={`${compact ? "mt-0.5 text-[11px] leading-snug" : "mt-1.5 text-[13px] leading-relaxed"} text-[#4b5563]`}>{props.subtitle}</p>
         ) : null}
       </div>
       {props.children}
@@ -131,8 +131,8 @@ export function MiniSparkline(props: { values: number[]; tone?: "green" | "neutr
   const values = props.values.length > 0 ? props.values : [0];
   const max = Math.max(...values, 1);
   const min = Math.min(...values, 0);
-  const width = 120;
-  const height = 34;
+  const width = 112;
+  const height = 30;
   const pad = 2;
   const span = Math.max(max - min, 1);
   const points = values
@@ -144,7 +144,7 @@ export function MiniSparkline(props: { values: number[]; tone?: "green" | "neutr
     .join(" ");
   const stroke = props.tone === "green" ? "#166534" : "#1f2937";
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="h-[2.65rem] w-full max-w-[132px]" aria-hidden>
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-8 w-full max-w-[118px]" aria-hidden>
       <polyline fill="none" stroke={stroke} strokeWidth="3.5" opacity={0.95} points={points} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );

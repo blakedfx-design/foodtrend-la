@@ -198,28 +198,28 @@ function MetricTile(props: {
         ? "text-red-700 bg-red-50 border-red-200"
         : "text-neutral-700 bg-neutral-50 border-neutral-200";
   return (
-    <div className="group relative flex h-full min-h-[112px] flex-col justify-between rounded-2xl border border-[#e8e1d3] bg-white px-3.5 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_18px_rgba(20,31,43,0.06)] xl:min-h-[120px]">
-      <div className="absolute right-2.5 top-2.5 z-10">
+    <div className="group relative flex h-full min-h-[84px] flex-col rounded-xl border border-[#e8e1d3] bg-white px-3 py-2 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(20,31,43,0.06)] xl:min-h-[88px]">
+      <div className="absolute right-2 top-2 z-10">
         <InfoHint text={props.tooltip} />
       </div>
       <div className="min-h-0 pr-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7d7465]">{props.label}</p>
-        <div className="mt-2 flex items-center justify-between gap-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#6b6358]">{props.label}</p>
+        <div className="mt-1 flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <p className="text-[1.85rem] font-semibold leading-none tracking-tight text-[#111827] md:text-[1.95rem]">{props.value}</p>
-            <p className="mt-1.5 text-[11px] leading-snug text-[#5c6570]">{props.detail}</p>
+            <p className="text-[1.6rem] font-semibold leading-none tracking-tight text-[#111827] md:text-[1.68rem]">{props.value}</p>
+            <p className="mt-1 text-[11px] leading-snug text-[#4b5563]">{props.detail}</p>
           </div>
-          <div className="shrink-0 self-center pt-0.5">
+          <div className="shrink-0 self-start pt-0">
             <StatusPill tone={props.tone} label={props.tone.toUpperCase()} size="sm" />
           </div>
         </div>
       </div>
-      <div className="mt-2 flex items-center justify-between border-t border-[#f2ede2] pt-2">
-        <div className="flex items-center gap-1.5 opacity-90">
-          <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${props.tone === "green" ? "bg-green-500" : props.tone === "yellow" ? "bg-amber-500" : props.tone === "red" ? "bg-red-500" : "bg-neutral-400"} animate-pulse`} />
+      <div className="mt-1.5 flex min-h-[2rem] items-end justify-between gap-2 border-t border-[#f0ebe3] pt-1.5">
+        <div className="flex items-end gap-1 opacity-90">
+          <span className={`mb-0.5 h-1.5 w-1.5 shrink-0 rounded-full ${props.tone === "green" ? "bg-green-500" : props.tone === "yellow" ? "bg-amber-500" : props.tone === "red" ? "bg-red-500" : "bg-neutral-400"} animate-pulse`} />
           <MiniSparkline values={props.sparkline} tone={props.tone === "green" ? "green" : "neutral"} />
         </div>
-        <span className={`inline-flex shrink-0 items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${deltaClass}`}>
+        <span className={`mb-0.5 inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${deltaClass}`}>
           {props.delta}
         </span>
       </div>
@@ -252,34 +252,36 @@ function ScoreRing(props: { score: number; sourceScore: number; jobScore: number
     { label: "Jobs", value: props.jobScore },
   ] as const;
   return (
-    <div className="flex min-w-0 flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-4 lg:gap-5">
+    <div className="flex min-w-0 flex-col gap-2.5">
+      <div className="flex flex-wrap items-center gap-3 sm:gap-4">
         <div
-          className="relative grid h-[6.5rem] w-[6.5rem] shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgba(255,255,255,0.25)]"
+          className="relative grid h-[5.125rem] w-[5.125rem] shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgba(255,255,255,0.25)]"
           style={{
             background: `conic-gradient(#16a34a ${clamped * 3.6}deg, #e7e5e4 0deg)`,
           }}
         >
-          <div className="grid h-[4.65rem] w-[4.65rem] place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]">
-            <span className="text-[2.1rem] font-bold leading-none tracking-tight text-[#0f172a] tabular-nums">{clamped}</span>
+          <div className="grid h-[3.75rem] w-[3.75rem] place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]">
+            <span className="text-[1.55rem] font-bold leading-none tracking-tight text-[#0f172a] tabular-nums">{clamped}</span>
           </div>
         </div>
-        <div className="min-w-0 flex-1 space-y-1">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b6570]">Overall quality score</p>
-          <p className="text-base font-semibold text-[#0f172a]">{qualityConfidence(clamped)}</p>
-          <p className="max-w-lg text-[11px] leading-snug text-[#5c6570]">
+        <div className="min-w-0 flex-1 space-y-0.5">
+          <p className="hidden text-[11px] font-semibold uppercase tracking-[0.1em] text-[#6b6358] sm:block">Overall quality score</p>
+          <p className="text-[0.9375rem] font-semibold text-[#0f172a]">{qualityConfidence(clamped)}</p>
+          <p className="max-w-xl text-[11px] leading-relaxed text-[#4b5563]">
             Composite trust from readiness, connectors, and jobs. See source table for detail.
           </p>
         </div>
       </div>
-      <div className="flex flex-wrap gap-2 border-t border-[#ebe4d5] pt-3">
+      <div className="grid grid-cols-3 gap-2 border-t border-[#ebe4d5] pt-2.5">
         {subs.map((s) => (
           <div
             key={s.label}
-            className="min-w-[5.5rem] flex-1 rounded-lg border border-[#e7dfcf] bg-[#fbf7ef] px-2.5 py-2 text-center sm:min-w-0 sm:flex-none sm:px-3"
+            className="rounded-lg border border-[#e7dfcf] bg-[#fbf7ef] px-2 py-1.5 text-center"
           >
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-[#5c6570]">{s.label}</p>
-            <p className="mt-0.5 text-lg font-bold tabular-nums leading-none text-[#1e293b]">{s.value}</p>
+            <p className="truncate text-[10px] font-semibold uppercase tracking-wide text-[#5c6570]" title={s.label}>
+              {s.label}
+            </p>
+            <p className="mt-0.5 text-base font-bold tabular-nums leading-none text-[#1e293b]">{s.value}</p>
           </div>
         ))}
       </div>
@@ -296,7 +298,7 @@ function SourceShareDonut(props: {
     props.segments.reduce((sum, s) => sum + s.value, 0),
     1,
   );
-  const r = 70;
+  const r = 76;
   const c = 2 * Math.PI * r;
   const segmentsWithOffsets = props.segments.map((segment) => ({
     ...segment,
@@ -317,9 +319,9 @@ function SourceShareDonut(props: {
     [],
   );
   return (
-    <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(200px,240px)_minmax(0,1fr)] xl:items-center">
-      <div className="mx-auto flex h-[200px] w-[200px] shrink-0 items-center justify-center xl:mx-0">
-        <svg viewBox="0 0 200 200" className="h-[196px] w-[196px]" aria-hidden>
+    <div className="grid min-w-0 gap-3 xl:grid-cols-[minmax(216px,1fr)_minmax(0,1.35fr)] xl:items-start xl:gap-4">
+      <div className="mx-auto flex h-[210px] w-[210px] shrink-0 items-center justify-center xl:mx-0 xl:pt-0.5">
+        <svg viewBox="0 0 200 200" className="h-[206px] w-[206px]" aria-hidden>
           <g transform="rotate(-90 100 100)">
             {donutSegments.map((segment) => {
               const dash = `${segment.pct * c} ${c - segment.pct * c}`;
@@ -331,30 +333,30 @@ function SourceShareDonut(props: {
                   r={r}
                   fill="none"
                   stroke={segment.color}
-                  strokeWidth="22"
+                  strokeWidth="26"
                   strokeDasharray={dash}
                   strokeDashoffset={segment.strokeDashoffset}
                 />
               );
             })}
           </g>
-          <circle cx="100" cy="100" r="48" fill="white" />
-          <text x="100" y="88" textAnchor="middle" className="fill-[#5c6570] text-[11px] font-semibold uppercase tracking-[0.1em]">
+          <circle cx="100" cy="100" r="44" fill="white" />
+          <text x="100" y="90" textAnchor="middle" className="fill-[#4b5563] text-[11px] font-semibold uppercase tracking-[0.1em]">
             Signals
           </text>
-          <text x="100" y="112" textAnchor="middle" className="fill-[#111827] text-[22px] font-semibold tabular-nums">
+          <text x="100" y="113" textAnchor="middle" className="fill-[#111827] text-[21px] font-semibold tabular-nums">
             {total}
           </text>
         </svg>
       </div>
-      <div className="min-w-0 space-y-1.5">
+      <div className="min-w-0 space-y-1">
         {props.segments.map((segment) => {
           const pct = Math.round((segment.value / total) * 100);
           const deltaTone = metricDeltaTone(segment.delta);
           return (
             <div
               key={segment.label}
-              className="flex min-w-0 items-center justify-between gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-[#f0ebe1]"
+              className="flex min-w-0 items-center justify-between gap-3 rounded-md px-1.5 py-1 transition-colors hover:bg-[#f0ebe1]"
             >
               <div className="flex min-w-0 items-center gap-2.5">
                 <span className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: segment.color }} />
@@ -936,7 +938,7 @@ export default async function AdminAnalyticsPage() {
         </a>
       }
     >
-      <section className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 sm:gap-3 xl:grid-cols-6">
+      <section className="grid grid-cols-1 items-stretch gap-2.5 sm:grid-cols-2 sm:gap-2.5 xl:grid-cols-6">
         <MetricTile
           label="Update Readiness"
           value={readinessValue}
@@ -982,18 +984,18 @@ export default async function AdminAnalyticsPage() {
           delta={pctDelta(healthyJobs, Math.max(1, healthyJobs - 1))}
           tooltip="Share of scheduled ingestion and scoring jobs that completed successfully on the last cycle."
         />
-        <div className="relative flex min-h-[112px] flex-col overflow-hidden rounded-2xl border border-[#e7dfcf] bg-white p-3.5 shadow-[0_1px_2px_rgba(15,23,42,0.045)] xl:min-h-[120px] xl:justify-center">
-          <div className="absolute right-2.5 top-2.5 z-10">
+        <div className="relative flex min-h-[84px] flex-col overflow-hidden rounded-xl border border-[#e7dfcf] bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.045)] xl:min-h-[88px]">
+          <div className="absolute right-2 top-2 z-10">
             <InfoHint text="Composite confidence score weighted by source reliability, freshness, corroboration, and pipeline health." />
           </div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7d7465]">Overall quality score</p>
-          <div className="mt-2 min-w-0">
+          <p className="pr-10 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#6b6358]">Overall quality score</p>
+          <div className="mt-1.5 min-w-0">
             <ScoreRing score={qualityScore} readinessScore={readinessScore} sourceScore={sourceScore} jobScore={jobScore} />
           </div>
         </div>
       </section>
 
-      <div className="mt-4 grid gap-3 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1.85fr)]">
+      <div className="mt-3 grid gap-2.5 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1.85fr)]">
         <Card
           compact
           title="Signal convergence — snapshot"
@@ -1060,55 +1062,64 @@ export default async function AdminAnalyticsPage() {
       <div className="mt-3 overflow-hidden rounded-2xl border border-[#e8e1d3] bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
         <div className="border-b border-[#efe8da] px-3 py-2">
           <h2 className="text-[13px] font-semibold tracking-tight text-[#1f2937]">Trend convergence detail</h2>
-          <p className="mt-0.5 text-[10px] leading-snug text-[#5c6570]">
+          <p className="mt-0.5 text-[11px] leading-snug text-[#4b5563]">
             Per-trend engine output: diversity, geo, persistence, and supporting source types.
           </p>
         </div>
-        <div className="max-h-[min(55vh,560px)] overflow-auto">
-          <table className="w-full min-w-[900px] text-left text-[12px]">
-            <thead className="sticky top-0 z-10 border-b border-[#e5dece] bg-[#fdfcf8] text-[10px] font-semibold uppercase tracking-[0.06em] text-[#5c6570]">
+        <div className="max-h-[min(52vh,540px)] overflow-auto">
+          <table className="w-full min-w-[920px] text-left text-[13px]">
+            <thead className="sticky top-0 z-10 border-b border-[#e5dece] bg-[#fdfcf8] text-[11px] font-semibold uppercase tracking-[0.05em] text-[#4b5563]">
               <tr>
-                <th className="px-3 py-2">Trend</th>
-                <th className="px-2 py-2 text-right tabular-nums">Conv.</th>
-                <th className="px-2 py-2">State</th>
-                <th className="px-2 py-2">Conf.</th>
-                <th className="px-2 py-2">Supporting sources</th>
-                <th className="px-2 py-2">Dimensions</th>
+                <th className="px-3 py-2.5">Trend</th>
+                <th className="w-[4.25rem] px-2 py-2.5 text-right tabular-nums">Conv.</th>
+                <th className="px-2 py-2.5">State</th>
+                <th className="px-2 py-2.5">Conf.</th>
+                <th className="min-w-[220px] px-2 py-2.5">Supporting sources</th>
+                <th className="min-w-[180px] px-2 py-2.5">Dimensions</th>
               </tr>
             </thead>
             <tbody>
               {convergenceList.slice(0, 40).map(({ trend, convergence: c }) => (
-                <tr key={trend.id} className="border-t border-[#efe8da] hover:bg-[#f9f6ee]">
-                  <td className="max-w-[220px] px-3 py-1.5">
-                    <p className="truncate font-semibold text-[#1f2937]">{trend.name}</p>
-                    <p className="truncate text-[10px] text-[#6b7280]">{trend.id}</p>
+                <tr key={trend.id} className="border-t border-[#f2ede5] hover:bg-[#f9f6ee]">
+                  <td className="max-w-[240px] px-3 py-2.5 align-top">
+                    <p className="truncate text-[13px] font-semibold leading-snug text-[#1f2937]">{trend.name}</p>
+                    <p className="mt-0.5 truncate font-mono text-[10px] leading-snug text-[#64748b]">{trend.id}</p>
                   </td>
-                  <td className="px-2 py-1.5 text-right text-sm font-bold tabular-nums text-[#111827]">{c.convergenceScore}</td>
-                  <td className="px-2 py-1.5 whitespace-nowrap">
-                    <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold ${tonePillClass(convergenceStateTone(c.trendState))}`}>
+                  <td className="px-2 py-2.5 align-top text-right text-[15px] font-bold tabular-nums text-[#111827]">{c.convergenceScore}</td>
+                  <td className="px-2 py-2.5 align-middle whitespace-nowrap">
+                    <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold ${tonePillClass(convergenceStateTone(c.trendState))}`}>
                       {c.trendState.replaceAll("_", " ")}
                     </span>
                   </td>
-                  <td className="px-2 py-1.5">
+                  <td className="px-2 py-2.5 align-middle">
                     <StatusPill
                       tone={c.confidence === "high" ? "green" : c.confidence === "medium" ? "yellow" : "red"}
                       label={c.confidence}
                       size="sm"
                     />
                   </td>
-                  <td className="max-w-[280px] px-2 py-1.5 text-[11px] text-[#4b5563]">
+                  <td className="max-w-[300px] px-2 py-2.5 align-top text-[12px] leading-relaxed text-[#374151]">
                     {c.strongestSources.length ? c.strongestSources.join(", ") : "—"}
                   </td>
-                  <td className="px-2 py-1.5">
-                    <div className="flex flex-wrap gap-1">
-                      <span className="rounded border border-[#e3dccf] bg-[#f3efe6] px-1.5 py-0.5 text-[9px] font-semibold text-[#4b5563]" title="Source diversity (0–100)">
-                        div {c.sourceDiversity}
+                  <td className="px-2 py-2.5 align-top">
+                    <div className="flex flex-nowrap gap-1.5">
+                      <span
+                        className="inline-flex shrink-0 whitespace-nowrap rounded border border-[#e3dccf] bg-[#f7f3eb] px-2 py-0.5 text-[10px] font-semibold tabular-nums text-[#374151]"
+                        title="Source diversity (0–100)"
+                      >
+                        D {c.sourceDiversity}
                       </span>
-                      <span className="rounded border border-[#e3dccf] bg-[#eef4fb] px-1.5 py-0.5 text-[9px] font-semibold text-[#374151]" title="Neighborhoods + regional spread">
-                        geo {c.geoSpreadScore} · {c.neighborhoodCount} nh
+                      <span
+                        className="inline-flex shrink-0 whitespace-nowrap rounded border border-[#e3dccf] bg-[#eaf1f9] px-2 py-0.5 text-[10px] font-semibold tabular-nums text-[#1e3a5f]"
+                        title="Neighborhoods + regional spread"
+                      >
+                        G {c.geoSpreadScore} · {c.neighborhoodCount}nh
                       </span>
-                      <span className="rounded border border-[#e3dccf] bg-[#f5f0fa] px-1.5 py-0.5 text-[9px] font-semibold text-[#4b5563]" title="History persistence">
-                        persist {c.persistenceScore}
+                      <span
+                        className="inline-flex shrink-0 whitespace-nowrap rounded border border-[#e8e2ef] bg-[#f5f1fa] px-2 py-0.5 text-[10px] font-semibold tabular-nums text-[#4b5563]"
+                        title="History persistence"
+                      >
+                        P {c.persistenceScore}
                       </span>
                     </div>
                   </td>
@@ -1119,11 +1130,11 @@ export default async function AdminAnalyticsPage() {
         </div>
       </div>
 
-      <div className="mt-4 grid min-w-0 items-stretch gap-3 lg:gap-4 xl:grid-cols-[minmax(0,3.65fr)_minmax(180px,17.25rem)] 2xl:grid-cols-[minmax(0,3.75fr)_minmax(190px,17.5rem)]">
+      <div className="mt-3 grid min-w-0 items-stretch gap-3 lg:gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(15.5rem,19.25rem)] 2xl:grid-cols-[minmax(0,1fr)_minmax(16rem,19.5rem)]">
         <Card
           title="Source Health"
           subtitle="Living ingestion monitor: confidence, velocity, freshness, and failure pressure."
-          className="min-h-[420px] min-w-0 !p-3.5 border-[#e1d7c4] shadow-[0_1px_2px_rgba(15,23,42,0.045),0_12px_24px_rgba(20,31,43,0.038)] [&>div:first-child]:mb-3"
+          className="min-h-0 min-w-0 !p-3 border-[#e1d7c4] shadow-[0_1px_2px_rgba(15,23,42,0.045),0_8px_20px_rgba(20,31,43,0.032)] [&>div:first-child]:mb-2.5"
         >
           <div className="mb-2 grid gap-1.5 text-xs sm:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-lg border border-[#ece4d5] bg-[#f8fcf9] px-2.5 py-1.5">
@@ -1143,21 +1154,21 @@ export default async function AdminAnalyticsPage() {
               <p className="mt-0.5 text-base font-semibold tabular-nums text-[#1f2937]">{lifecycleCounts.producing}</p>
             </div>
           </div>
-          <div className="relative max-h-[min(62vh,780px)] min-w-0 overflow-auto rounded-xl border border-[#ece5d8]">
+          <div className="relative max-h-[min(60vh,760px)] min-w-0 overflow-auto rounded-xl border border-[#ebe6dc]">
             <table className="min-w-[1180px] w-full text-left text-[13px]">
-              <thead className="sticky top-0 z-20 border-b border-[#e5dece] bg-[#fdfcf8] text-[11px] font-semibold uppercase tracking-[0.06em] text-[#5c6570] shadow-[0_1px_0_rgba(15,23,42,0.06)]">
+              <thead className="sticky top-0 z-20 border-b border-[#e5dece] bg-[#fdfcf8] text-[11px] font-semibold uppercase tracking-[0.05em] text-[#4b5563] shadow-[0_1px_0_rgba(15,23,42,0.05)]">
                 <tr>
-                  <th className="px-3 py-3 pr-4 align-bottom">Source</th>
-                  <th className="px-2 py-3 pr-4 align-bottom">Category</th>
-                  <th className="px-2 py-3 pr-4 align-bottom whitespace-nowrap">Lifecycle</th>
-                  <th className="px-2 py-3 pr-4 align-bottom whitespace-nowrap">Status</th>
-                  <th className="min-w-[160px] px-2 py-3 pr-4 align-bottom">Reason</th>
-                  <th className="px-2 py-3 pr-4 align-bottom whitespace-nowrap">Freshness</th>
-                  <th className="px-2 py-3 pr-4 align-bottom whitespace-nowrap">Last attempt</th>
-                  <th className="px-2 py-3 pr-4 align-bottom whitespace-nowrap">Last success</th>
-                  <th className="px-2 py-3 pr-4 align-bottom text-right tabular-nums">Signals</th>
-                  <th className="px-2 py-3 pr-4 align-bottom text-right tabular-nums">Conf.</th>
-                  <th className="min-w-[200px] px-3 py-3 align-bottom">Notes</th>
+                  <th className="px-3 py-3.5 pr-4 align-bottom">Source</th>
+                  <th className="px-2 py-3.5 pr-4 align-bottom">Category</th>
+                  <th className="px-2 py-3.5 pr-4 align-bottom whitespace-nowrap">Lifecycle</th>
+                  <th className="px-2 py-3.5 pr-4 align-bottom whitespace-nowrap">Status</th>
+                  <th className="min-w-[200px] px-2 py-3.5 pr-4 align-bottom">Reason</th>
+                  <th className="px-2 py-3.5 pr-4 align-bottom whitespace-nowrap">Freshness</th>
+                  <th className="px-2 py-3.5 pr-4 align-bottom whitespace-nowrap">Last attempt</th>
+                  <th className="px-2 py-3.5 pr-4 align-bottom whitespace-nowrap">Last success</th>
+                  <th className="px-2 py-3.5 pr-4 align-bottom text-right tabular-nums">Signals</th>
+                  <th className="px-2 py-3.5 pr-4 align-bottom text-right tabular-nums">Conf.</th>
+                  <th className="min-w-[200px] px-3 py-3.5 align-bottom">Notes</th>
                 </tr>
               </thead>
               <tbody>
@@ -1171,8 +1182,8 @@ export default async function AdminAnalyticsPage() {
                         : "bg-[#f4f5f7] text-[#374151]";
                   const groupLabel = group[0].toUpperCase() + group.slice(1);
                   return [
-                    <tr key={`group-${group}`} className="border-t border-[#ece5d8]">
-                      <td colSpan={11} className={`px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.1em] ${groupBg}`}>
+                    <tr key={`group-${group}`} className="border-t border-[#ebe6df] bg-[#faf8f4]">
+                      <td colSpan={11} className={`px-3 py-2.5 text-[11px] font-semibold uppercase tracking-[0.08em] ${groupBg}`}>
                         {groupLabel} ({rows.length})
                       </td>
                     </tr>,
@@ -1208,9 +1219,9 @@ export default async function AdminAnalyticsPage() {
                       return (
                         <tr
                           key={row.key}
-                          className={`group/row border-t border-[#efe8da] align-middle transition-colors duration-150 hover:bg-[#f3efe4] ${isDegraded ? "bg-[#fff9f4]" : "bg-white"} ${connectorStripe}`}
+                          className={`group/row border-t border-[#f0ebe4] align-middle transition-colors duration-150 hover:bg-[#f5f2ea] ${isDegraded ? "bg-[#fffbf7]" : "bg-white"} ${connectorStripe}`}
                         >
-                          <td className="px-3 py-3 pr-4 align-top">
+                          <td className="px-3 py-3.5 pr-4 align-top">
                             <div className="flex items-start gap-2.5">
                               <span
                                 className={`mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold ${
@@ -1225,7 +1236,7 @@ export default async function AdminAnalyticsPage() {
                               </span>
                               <div className="min-w-0">
                                 <p className="text-[13px] font-semibold leading-snug text-[#1f2937]">{row.label}</p>
-                                <p className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.06em] text-[#7a7165]">{row.lifecycle}</p>
+                                <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#64748b]">{row.lifecycle}</p>
                                 {connectorBadge ? (
                                   <p
                                     className={`mt-1 inline-flex max-w-[260px] rounded-md border px-2 py-1 text-[10px] font-semibold leading-snug ${connectorBadge.className}`}
@@ -1236,19 +1247,19 @@ export default async function AdminAnalyticsPage() {
                               </div>
                             </div>
                           </td>
-                          <td className="px-2 py-3 pr-4 align-middle text-[13px] capitalize text-[#374151]">{row.category.replaceAll("_", " ")}</td>
-                          <td className="px-2 py-3 pr-4 align-middle">
-                            <span className={`inline-flex min-w-[5.5rem] justify-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${row.lifecycle === "active" ? "border-green-200 bg-green-50 text-green-800" : row.lifecycle === "degraded" ? "border-red-200 bg-red-50 text-red-800" : "border-neutral-200 bg-neutral-100 text-neutral-800"}`}>
+                          <td className="px-2 py-3.5 pr-4 align-middle text-[13px] capitalize text-[#334155]">{row.category.replaceAll("_", " ")}</td>
+                          <td className="px-2 py-3.5 pr-4 align-middle">
+                            <span className={`inline-flex min-w-[5.75rem] justify-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${row.lifecycle === "active" ? "border-green-200 bg-green-50 text-green-800" : row.lifecycle === "degraded" ? "border-red-200 bg-red-50 text-red-800" : "border-neutral-200 bg-neutral-100 text-neutral-800"}`}>
                               {row.lifecycle}
                             </span>
                           </td>
-                          <td className="px-2 py-3 pr-4 align-middle">
-                            <span className={`inline-flex min-w-[4.5rem] justify-center rounded-full border px-2.5 py-1 text-[12px] font-semibold ${tonePillClass(statusTone(row.status))}`}>
+                          <td className="px-2 py-3.5 pr-4 align-middle">
+                            <span className={`inline-flex min-w-[4.75rem] justify-center rounded-full border px-2.5 py-1 text-[12px] font-semibold ${tonePillClass(statusTone(row.status))}`}>
                               {row.status}
                             </span>
                           </td>
-                          <td className="max-w-[220px] px-2 py-3 pr-4 align-middle text-[12px] leading-relaxed text-[#4b5563]">{row.reason}</td>
-                          <td className="px-2 py-3 pr-4 align-middle">
+                          <td className="max-w-[240px] px-2 py-3.5 pr-4 align-middle text-[12px] leading-relaxed text-[#374151]">{row.reason}</td>
+                          <td className="px-2 py-3.5 pr-4 align-middle">
                             <div className="space-y-1.5">
                               <p className="tabular-nums text-[#374151]">{row.freshnessMinutes ?? "-"}m</p>
                               <div className="h-2 w-24 rounded-full bg-[#ebe4d5]">
@@ -1256,15 +1267,15 @@ export default async function AdminAnalyticsPage() {
                               </div>
                             </div>
                           </td>
-                          <td className="whitespace-nowrap px-2 py-3 pr-4 align-middle text-[12px] text-[#4b5563]">{fmtDateTime(row.lastAttempt)}</td>
-                          <td className="whitespace-nowrap px-2 py-3 pr-4 align-middle text-[12px] text-[#4b5563]">{fmtDateTime(row.lastSuccess)}</td>
-                          <td className="px-2 py-3 pr-4 align-middle text-right text-[13px] font-semibold tabular-nums text-[#1f2937]">{row.signals}</td>
-                          <td className="px-2 py-3 pr-4 align-middle text-right">
+                          <td className="whitespace-nowrap px-2 py-3.5 pr-4 align-middle text-[12px] text-[#475569]">{fmtDateTime(row.lastAttempt)}</td>
+                          <td className="whitespace-nowrap px-2 py-3.5 pr-4 align-middle text-[12px] text-[#475569]">{fmtDateTime(row.lastSuccess)}</td>
+                          <td className="px-2 py-3.5 pr-4 align-middle text-right text-[13px] font-semibold tabular-nums text-[#111827]">{row.signals}</td>
+                          <td className="px-2 py-3.5 pr-4 align-middle text-right">
                             <span className={`text-[13px] font-semibold tabular-nums ${row.confidence >= 85 ? "text-green-700" : row.confidence >= 65 ? "text-amber-700" : "text-red-700"}`}>
                               {row.confidence}
                             </span>
                           </td>
-                          <td className="max-w-[280px] px-3 py-3 align-top text-[12px] leading-relaxed text-[#5c6570]">{row.notes}</td>
+                          <td className="max-w-[280px] px-3 py-3.5 align-top text-[12px] leading-relaxed text-[#4b5563]">{row.notes}</td>
                         </tr>
                       );
                     }),
@@ -1342,46 +1353,46 @@ export default async function AdminAnalyticsPage() {
         <Card
           title="Signals Overview"
           subtitle="Signal composition, convergence context, and weekly momentum."
-          className="flex min-h-[400px] min-w-0 flex-col !p-3.5 border-[#e1d7c4] shadow-[0_1px_2px_rgba(15,23,42,0.045),0_13px_24px_rgba(20,31,43,0.042)] [&>div:first-child]:mb-2"
+          className="flex min-h-0 min-w-0 flex-col !p-3 border-[#e1d7c4] shadow-[0_1px_2px_rgba(15,23,42,0.045),0_8px_20px_rgba(20,31,43,0.032)] [&>div:first-child]:mb-2"
         >
-          <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-[#e9e2d3] bg-[#fbfaf7]">
-            <div className="grid grid-cols-3 gap-1 border-b border-[#e5dfd0] bg-[#f3efe6] px-2 py-1.5">
-              <div className="min-w-0 rounded border border-[#e3dccf] bg-white/95 px-1.5 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-wide text-[#5c6570]">Convergence</p>
+          <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-[#e9e2d3] bg-[#faf8f4]">
+            <div className="grid grid-cols-3 gap-1.5 border-b border-[#e5dfd0] bg-[#f1ece2] px-2 py-1.5">
+              <div className="min-w-0 rounded border border-[#e0d8c8] bg-white/95 px-2 py-1">
+                <p className="text-[9px] font-semibold uppercase tracking-wide text-[#4b5563]">Convergence</p>
                 <p className="text-sm font-bold tabular-nums leading-tight text-[#111827]">{convergenceCandidates}</p>
-                <p className="text-[9px] leading-tight text-[#6b6570]">editorial candidates</p>
+                <p className="text-[9px] leading-tight text-[#5c6570]">Editorial queue</p>
               </div>
-              <div className="min-w-0 rounded border border-[#e3dccf] bg-white/95 px-1.5 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-wide text-[#5c6570]">Geo-linked</p>
+              <div className="min-w-0 rounded border border-[#e0d8c8] bg-white/95 px-2 py-1">
+                <p className="text-[9px] font-semibold uppercase tracking-wide text-[#4b5563]">Geo-linked</p>
                 <p className="text-sm font-bold tabular-nums leading-tight text-[#1e3a5f]">{geoLinkedSignals}</p>
-                <p className="text-[9px] leading-tight text-[#6b6570]">Places signals</p>
+                <p className="text-[9px] leading-tight text-[#5c6570]">Places signals</p>
               </div>
-              <div className="min-w-0 rounded border border-[#e3dccf] bg-white/95 px-1.5 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-wide text-[#5c6570]">Ed · social</p>
+              <div className="min-w-0 rounded border border-[#e0d8c8] bg-white/95 px-2 py-1">
+                <p className="text-[9px] font-semibold uppercase tracking-wide text-[#4b5563]">Ed · social</p>
                 <p className="text-sm font-bold tabular-nums leading-tight text-[#14532d]">
                   {Math.round((editorialCoreSignals / signalMixTotal) * 100)}% · {Math.round((socialProxySignals / signalMixTotal) * 100)}%
                 </p>
-                <p className="text-[9px] leading-tight text-[#6b6570]">connector mix</p>
+                <p className="text-[9px] leading-tight text-[#5c6570]">Connector mix</p>
               </div>
             </div>
-            <div className="flex min-h-[220px] flex-1 items-center justify-center px-2 py-3">
-              <div className="w-full max-w-none">
+            <div className="flex items-start justify-center px-1.5 py-2">
+              <div className="w-full max-w-[min(100%,28rem)]">
               <SourceShareDonut segments={signalsSegments} total={signalsThisWeek} />
               </div>
             </div>
-            <div className="border-t border-[#ece5d8] px-2.5 py-2">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6b6570]">Weekly volume</p>
-              <div className="mt-1.5 flex items-end gap-1">
+            <div className="border-t border-[#e5dfd0] px-2 py-1.5">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#4b5563]">Weekly volume</p>
+              <div className="mt-1 flex items-end gap-1">
                 {weeklyBars.map((value, idx) => (
                   <div
                     key={idx}
-                    className="w-full rounded-sm bg-[#8eb8a0] transition-all duration-200 hover:bg-[#4e8c67]"
-                    style={{ height: `${Math.max(8, (value / maxWeekly) * 44)}px` }}
+                    className="w-full rounded-sm bg-[#7eab8f] transition-all duration-200 hover:bg-[#4e8c67]"
+                    style={{ height: `${Math.max(6, (value / maxWeekly) * 36)}px` }}
                     title={`Day ${idx + 1}: ${value}`}
                   />
                 ))}
               </div>
-              <div className="mt-1 grid grid-cols-7 text-[9px] font-medium text-[#5c6570]">
+              <div className="mt-1 grid grid-cols-7 gap-0.5 text-[9px] font-medium text-[#4b5563]">
                 {["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"].map((d) => (
                   <span key={d} className="text-center">
                     {d}
@@ -1389,34 +1400,34 @@ export default async function AdminAnalyticsPage() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-1.5 border-t border-[#ece5d8] px-2.5 py-2">
-              <div className="rounded-md border border-[#ede6d8] bg-white/90 px-2 py-1.5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6b6570]">WoW</p>
-                <p className="mt-0.5 text-lg font-semibold tabular-nums leading-none text-[#111827]">{wowDelta}</p>
+            <div className="grid grid-cols-3 gap-1.5 border-t border-[#e5dfd0] px-2 py-1.5">
+              <div className="rounded-md border border-[#e8e2d6] bg-white px-2 py-1">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#4b5563]">WoW</p>
+                <p className="mt-0.5 text-base font-semibold tabular-nums leading-none text-[#111827]">{wowDelta}</p>
               </div>
-              <div className="rounded-md border border-[#ede6d8] bg-white/90 px-2 py-1.5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6b6570]">Strongest</p>
-                <p className="mt-0.5 truncate text-[12px] font-semibold text-[#111827]">{strongestSource?.label ?? "-"}</p>
-                <p className="text-[10px] text-[#5c6570]">{strongestSource?.value ?? 0} sig</p>
+              <div className="rounded-md border border-[#e8e2d6] bg-white px-2 py-1">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#4b5563]">Strongest</p>
+                <p className="mt-0.5 truncate text-[11px] font-semibold text-[#111827]">{strongestSource?.label ?? "-"}</p>
+                <p className="text-[10px] tabular-nums text-[#4b5563]">{strongestSource?.value ?? 0} sig</p>
               </div>
-              <div className="rounded-md border border-[#ede6d8] bg-white/90 px-2 py-1.5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6b6570]">Fastest</p>
-                <p className="mt-0.5 truncate text-[12px] font-semibold text-[#166534]">{fastestSource?.label ?? "-"}</p>
-                <p className="text-[10px] text-[#5c6570]">{fastestSource?.delta ?? "+0%"}</p>
+              <div className="rounded-md border border-[#e8e2d6] bg-white px-2 py-1">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#4b5563]">Fastest</p>
+                <p className="mt-0.5 truncate text-[11px] font-semibold text-[#166534]">{fastestSource?.label ?? "-"}</p>
+                <p className="text-[10px] tabular-nums text-[#4b5563]">{fastestSource?.delta ?? "+0%"}</p>
               </div>
             </div>
           </div>
-          <p className="mt-2 text-[11px] leading-snug text-[#5c6570]">
+          <p className="mt-1.5 text-[11px] leading-snug text-[#4b5563]">
             Source deltas and trendline history are currently modeled from available snapshots where historical day-series is not persisted yet.
           </p>
         </Card>
       </div>
 
-      <div className="mt-4 grid items-start gap-3 xl:grid-cols-12 xl:gap-4">
+      <div className="mt-3 grid items-start gap-3 xl:grid-cols-12 xl:gap-3">
         <Card
           title="LA Signal Map"
           subtitle="Neighborhood-level trend concentration with source-category context."
-          className="min-h-[420px] xl:col-span-8 !p-3 border-[#d4c9b4] shadow-[0_3px_14px_rgba(20,31,43,0.08)] [&>div:first-child]:mb-2"
+          className="min-h-0 xl:col-span-8 !p-3 border-[#cfc4b0] shadow-[0_2px_12px_rgba(20,31,43,0.07)] [&>div:first-child]:mb-2"
         >
           <div className="mb-1.5 flex flex-wrap items-center gap-2 text-[11px]">
             <span
@@ -1428,27 +1439,27 @@ export default async function AdminAnalyticsPage() {
             >
               {liveGeoDataActive ? "Live geo data active" : "Live geo data inactive"}
             </span>
-            <span className="text-[#5c6570]">
+            <span className="text-[#4b5563]">
               {liveGeoDataActive
                 ? `${projectedRestaurantPoints.length} real restaurant points mapped`
                 : "Using centroid fallback until live points are available"}
             </span>
           </div>
-          <div className="mb-2 rounded-md border border-[#e7dfcf] bg-[#fbfaf7] px-2.5 py-1.5 text-[10px] leading-snug text-[#5c6570]">
-            <p className="font-semibold uppercase tracking-[0.06em] text-[#5c6570]">Map data · hybrid</p>
+          <div className="mb-2 rounded-md border border-[#e7dfcf] bg-[#f8f5ef] px-2.5 py-1.5 text-[11px] leading-snug text-[#4b5563]">
+            <p className="font-semibold uppercase tracking-[0.06em] text-[#4b5563]">Map data · hybrid</p>
             <p className="mt-0.5">
               Trends + editorial metadata; {hasRealPlaceCoordinates ? "Places lat/lng when available." : "centroid fallbacks otherwise."}{" "}
               <span className="font-medium text-[#374151]">No invented precision.</span>
             </p>
           </div>
           <div className="rounded-xl border-2 border-[#cfc3aa] bg-[#e8dcc8] p-1.5 shadow-inner">
-            <svg viewBox="0 0 640 360" className="h-[min(48vh,480px)] w-full min-h-[340px]">
+            <svg viewBox="0 0 640 360" className="h-[min(52vh,520px)] w-full min-h-[360px]">
               <defs>
                 <filter id="markerShadow" x="-40%" y="-40%" width="180%" height="180%">
-                  <feDropShadow dx="0" dy="1.2" stdDeviation="1.3" floodColor="#000000" floodOpacity="0.16" />
+                  <feDropShadow dx="0" dy="1.5" stdDeviation="1.6" floodColor="#000000" floodOpacity="0.2" />
                 </filter>
               </defs>
-              <rect x="0" y="0" width="640" height="360" rx="16" fill="#efe6d8" />
+              <rect x="0" y="0" width="640" height="360" rx="16" fill="#e8ded0" />
               <path d="M50 20 C28 118, 27 248, 54 342" fill="none" stroke="#d8cdb8" strokeWidth="2.2" />
               <path d="M78 106 C218 82, 384 80, 612 114" fill="none" stroke="#d8cdb8" strokeWidth="1.15" />
               <path d="M78 170 C220 148, 392 148, 612 184" fill="none" stroke="#d8cdb8" strokeWidth="1.15" />
@@ -1475,12 +1486,12 @@ export default async function AdminAnalyticsPage() {
                     <text
                       x={n.labelX}
                       y={n.labelY}
-                      fontSize="13"
-                      fill="#1e293b"
+                      fontSize="14.5"
+                      fill="#0f172a"
                       fontWeight="700"
                       paintOrder="stroke fill"
-                      stroke="#fdf6e9"
-                      strokeWidth="2.5"
+                      stroke="#fffefb"
+                      strokeWidth="3.2"
                       strokeLinejoin="round"
                     >
                       {n.name}
@@ -1491,8 +1502,8 @@ export default async function AdminAnalyticsPage() {
                         <animate attributeName="opacity" values="0.55;0.2;0.55" dur="2.8s" repeatCount="indefinite" />
                       </circle>
                     ) : null}
-                    <circle cx={n.x} cy={n.y} r={markerSize} fill={tone} stroke="#fdfaf4" strokeWidth="5" filter="url(#markerShadow)" />
-                    <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize="12" fill="white" fontWeight="800">
+                    <circle cx={n.x} cy={n.y} r={markerSize} fill={tone} stroke="#fffcf7" strokeWidth="5.5" filter="url(#markerShadow)" />
+                    <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize="12.5" fill="white" fontWeight="800">
                       {Math.min(9, n.count)}
                     </text>
                     {n.count > 1 ? (
@@ -1516,16 +1527,16 @@ export default async function AdminAnalyticsPage() {
                 return (
                   <g key={`cluster-${cluster.key}`}>
                     {cluster.count >= 2 ? (
-                      <circle cx={cluster.x} cy={cluster.y} r={clusterRadius + 5} fill="none" stroke="#1e40af" strokeOpacity="0.35" strokeWidth="2" />
+                      <circle cx={cluster.x} cy={cluster.y} r={clusterRadius + 5} fill="none" stroke="#1e3a8a" strokeOpacity="0.42" strokeWidth="2.2" />
                     ) : null}
                     <circle
                       cx={cluster.x}
                       cy={cluster.y}
                       r={clusterRadius}
                       fill={cluster.count >= 2 ? "#1d4ed8" : "#0f766e"}
-                      fillOpacity={0.95}
+                      fillOpacity={0.97}
                       stroke="#fffef9"
-                      strokeWidth="2.5"
+                      strokeWidth="2.8"
                     >
                       <title>{tooltip}</title>
                     </circle>
@@ -1555,20 +1566,20 @@ export default async function AdminAnalyticsPage() {
               Fastest: {fastestGrowth}
             </span>
           </div>
-          <div className="mt-2 grid max-h-[132px] grid-cols-2 gap-1.5 overflow-hidden rounded-md border border-[#e7dfcf] bg-[#fbfaf7] text-[10px] md:max-h-[148px]">
-            <div className="max-h-full overflow-auto p-1.5">
+          <div className="mt-2 grid max-h-[152px] grid-cols-2 gap-2 overflow-hidden rounded-md border border-[#e3dcd0] bg-[#faf7f0] text-[11px] md:max-h-[160px]">
+            <div className="max-h-full overflow-auto p-2">
               {mappedNeighborhoods
                 .filter((n) => n.count > 0)
                 .sort((a, b) => b.count - a.count)
                 .slice(0, 7)
                 .map((n) => (
-                  <div key={`${n.name}-meta`} className="grid grid-cols-[1fr_auto] items-center gap-1 border-b border-[#efe7da] py-0.5 last:border-b-0">
-                    <span className="truncate font-semibold text-[#1f2937]">{n.name}</span>
+                  <div key={`${n.name}-meta`} className="grid grid-cols-[1fr_auto] items-center gap-2 border-b border-[#ebe4d8] py-1 last:border-b-0">
+                    <span className="truncate font-semibold text-[#1a202c]">{n.name}</span>
                     <span className="tabular-nums text-[#111827]">{n.count}</span>
                   </div>
                 ))}
             </div>
-            <div className="max-h-full overflow-auto border-l border-[#efe7da] p-1.5 text-[#4b5563]">
+            <div className="max-h-full overflow-auto border-l border-[#ebe4d8] p-2 text-[#475569]">
               {pointClusters
                 .sort((a, b) => b.count - a.count)
                 .slice(0, 6)
@@ -1602,7 +1613,7 @@ export default async function AdminAnalyticsPage() {
           compact
           title="Freshness Heatmap"
           subtitle="Activity intensity and ingestion aging by source."
-          className="min-h-0 xl:col-span-4 border-[#ebe4d5] !p-3"
+          className="min-h-0 xl:col-span-4 border-[#e5dfcf] !p-3"
         >
           <div className="mb-2 grid grid-cols-2 gap-1.5 text-[11px]">
             <div className="rounded-md border border-[#e5dece] bg-[#f7fcf8] px-2 py-1.5">
@@ -1658,24 +1669,24 @@ export default async function AdminAnalyticsPage() {
         </Card>
       </div>
 
-      <div className="mt-3 grid gap-3 xl:grid-cols-3">
-        <div className="flex min-h-0 flex-col gap-3">
+      <div className="mt-3 grid gap-2.5 xl:grid-cols-3">
+        <div className="flex min-h-0 flex-col gap-2.5">
           <Card
             compact
             title="Data Quality"
             subtitle="Composite trust, connector posture, and freshness pressure."
-            className="min-h-0 border-[#e9e3d5]"
+            className="min-h-0 flex-1 border-[#e4ddcf] !p-3"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <p className="text-[1.75rem] font-bold leading-none tabular-nums text-[#0f172a]">{qualityScore}</p>
-                <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-[#6b6570]">{qualityConfidence(qualityScore)}</p>
+                <p className="text-[1.65rem] font-bold leading-none tabular-nums text-[#0f172a]">{qualityScore}</p>
+                <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-[#4b5563]">{qualityConfidence(qualityScore)}</p>
               </div>
               <div className="shrink-0 pt-0.5">
                 <StatusPill tone={readinessTone(readinessValue)} label={readinessValue.toUpperCase()} size="sm" />
               </div>
             </div>
-            <div className="mt-2 grid grid-cols-3 gap-1.5">
+            <div className="mt-2 grid grid-cols-3 gap-2">
               {(
                 [
                   ["Readiness", readinessScore],
@@ -1683,13 +1694,13 @@ export default async function AdminAnalyticsPage() {
                   ["Jobs", jobScore],
                 ] as const
               ).map(([label, value]) => (
-                <div key={label} className="rounded-md border border-[#ebe4d5] bg-[#fbfaf7] px-1.5 py-1 text-center">
-                  <p className="text-[9px] font-semibold uppercase tracking-wide text-[#6b6570]">{label}</p>
+                <div key={label} className="rounded-md border border-[#e8e2d6] bg-[#faf7f0] px-2 py-1.5 text-center">
+                  <p className="truncate text-[9px] font-semibold uppercase tracking-wide text-[#4b5563]">{label}</p>
                   <p className="text-sm font-bold tabular-nums text-[#111827]">{value}</p>
                 </div>
               ))}
             </div>
-            <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-0.5 border-t border-[#efe8da] pt-2 text-[10px] leading-snug text-[#5c6570]">
+            <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 border-t border-[#efe8da] pt-2 text-[11px] leading-snug text-[#4b5563]">
               <p>
                 <span className="font-semibold text-[#4b5563]">Healthy sources:</span> {healthySources}/{sourceCount}
               </p>
@@ -1708,15 +1719,15 @@ export default async function AdminAnalyticsPage() {
             </div>
           </Card>
 
-          <Card compact title="Job Health" subtitle="Scheduled runs and last known outcomes." className="min-h-0 border-[#e9e3d5]">
-            <div className="max-h-[192px] space-y-1 overflow-y-auto overscroll-contain pr-0.5">
+          <Card compact title="Job Health" subtitle="Scheduled runs and last known outcomes." className="min-h-0 flex-1 border-[#e4ddcf] !p-3">
+            <div className="max-h-[200px] space-y-1 overflow-y-auto overscroll-contain pr-0.5">
               {jobEntries.length === 0 ? (
                 <p className="text-[11px] text-[#6b7280]">No job telemetry (pipeline unavailable).</p>
               ) : (
                 jobEntries.map(([key, job]) => (
                   <div
                     key={key}
-                    className="flex items-center justify-between gap-2 rounded-md border border-[#ece5d8] bg-[#fcfaf7] px-2 py-1 text-[11px]"
+                    className="flex items-center justify-between gap-2 rounded-md border border-[#e8e2d6] bg-[#fcfaf7] px-2 py-1.5 text-[11px]"
                   >
                     <span className="min-w-0 truncate font-medium text-[#374151]" title={key}>
                       {jobDisplayName(key)}
@@ -1736,12 +1747,12 @@ export default async function AdminAnalyticsPage() {
           </Card>
         </div>
 
-        <div className="flex min-h-0 flex-col gap-3">
+        <div className="flex min-h-0 flex-col gap-2.5">
           <Card
             compact
             title="Trend Transition Timeline"
             subtitle="State changes, score momentum, and convergence."
-            className="flex min-h-0 max-h-[min(42vh,360px)] flex-col border-[#e1d7c4]"
+            className="flex min-h-0 max-h-[min(40vh,360px)] flex-1 flex-col border-[#ded8cc] !p-3"
           >
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-0.5">
               {(data.transitions?.transitions ?? []).length === 0 ? (
@@ -1808,8 +1819,8 @@ export default async function AdminAnalyticsPage() {
             </div>
           </Card>
 
-          <Card compact title="Alerts & Warnings" subtitle="Severity-ranked operational incidents." className="min-h-0 border-[#e9e1d3]">
-            <div className="max-h-[220px] space-y-2 overflow-y-auto overscroll-contain pr-0.5">
+          <Card compact title="Alerts & Warnings" subtitle="Severity-ranked operational incidents." className="min-h-0 flex-1 border-[#e4ddcf] !p-3">
+            <div className="max-h-[200px] space-y-1.5 overflow-y-auto overscroll-contain pr-0.5">
               {(["critical", "warning", "info"] as const).map((level) => {
                 const levelAlerts = groupedAlerts[level];
                 if (levelAlerts.length === 0) return null;
@@ -1820,7 +1831,7 @@ export default async function AdminAnalyticsPage() {
                       {style.label} ({levelAlerts.length})
                     </p>
                     {levelAlerts.slice(0, 2).map((alert, idx) => (
-                      <div key={`${level}-${idx}`} className={`rounded-md border px-2 py-1 text-[11px] leading-snug ${style.ring}`}>
+                      <div key={`${level}-${idx}`} className={`rounded-md border px-2 py-1.5 text-[11px] leading-snug ${style.ring}`}>
                         <div className="mb-0.5 flex items-center gap-1 font-semibold">
                           <span>{style.icon}</span>
                           <span className="truncate">{alert.title}</span>
@@ -1835,9 +1846,9 @@ export default async function AdminAnalyticsPage() {
           </Card>
         </div>
 
-        <div className="flex min-h-0 flex-col gap-3">
-          <Card compact title="Active Sources by Category" subtitle="Weekly movement by ingestion lane." className="min-h-0 border-[#ebe4d5]">
-            <div className="max-h-[240px] space-y-1 overflow-y-auto overscroll-contain pr-0.5">
+        <div className="flex min-h-0 flex-col gap-2.5">
+          <Card compact title="Active Sources by Category" subtitle="Weekly movement by ingestion lane." className="min-h-0 flex-1 border-[#e8e2d6] !p-3">
+            <div className="max-h-[228px] space-y-1 overflow-y-auto overscroll-contain pr-0.5">
               <div className="grid gap-1.5 sm:grid-cols-2">
                 {categorizedSources.map((item) => {
                   const deltaTone = metricDeltaTone(item.weeklyDelta);
@@ -1877,34 +1888,34 @@ export default async function AdminAnalyticsPage() {
             compact
             title="System Info"
             subtitle="Runtime context and connector env readiness."
-            className="scroll-mt-6 min-h-0 border-[#ebe4d5] bg-[#fdfcf9]"
+            className="scroll-mt-6 min-h-0 flex-1 border-[#e8e2d6] bg-[#fdfcf9] !p-3"
           >
-            <div id="system-info" className="grid gap-1.5 text-[11px] md:grid-cols-2">
-              <div className="rounded-md border border-[#ebe4d4] bg-[#fbfaf7] px-2 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[#8b8171]">Pipeline generated</p>
+            <div id="system-info" className="grid gap-1.5 text-[12px] md:grid-cols-2">
+              <div className="rounded-md border border-[#e5dfcf] bg-[#faf7f0] px-2 py-1.5">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#6b6358]">Pipeline generated</p>
                 <p className="font-medium leading-tight text-[#1f2937]">{fmtDateTime(data.pipeline?.generatedAt ?? null)}</p>
               </div>
-              <div className="rounded-md border border-[#ebe4d4] bg-[#fbfaf7] px-2 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[#8b8171]">Trend data updated</p>
+              <div className="rounded-md border border-[#e5dfcf] bg-[#faf7f0] px-2 py-1.5">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#6b6358]">Trend data updated</p>
                 <p className="font-medium leading-tight text-[#1f2937]">{fmtDateTime(data.trendData?.lastUpdated ?? null)}</p>
               </div>
-              <div className="rounded-md border border-[#ebe4d4] bg-[#fbfaf7] px-2 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[#8b8171]">Pipeline error</p>
+              <div className="rounded-md border border-[#e5dfcf] bg-[#faf7f0] px-2 py-1.5">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#6b6358]">Pipeline error</p>
                 <p className="break-words font-medium leading-tight text-[#1f2937]">{data.pipelineError ?? "none"}</p>
               </div>
-              <div className="rounded-md border border-[#ebe4d4] bg-[#fbfaf7] px-2 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-[#8b8171]">Editorial error</p>
+              <div className="rounded-md border border-[#e5dfcf] bg-[#faf7f0] px-2 py-1.5">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.08em] text-[#6b6358]">Editorial error</p>
                 <p className="break-words font-medium leading-tight text-[#1f2937]">{data.editorialError ?? "none"}</p>
               </div>
             </div>
-            <div className="mt-2 max-h-[140px] overflow-y-auto rounded-md border border-[#e6dece] bg-[#fbfaf7] p-1.5">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#8b8171]">Connector env</p>
+            <div className="mt-2 max-h-[132px] overflow-y-auto rounded-md border border-[#e3dcd0] bg-[#faf8f4] p-2">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#6b6358]">Connector env</p>
               <div className="mt-1 grid gap-0.5">
                 {requiredEnvVars.map((name) => {
                   const missing = missingEnvVars.includes(name);
                   return (
-                    <div key={name} className="flex items-center justify-between rounded border border-[#ece5d8] bg-white px-1.5 py-0.5">
-                      <span className="font-mono text-[10px] text-[#4b5563]">{name}</span>
+                    <div key={name} className="flex items-center justify-between rounded border border-[#e8e2d6] bg-white px-2 py-1">
+                      <span className="font-mono text-[10px] text-[#475569]">{name}</span>
                       <span className={`text-[10px] font-semibold ${missing ? "text-red-700" : "text-green-700"}`}>
                         {missing ? "missing" : "set"}
                       </span>
@@ -1916,7 +1927,7 @@ export default async function AdminAnalyticsPage() {
           </Card>
         </div>
       </div>
-      <p className="mt-6 text-xs leading-relaxed text-[#5c6570]">
+      <p className="mt-5 text-[13px] leading-relaxed text-[#4b5563]">
         Layout tuned for wide desktop operations. Build verified on deploy.
       </p>
     </AdminScaffold>
