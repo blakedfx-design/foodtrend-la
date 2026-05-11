@@ -14,14 +14,17 @@
   "private": true,
   "dependencies": {
     "@tailwindcss/postcss": "^4.2.4",
+    "leaflet": "^1.9.4",
     "next": "^16.2.4",
     "openai": "^6.35.0",
     "postcss": "^8.5.13",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "react-leaflet": "^5.0.0",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

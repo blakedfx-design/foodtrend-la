@@ -356,6 +356,8 @@ export function normalizeRestaurant(raw: unknown): TrendRestaurant | null {
   const dishRaw = typeof raw.dish === "string" ? raw.dish.trim() : "";
   const dish = dishRaw || undefined;
 
+  const venueHeroImageUrl = readOptionalTrimmedString(raw, "heroImageUrl", "hero_image_url");
+
   const instagramRaw = readOptionalTrimmedString(raw, "instagramUrl", "instagram_url");
   const instagramUrl = instagramRaw ? optionalHttpsUrl(instagramRaw) : undefined;
   const tiktokRaw = readOptionalTrimmedString(raw, "tiktokUrl", "tiktok_url");
@@ -433,6 +435,7 @@ export function normalizeRestaurant(raw: unknown): TrendRestaurant | null {
     name,
     neighborhood,
     ...(dish ? { dish } : {}),
+    ...(venueHeroImageUrl ? { heroImageUrl: venueHeroImageUrl } : {}),
     ...(instagramUrl ? { instagramUrl } : {}),
     ...(tiktokUrl ? { tiktokUrl } : {}),
     ...(websiteUrl ? { websiteUrl } : {}),
@@ -466,6 +469,9 @@ function restaurantToDiskJson(r: TrendRestaurant): Record<string, unknown> {
   };
   if (r.dish != null && r.dish !== "") {
     o.dish = r.dish;
+  }
+  if (r.heroImageUrl != null && r.heroImageUrl !== "") {
+    o.heroImageUrl = r.heroImageUrl;
   }
   if (r.instagramUrl != null && r.instagramUrl !== "") {
     o.instagramUrl = r.instagramUrl;

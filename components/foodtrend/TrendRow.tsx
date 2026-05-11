@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
+import { resolveEditorialFoodHeroSrc } from "@/lib/publicTrendHeroImage";
 import type { WherePick } from "./wherePick";
 import { EditorialVenueLine } from "./EditorialVenueLine";
+import { TrendHeroMedia } from "./TrendHeroMedia";
 
 export type FtTrendRowProps = {
   trendId: string;
@@ -30,49 +32,6 @@ export type FtTrendRowProps = {
 };
 
 const SEGMENTS = 15;
-
-const EDITORIAL_FOOD_PATH_PREFIX = "/editorial/food/";
-
-/** Blocks screenshots, mockups, or other non–food references from resolving as hero paths. */
-const DISALLOWED_HERO_IMAGE_SUBSTRINGS = [
-  "screencapture",
-  "screenshot",
-  "mockup",
-  "reference",
-  "localhost",
-] as const;
-
-const EDITORIAL_FOOD_FILENAME = /^[\w.-]+\.(avif|gif|jpe?g|png|webp)$/i;
-
-function isDisallowedHeroImagePath(pathLower: string): boolean {
-  return DISALLOWED_HERO_IMAGE_SUBSTRINGS.some((frag) => pathLower.includes(frag));
-}
-
-/**
- * Only curated files in `public/editorial/food/`; no remote URLs, no path traversal.
- */
-function resolveHeroImageSrc(raw?: string): string | undefined {
-  const trimmed = raw?.trim();
-  if (!trimmed) {
-    return undefined;
-  }
-  const pathOnly = trimmed.split("?")[0].split("#")[0];
-  const lower = pathOnly.toLowerCase();
-  if (
-    isDisallowedHeroImagePath(lower) ||
-    lower.includes("..") ||
-    lower.includes("//") ||
-    pathOnly.includes(":") ||
-    !pathOnly.startsWith(EDITORIAL_FOOD_PATH_PREFIX)
-  ) {
-    return undefined;
-  }
-  const file = pathOnly.slice(EDITORIAL_FOOD_PATH_PREFIX.length);
-  if (!file || file.includes("/") || !EDITORIAL_FOOD_FILENAME.test(file)) {
-    return undefined;
-  }
-  return pathOnly;
-}
 
 function SegmentBar({ value, tone }: { value: number; tone: "rust" | "gold" }) {
   const filled = Math.round((Math.min(100, Math.max(0, value)) / 100) * SEGMENTS);
@@ -189,7 +148,7 @@ export default function TrendRow({
   const mealMomentDisplay = mealMoment?.trim();
   const move = moveCopy;
   const whyLines = why.slice(0, 3);
-  const heroSrc = resolveHeroImageSrc(heroImageUrl);
+  const heroSrc = resolveEditorialFoodHeroSrc(heroImageUrl);
   const showHeroCaption = Boolean(
     heroSrc && (heroImageCredit?.trim() || heroImageSource?.trim()),
   );
@@ -282,29 +241,18 @@ export default function TrendRow({
           </div>
 
           <aside className="ft-editorial-card__insight" aria-label="Right now">
-            {heroSrc ? (
-              <figure className="ft-editorial-card__hero ft-editorial-card__hero--rail ft-editorial-card__hero--rail-lead">
-                <div className="ft-editorial-card__hero-frame">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- curated files in public/editorial/food only */}
-                  <img
-                    src={heroSrc}
-                    alt=""
-                    className="ft-editorial-card__hero-img"
-                    loading="lazy"
-                    decoding="async"
+            <figure className="ft-editorial-card__hero ft-editorial-card__hero--rail ft-editorial-card__hero--rail-lead">
+              <TrendHeroMedia src={heroSrc} title={title} mealCue={mealScanLabel} />
+              {showHeroCaption ? (
+                <figcaption className="ft-editorial-card__hero-credit">
+                  <HeroCaption
+                    credit={heroImageCredit}
+                    source={heroImageSource}
+                    sourceUrl={heroImageSourceUrl}
                   />
-                </div>
-                {showHeroCaption ? (
-                  <figcaption className="ft-editorial-card__hero-credit">
-                    <HeroCaption
-                      credit={heroImageCredit}
-                      source={heroImageSource}
-                      sourceUrl={heroImageSourceUrl}
-                    />
-                  </figcaption>
-                ) : null}
-              </figure>
-            ) : null}
+                </figcaption>
+              ) : null}
+            </figure>
 
             <div className="ft-editorial-insight__block ft-editorial-insight__block--cuisine">
               <InsightCircleIcon>

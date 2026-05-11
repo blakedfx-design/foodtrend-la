@@ -64,6 +64,11 @@ export type TrendRestaurant = {
   source?: string;
   rating?: number;
   review_count?: number;
+  /**
+   * Optional curated dish photo path (`/editorial/food/...`) for this venue when it should
+   * supply the public card hero (used only when the trend has no valid `heroImageUrl`).
+   */
+  heroImageUrl?: string;
 };
 
 /** Editorial keys stored in `data/la-food-trends.json` (normalized in-memory copy mirrors legacy fields). */

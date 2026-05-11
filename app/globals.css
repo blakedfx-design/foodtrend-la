@@ -1355,6 +1355,47 @@ a:hover {
   box-shadow: none;
 }
 
+.ft-editorial-card__hero-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  box-sizing: border-box;
+  background: linear-gradient(
+    152deg,
+    color-mix(in srgb, var(--ec-navy) 11%, #e5e2db) 0%,
+    color-mix(in srgb, var(--ec-rust) 9%, #f3f0ea) 52%,
+    color-mix(in srgb, var(--ec-navy) 6%, #ebe8e2) 100%
+  );
+}
+
+.ft-editorial-card__hero-placeholder__kicker {
+  margin: 0;
+  max-width: 14rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ec-navy) 42%, #6b7280);
+}
+
+.ft-editorial-card__hero-placeholder__title {
+  margin: 0;
+  max-width: 13rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.38;
+  color: color-mix(in srgb, var(--ec-navy) 76%, #3f4960);
+}
+
 .ft-editorial-card__hero--rail .ft-editorial-card__hero-frame {
   min-height: 10.5rem;
 }
@@ -2518,4 +2559,30 @@ a.ft-where-pick-name-link:hover .ft-where-pick-glyph {
 
 .ft-home-dispatch .ft-momentum-cue__dek {
   color: color-mix(in srgb, var(--ft-ink) 68%, var(--ft-muted));
+}
+
+/* —— Admin LA Signal Map (Leaflet) —— */
+.la-signal-map-root.leaflet-container {
+  background: #f0ebe3;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.la-signal-map-count-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.la-signal-map-count-icon__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.65),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
 }

@@ -7,6 +7,8 @@ import {
   tonePillClass,
   type HealthTone,
 } from "@/components/admin/AdminUi";
+import LaSignalMap from "@/components/admin/LaSignalMap";
+import { LA_PLACE_CLUSTER_CELL_DEG, LA_SIGNAL_MAP_NEIGHBORHOODS } from "@/lib/admin/laSignalMapLayout";
 import {
   computeReadiness,
   fmtDateTime,
@@ -150,7 +152,7 @@ function clamp(n: number, min: number, max: number): number {
 
 function qualityConfidence(score: number): string {
   if (score >= 88) return "High confidence";
-  if (score >= 74) return "Moderate confidence";
+  if (score >= 74) return "Medium confidence";
   return "Low confidence";
 }
 
@@ -181,6 +183,12 @@ function metricDeltaTone(delta: string): "up" | "down" | "flat" {
   return "flat";
 }
 
+/** Single-line KPI headline; avoids awkward wrap on “Not Ready”. */
+function readinessKpiHeadline(verdict: "Ready" | "Caution" | "Not Ready"): string {
+  if (verdict === "Not Ready") return "Not\u00A0ready";
+  return verdict;
+}
+
 function MetricTile(props: {
   label: string;
   value: string;
@@ -198,28 +206,28 @@ function MetricTile(props: {
         ? "text-red-700 bg-red-50 border-red-200"
         : "text-neutral-700 bg-neutral-50 border-neutral-200";
   return (
-    <div className="group relative flex h-full min-h-[84px] flex-col rounded-xl border border-[#e8e1d3] bg-white px-3 py-2 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(20,31,43,0.06)] xl:min-h-[88px]">
+    <div className="group relative flex h-full min-h-[102px] flex-col rounded-xl border border-[#e8e1d3] bg-white px-3 py-2 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_16px_rgba(20,31,43,0.06)]">
       <div className="absolute right-2 top-2 z-10">
         <InfoHint text={props.tooltip} />
       </div>
-      <div className="min-h-0 pr-6">
+      <div className="flex min-h-0 flex-1 flex-col pr-6">
         <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#6b6358]">{props.label}</p>
         <div className="mt-1 flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
-            <p className="text-[1.6rem] font-semibold leading-none tracking-tight text-[#111827] md:text-[1.68rem]">{props.value}</p>
-            <p className="mt-1 text-[11px] leading-snug text-[#4b5563]">{props.detail}</p>
+            <p className="text-[1.6rem] font-semibold leading-none tracking-tight text-[#111827] md:text-[1.68rem] whitespace-nowrap">{props.value}</p>
+            <p className="mt-1 line-clamp-2 text-[11px] leading-snug text-[#4b5563]">{props.detail}</p>
           </div>
           <div className="shrink-0 self-start pt-0">
             <StatusPill tone={props.tone} label={props.tone.toUpperCase()} size="sm" />
           </div>
         </div>
       </div>
-      <div className="mt-1.5 flex min-h-[2rem] items-end justify-between gap-2 border-t border-[#f0ebe3] pt-1.5">
+      <div className="mt-auto flex items-end justify-between gap-2 border-t border-[#f0ebe3] pt-1.5">
         <div className="flex items-end gap-1 opacity-90">
           <span className={`mb-0.5 h-1.5 w-1.5 shrink-0 rounded-full ${props.tone === "green" ? "bg-green-500" : props.tone === "yellow" ? "bg-amber-500" : props.tone === "red" ? "bg-red-500" : "bg-neutral-400"} animate-pulse`} />
           <MiniSparkline values={props.sparkline} tone={props.tone === "green" ? "green" : "neutral"} />
         </div>
-        <span className={`mb-0.5 inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${deltaClass}`}>
+        <span className={`mb-0.5 inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-semibold ${deltaClass}`}>
           {props.delta}
         </span>
       </div>
@@ -252,36 +260,32 @@ function ScoreRing(props: { score: number; sourceScore: number; jobScore: number
     { label: "Jobs", value: props.jobScore },
   ] as const;
   return (
-    <div className="flex min-w-0 flex-col gap-2.5">
-      <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col justify-between gap-1">
+      <div className="flex min-w-0 items-center gap-2">
         <div
-          className="relative grid h-[5.125rem] w-[5.125rem] shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgba(255,255,255,0.25)]"
+          className="relative grid h-[3.75rem] w-[3.75rem] shrink-0 place-items-center rounded-full shadow-[inset_0_0_0_1px_rgba(255,255,255,0.25)]"
           style={{
             background: `conic-gradient(#16a34a ${clamped * 3.6}deg, #e7e5e4 0deg)`,
           }}
         >
-          <div className="grid h-[3.75rem] w-[3.75rem] place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]">
-            <span className="text-[1.55rem] font-bold leading-none tracking-tight text-[#0f172a] tabular-nums">{clamped}</span>
+          <div className="grid h-[2.7rem] w-[2.7rem] place-items-center rounded-full bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]">
+            <span className="text-[1.2rem] font-bold leading-none tracking-tight text-[#0f172a] tabular-nums">{clamped}</span>
           </div>
         </div>
-        <div className="min-w-0 flex-1 space-y-0.5">
-          <p className="hidden text-[11px] font-semibold uppercase tracking-[0.1em] text-[#6b6358] sm:block">Overall quality score</p>
-          <p className="text-[0.9375rem] font-semibold text-[#0f172a]">{qualityConfidence(clamped)}</p>
-          <p className="max-w-xl text-[11px] leading-relaxed text-[#4b5563]">
-            Composite trust from readiness, connectors, and jobs. See source table for detail.
-          </p>
-        </div>
+        <p className="min-w-0 flex-1 truncate text-[11px] font-semibold leading-tight text-[#0f172a] whitespace-nowrap">
+          {qualityConfidence(clamped)}
+        </p>
       </div>
-      <div className="grid grid-cols-3 gap-2 border-t border-[#ebe4d5] pt-2.5">
+      <div className="flex min-w-0 gap-1 border-t border-[#ebe4d5] pt-1.5">
         {subs.map((s) => (
           <div
             key={s.label}
-            className="rounded-lg border border-[#e7dfcf] bg-[#fbf7ef] px-2 py-1.5 text-center"
+            className="min-w-0 flex-1 basis-0 rounded-md border border-[#e7dfcf] bg-[#fbf7ef] px-1 py-1 text-center"
           >
-            <p className="truncate text-[10px] font-semibold uppercase tracking-wide text-[#5c6570]" title={s.label}>
+            <p className="truncate text-[8px] font-semibold uppercase tracking-wide text-[#5c6570]" title={s.label}>
               {s.label}
             </p>
-            <p className="mt-0.5 text-base font-bold tabular-nums leading-none text-[#1e293b]">{s.value}</p>
+            <p className="mt-0.5 text-xs font-bold tabular-nums leading-none text-[#1e293b]">{s.value}</p>
           </div>
         ))}
       </div>
@@ -298,9 +302,23 @@ function SourceShareDonut(props: {
     props.segments.reduce((sum, s) => sum + s.value, 0),
     1,
   );
-  const r = 76;
+  const positive = props.segments.filter((s) => s.value > 0).sort((a, b) => b.value - a.value);
+  const merged: typeof props.segments =
+    positive.length <= 5
+      ? positive
+      : [
+          ...positive.slice(0, 5),
+          {
+            label: "Other",
+            value: positive.slice(5).reduce((sum, s) => sum + s.value, 0),
+            color: "#94a3b8",
+            delta: "—",
+          },
+        ];
+  const drawSegments = merged.length > 0 ? merged : props.segments;
+  const r = 70;
   const c = 2 * Math.PI * r;
-  const segmentsWithOffsets = props.segments.map((segment) => ({
+  const segmentsWithOffsets = drawSegments.map((segment) => ({
     ...segment,
     pct: segment.value / total,
   }));
@@ -319,9 +337,9 @@ function SourceShareDonut(props: {
     [],
   );
   return (
-    <div className="grid min-w-0 gap-3 xl:grid-cols-[minmax(216px,1fr)_minmax(0,1.35fr)] xl:items-start xl:gap-4">
-      <div className="mx-auto flex h-[210px] w-[210px] shrink-0 items-center justify-center xl:mx-0 xl:pt-0.5">
-        <svg viewBox="0 0 200 200" className="h-[206px] w-[206px]" aria-hidden>
+    <div className="flex w-full flex-col items-center gap-3">
+      <div className="flex shrink-0 justify-center">
+        <svg viewBox="0 0 200 200" className="h-[180px] w-[180px] max-w-full" aria-hidden>
           <g transform="rotate(-90 100 100)">
             {donutSegments.map((segment) => {
               const dash = `${segment.pct * c} ${c - segment.pct * c}`;
@@ -333,41 +351,47 @@ function SourceShareDonut(props: {
                   r={r}
                   fill="none"
                   stroke={segment.color}
-                  strokeWidth="26"
+                  strokeWidth="24"
                   strokeDasharray={dash}
                   strokeDashoffset={segment.strokeDashoffset}
                 />
               );
             })}
           </g>
-          <circle cx="100" cy="100" r="44" fill="white" />
-          <text x="100" y="90" textAnchor="middle" className="fill-[#4b5563] text-[11px] font-semibold uppercase tracking-[0.1em]">
+          <circle cx="100" cy="100" r="46" fill="white" />
+          <text x="100" y="89" textAnchor="middle" className="fill-[#64748b] text-[11px] font-semibold uppercase tracking-[0.08em]">
             Signals
           </text>
-          <text x="100" y="113" textAnchor="middle" className="fill-[#111827] text-[21px] font-semibold tabular-nums">
+          <text x="100" y="112" textAnchor="middle" className="fill-[#111827] text-[22px] font-semibold tabular-nums">
             {total}
           </text>
         </svg>
       </div>
-      <div className="min-w-0 space-y-1">
-        {props.segments.map((segment) => {
+      <div className="grid w-full min-w-0 grid-cols-2 gap-x-4 gap-y-2 px-0.5">
+        {merged.map((segment) => {
           const pct = Math.round((segment.value / total) * 100);
           const deltaTone = metricDeltaTone(segment.delta);
           return (
             <div
               key={segment.label}
-              className="flex min-w-0 items-center justify-between gap-3 rounded-md px-1.5 py-1 transition-colors hover:bg-[#f0ebe1]"
+              className="flex min-w-0 items-start gap-2 rounded-md px-1 py-0.5 transition-colors hover:bg-[#f0ebe1]/80"
             >
-              <div className="flex min-w-0 items-center gap-2.5">
-                <span className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: segment.color }} />
-                <span className="truncate text-[13px] font-semibold leading-tight text-[#1f2937]">{segment.label}</span>
-              </div>
-              <div className="flex shrink-0 items-center gap-2.5 text-xs">
-                <span className="text-base font-semibold tabular-nums text-[#111827]">{segment.value}</span>
-                <span className="tabular-nums text-[#5c6570]">{pct}%</span>
-                <span className={`w-10 text-right text-[13px] font-semibold tabular-nums ${deltaTone === "up" ? "text-green-700" : deltaTone === "down" ? "text-red-700" : "text-[#5c6570]"}`}>
-                  {segment.delta}
-                </span>
+              <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: segment.color }} />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[11px] font-semibold leading-tight text-[#1f2937]" title={segment.label}>
+                  {segment.label}
+                </p>
+                <div className="mt-0.5 flex flex-wrap items-baseline gap-x-1.5 text-[10px] tabular-nums text-[#475569]">
+                  <span className="text-[13px] font-semibold text-[#111827]">{segment.value}</span>
+                  <span>{pct}%</span>
+                  <span
+                    className={`font-semibold ${
+                      deltaTone === "up" ? "text-green-700" : deltaTone === "down" ? "text-red-700" : "text-[#64748b]"
+                    }`}
+                  >
+                    {segment.delta}
+                  </span>
+                </div>
               </div>
             </div>
           );
@@ -706,26 +730,6 @@ export default async function AdminAnalyticsPage() {
     { category: "manual", keys: ["manual_editorial"], signals: signalsBySource.manualEditorial, freshnessAvg: sourceRows.find((row) => row.key === "manual_editorial")?.freshnessMinutes ?? 0, weeklyDelta: pctDelta(signalsBySource.manualEditorial, Math.max(1, Math.round(signalsBySource.manualEditorial * 0.97))) },
   ];
 
-  const laNeighborhoodLayout: Array<{ name: string; x: number; y: number; labelX: number; labelY: number }> = [
-    { name: "Koreatown", x: 290, y: 175, labelX: 298, labelY: 162 },
-    { name: "Silver Lake", x: 360, y: 135, labelX: 370, labelY: 122 },
-    { name: "Echo Park", x: 330, y: 148, labelX: 342, labelY: 166 },
-    { name: "Highland Park", x: 400, y: 118, labelX: 412, labelY: 106 },
-    { name: "Downtown LA", x: 340, y: 200, labelX: 352, labelY: 215 },
-    { name: "Arts District", x: 365, y: 194, labelX: 377, labelY: 182 },
-    { name: "Venice", x: 170, y: 222, labelX: 176, labelY: 240 },
-    { name: "Santa Monica", x: 130, y: 190, labelX: 126, labelY: 178 },
-    { name: "Culver City", x: 220, y: 220, labelX: 228, labelY: 236 },
-    { name: "West Hollywood", x: 255, y: 145, labelX: 244, labelY: 132 },
-    { name: "Fairfax", x: 250, y: 170, labelX: 230, labelY: 184 },
-    { name: "Thai Town", x: 300, y: 140, labelX: 308, labelY: 127 },
-    { name: "Sawtelle", x: 185, y: 190, labelX: 191, labelY: 177 },
-    { name: "Pasadena", x: 460, y: 130, labelX: 470, labelY: 117 },
-    { name: "Long Beach", x: 470, y: 300, labelX: 482, labelY: 316 },
-    { name: "Inglewood", x: 255, y: 255, labelX: 265, labelY: 272 },
-    { name: "Boyle Heights", x: 390, y: 212, labelX: 401, labelY: 228 },
-  ];
-
   const realGooglePlacePoints = [
     ...(data.pipeline?.sources.google_places_reviews?.geoPoints ?? []),
     ...(data.pipeline?.sources.google_places_metadata?.geoPoints ?? []),
@@ -744,58 +748,42 @@ export default async function AdminAnalyticsPage() {
     ...(data.pipeline?.sources.google_places_metadata?.debugNotes ?? []),
   ].some((note) => note === "requestStatus=ok");
   const liveGeoDataActive = hasRealPlaceCoordinates && googlePlacesRequestOk;
-  const projectCoordinates = (lat: number, lng: number) => {
-    const bounds = {
-      minLat: 33.66,
-      maxLat: 34.36,
-      minLng: -118.72,
-      maxLng: -117.88,
-    };
-    const x = ((lng - bounds.minLng) / (bounds.maxLng - bounds.minLng)) * 640;
-    const y = ((bounds.maxLat - lat) / (bounds.maxLat - bounds.minLat)) * 360;
-    return {
-      x: clamp(Math.round(x), 36, 608),
-      y: clamp(Math.round(y), 34, 324),
-    };
-  };
-  const projectedRestaurantPoints = dedupedRealGooglePlacePoints.map((point) => {
-    const projected = projectCoordinates(point.lat, point.lng);
-    return {
-      ...point,
-      x: projected.x,
-      y: projected.y,
-      cuisines: point.cuisines ?? [],
-      rating: point.rating ?? null,
-      reviewCount: point.reviewCount ?? null,
-      source: point.source ?? "google_places",
-    };
-  });
+
+  const restaurantPoints = dedupedRealGooglePlacePoints.map((point) => ({
+    ...point,
+    cuisines: point.cuisines ?? [],
+    rating: point.rating ?? null,
+    reviewCount: point.reviewCount ?? null,
+    source: point.source ?? "google_places",
+  }));
   const pointClusters = Array.from(
-    projectedRestaurantPoints.reduce<
+    restaurantPoints.reduce<
       Map<
         string,
         {
           key: string;
-          x: number;
-          y: number;
+          sumLat: number;
+          sumLng: number;
           count: number;
-          points: typeof projectedRestaurantPoints;
+          points: typeof restaurantPoints;
           cuisineCounts: Record<string, number>;
         }
       >
     >((acc, point) => {
-      const clusterKey = `${Math.floor(point.x / 28)}:${Math.floor(point.y / 28)}`;
+      const cellLat = Math.round(point.lat / LA_PLACE_CLUSTER_CELL_DEG);
+      const cellLng = Math.round(point.lng / LA_PLACE_CLUSTER_CELL_DEG);
+      const clusterKey = `${cellLat}:${cellLng}`;
       const current = acc.get(clusterKey) ?? {
         key: clusterKey,
-        x: 0,
-        y: 0,
+        sumLat: 0,
+        sumLng: 0,
         count: 0,
         points: [],
         cuisineCounts: {},
       };
       current.count += 1;
-      current.x += point.x;
-      current.y += point.y;
+      current.sumLat += point.lat;
+      current.sumLng += point.lng;
       current.points.push(point);
       for (const cuisine of point.cuisines) {
         current.cuisineCounts[cuisine] = (current.cuisineCounts[cuisine] ?? 0) + 1;
@@ -807,11 +795,12 @@ export default async function AdminAnalyticsPage() {
   ).map((cluster) => {
     const strongestCuisine =
       Object.entries(cluster.cuisineCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "mixed";
-    const anchor = cluster.points[0];
+    const anchor = cluster.points[0]!;
     return {
-      ...cluster,
-      x: Math.round(cluster.x / cluster.count),
-      y: Math.round(cluster.y / cluster.count),
+      key: cluster.key,
+      lat: cluster.sumLat / cluster.count,
+      lng: cluster.sumLng / cluster.count,
+      count: cluster.count,
       strongestCuisine,
       anchor,
     };
@@ -819,7 +808,8 @@ export default async function AdminAnalyticsPage() {
 
   const canonicalNeighborhood = (raw: string): string | null => {
     const lower = raw.trim().toLowerCase();
-    for (const n of laNeighborhoodLayout) {
+    if (lower.includes("sawtelle")) return "Santa Monica";
+    for (const n of LA_SIGNAL_MAP_NEIGHBORHOODS) {
       const canon = n.name.toLowerCase();
       if (lower === canon || lower.includes(canon) || canon.includes(lower)) return n.name;
       if (lower === "dtla" && n.name === "Downtown LA") return n.name;
@@ -861,22 +851,21 @@ export default async function AdminAnalyticsPage() {
 
   const realPointByNeighborhood = new Map<
     string,
-    { x: number; y: number; name: string; neighborhood: string | null }
+    { lat: number; lng: number; name: string; neighborhood: string | null }
   >();
   for (const point of dedupedRealGooglePlacePoints) {
     const canonical = point.neighborhood ? canonicalNeighborhood(point.neighborhood) : null;
     if (!canonical || realPointByNeighborhood.has(canonical)) continue;
-    const projected = projectCoordinates(point.lat, point.lng);
     realPointByNeighborhood.set(canonical, {
-      x: projected.x,
-      y: projected.y,
+      lat: point.lat,
+      lng: point.lng,
       name: point.name,
       neighborhood: point.neighborhood,
     });
   }
 
-  const mappedNeighborhoods = laNeighborhoodLayout.map((layout) => {
-    const stat = mapStats.get(layout.name);
+  const mappedNeighborhoods = LA_SIGNAL_MAP_NEIGHBORHOODS.map((hood) => {
+    const stat = mapStats.get(hood.name);
     const count = stat?.count ?? 0;
     const strongestCategory =
       Object.entries(stat?.categories ?? {}).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "editorial";
@@ -885,16 +874,29 @@ export default async function AdminAnalyticsPage() {
     const categoryLifecycle = sourceActivityByCategory[strongestCategory] ?? "active";
     const activity: "green" | "yellow" | "red" =
       categoryLifecycle !== "active" ? "red" : count >= 3 ? "green" : count >= 1 ? "yellow" : "red";
-    const realPoint = realPointByNeighborhood.get(layout.name);
+    const placeCount = restaurantPoints.filter((p) =>
+      p.neighborhood ? canonicalNeighborhood(p.neighborhood) === hood.name : false,
+    ).length;
+    const realPoint = realPointByNeighborhood.get(hood.name);
+    const lat = realPoint?.lat ?? hood.lat;
+    const lng = realPoint?.lng ?? hood.lng;
+    const sourceMix =
+      Object.entries(stat?.categories ?? {})
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4)
+        .map(([k, v]) => `${k.replaceAll("_", " ")} (${v})`)
+        .join(" · ") || "—";
     return {
-      ...layout,
-      x: realPoint?.x ?? layout.x,
-      y: realPoint?.y ?? layout.y,
+      name: hood.name,
+      lat,
+      lng,
       count,
       strongestCategory,
       topTrend,
       activity,
-      coordinateType: realPoint ? "real place coordinates" : "approximate centroid",
+      coordinateType: realPoint ? "Restaurant anchor (Google)" : "Approximate neighborhood centroid",
+      placeCount,
+      sourceMix,
     };
   });
   const topCluster = mappedNeighborhoods
@@ -941,7 +943,7 @@ export default async function AdminAnalyticsPage() {
       <section className="grid grid-cols-1 items-stretch gap-2.5 sm:grid-cols-2 sm:gap-2.5 xl:grid-cols-6">
         <MetricTile
           label="Update Readiness"
-          value={readinessValue}
+          value={readinessKpiHeadline(readiness.verdict)}
           detail={readiness.reasons[0] ?? "No blockers detected"}
           tone={readinessTone(readiness.verdict)}
           sparkline={[72, 78, 81, 76, 84, 88, readiness.verdict === "Ready" ? 94 : readiness.verdict === "Caution" ? 74 : 42]}
@@ -984,12 +986,12 @@ export default async function AdminAnalyticsPage() {
           delta={pctDelta(healthyJobs, Math.max(1, healthyJobs - 1))}
           tooltip="Share of scheduled ingestion and scoring jobs that completed successfully on the last cycle."
         />
-        <div className="relative flex min-h-[84px] flex-col overflow-hidden rounded-xl border border-[#e7dfcf] bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.045)] xl:min-h-[88px]">
+        <div className="relative flex h-full min-h-[102px] flex-col overflow-hidden rounded-xl border border-[#e7dfcf] bg-white px-2.5 py-2 shadow-[0_1px_2px_rgba(15,23,42,0.045)]">
           <div className="absolute right-2 top-2 z-10">
-            <InfoHint text="Composite confidence score weighted by source reliability, freshness, corroboration, and pipeline health." />
+            <InfoHint text="Weighted by reliability, freshness, and corroboration. How the score blends readiness, sources, and jobs is summarized in Data Quality below." />
           </div>
-          <p className="pr-10 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#6b6358]">Overall quality score</p>
-          <div className="mt-1.5 min-w-0">
+          <p className="pr-8 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#6b6358]">Overall quality score</p>
+          <div className="mt-1 flex min-h-0 flex-1 flex-col">
             <ScoreRing score={qualityScore} readinessScore={readinessScore} sourceScore={sourceScore} jobScore={jobScore} />
           </div>
         </div>
@@ -1130,7 +1132,7 @@ export default async function AdminAnalyticsPage() {
         </div>
       </div>
 
-      <div className="mt-3 grid min-w-0 items-stretch gap-3 lg:gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(15.5rem,19.25rem)] 2xl:grid-cols-[minmax(0,1fr)_minmax(16rem,19.5rem)]">
+      <div className="mt-3 grid min-w-0 items-stretch gap-3 lg:gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(17.25rem,20.5rem)] 2xl:grid-cols-[minmax(0,1fr)_minmax(17.5rem,21rem)]">
         <Card
           title="Source Health"
           subtitle="Living ingestion monitor: confidence, velocity, freshness, and failure pressure."
@@ -1353,71 +1355,80 @@ export default async function AdminAnalyticsPage() {
         <Card
           title="Signals Overview"
           subtitle="Signal composition, convergence context, and weekly momentum."
-          className="flex min-h-0 min-w-0 flex-col !p-3 border-[#e1d7c4] shadow-[0_1px_2px_rgba(15,23,42,0.045),0_8px_20px_rgba(20,31,43,0.032)] [&>div:first-child]:mb-2"
+          className="flex min-h-0 min-w-0 flex-col !p-2.5 border-[#e1d7c4] shadow-[0_1px_2px_rgba(15,23,42,0.045),0_8px_20px_rgba(20,31,43,0.032)] [&>div:first-child]:mb-2"
         >
           <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-[#e9e2d3] bg-[#faf8f4]">
-            <div className="grid grid-cols-3 gap-1.5 border-b border-[#e5dfd0] bg-[#f1ece2] px-2 py-1.5">
-              <div className="min-w-0 rounded border border-[#e0d8c8] bg-white/95 px-2 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-wide text-[#4b5563]">Convergence</p>
-                <p className="text-sm font-bold tabular-nums leading-tight text-[#111827]">{convergenceCandidates}</p>
-                <p className="text-[9px] leading-tight text-[#5c6570]">Editorial queue</p>
+            <div className="grid grid-cols-3 gap-2 border-b border-[#e5dfd0] bg-[#f1ece2] px-2.5 py-2">
+              <div className="flex min-h-[4.75rem] flex-col justify-center rounded-lg border border-[#e0d8c8] bg-white px-2 py-2 text-center shadow-[0_1px_0_rgba(255,255,255,0.85)_inset]">
+                <p className="text-[1.375rem] font-bold tabular-nums leading-none tracking-tight text-[#111827]">{convergenceCandidates}</p>
+                <p className="mt-1.5 text-[11px] font-semibold leading-snug text-[#334155]">Convergence</p>
+                <p className="mt-0.5 text-[10px] leading-snug text-[#64748b]">Editorial queue</p>
               </div>
-              <div className="min-w-0 rounded border border-[#e0d8c8] bg-white/95 px-2 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-wide text-[#4b5563]">Geo-linked</p>
-                <p className="text-sm font-bold tabular-nums leading-tight text-[#1e3a5f]">{geoLinkedSignals}</p>
-                <p className="text-[9px] leading-tight text-[#5c6570]">Places signals</p>
+              <div className="flex min-h-[4.75rem] flex-col justify-center rounded-lg border border-[#e0d8c8] bg-white px-2 py-2 text-center shadow-[0_1px_0_rgba(255,255,255,0.85)_inset]">
+                <p className="text-[1.375rem] font-bold tabular-nums leading-none tracking-tight text-[#1e3a5f]">{geoLinkedSignals}</p>
+                <p className="mt-1.5 text-[11px] font-semibold leading-snug text-[#334155]">Geo-linked</p>
+                <p className="mt-0.5 text-[10px] leading-snug text-[#64748b]">Places signals</p>
               </div>
-              <div className="min-w-0 rounded border border-[#e0d8c8] bg-white/95 px-2 py-1">
-                <p className="text-[9px] font-semibold uppercase tracking-wide text-[#4b5563]">Ed · social</p>
-                <p className="text-sm font-bold tabular-nums leading-tight text-[#14532d]">
-                  {Math.round((editorialCoreSignals / signalMixTotal) * 100)}% · {Math.round((socialProxySignals / signalMixTotal) * 100)}%
+              <div className="flex min-h-[4.75rem] flex-col justify-center rounded-lg border border-[#e0d8c8] bg-white px-2 py-2 text-center shadow-[0_1px_0_rgba(255,255,255,0.85)_inset]">
+                <p className="text-[1.25rem] font-bold tabular-nums leading-none tracking-tight text-[#14532d]">
+                  <span>{Math.round((editorialCoreSignals / signalMixTotal) * 100)}%</span>
+                  <span className="mx-0.5 text-[0.95rem] font-semibold text-[#94a3b8]">/</span>
+                  <span>{Math.round((socialProxySignals / signalMixTotal) * 100)}%</span>
                 </p>
-                <p className="text-[9px] leading-tight text-[#5c6570]">Connector mix</p>
+                <p className="mt-1.5 text-[11px] font-semibold leading-snug text-[#334155]">Editorial / social</p>
+                <p className="mt-0.5 text-[10px] leading-snug text-[#64748b]">Share of connector mix</p>
               </div>
             </div>
-            <div className="flex items-start justify-center px-1.5 py-2">
-              <div className="w-full max-w-[min(100%,28rem)]">
+            <div className="px-2 pb-2 pt-3">
               <SourceShareDonut segments={signalsSegments} total={signalsThisWeek} />
-              </div>
             </div>
-            <div className="border-t border-[#e5dfd0] px-2 py-1.5">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#4b5563]">Weekly volume</p>
-              <div className="mt-1 flex items-end gap-1">
+            <div className="border-t border-[#e5dfd0] px-2.5 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#64748b]">Weekly volume</p>
+              <p className="mt-0.5 text-[10px] leading-snug text-[#6b7280]">Modeled split · day-series not persisted</p>
+              <div className="mt-2 flex h-[26px] items-end gap-1">
                 {weeklyBars.map((value, idx) => (
                   <div
                     key={idx}
-                    className="w-full rounded-sm bg-[#7eab8f] transition-all duration-200 hover:bg-[#4e8c67]"
-                    style={{ height: `${Math.max(6, (value / maxWeekly) * 36)}px` }}
+                    className="min-w-0 flex-1 rounded-sm bg-[#6d9e82] transition-colors hover:bg-[#4e8c67]"
+                    style={{ height: `${Math.max(5, (value / maxWeekly) * 26)}px` }}
                     title={`Day ${idx + 1}: ${value}`}
                   />
                 ))}
               </div>
-              <div className="mt-1 grid grid-cols-7 gap-0.5 text-[9px] font-medium text-[#4b5563]">
+              <div className="mt-1.5 flex justify-between gap-1 text-[10px] font-medium text-[#4b5563]">
                 {["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"].map((d) => (
-                  <span key={d} className="text-center">
+                  <span key={d} className="w-[calc(100%/7)] min-w-0 text-center">
                     {d}
                   </span>
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-1.5 border-t border-[#e5dfd0] px-2 py-1.5">
-              <div className="rounded-md border border-[#e8e2d6] bg-white px-2 py-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#4b5563]">WoW</p>
-                <p className="mt-0.5 text-base font-semibold tabular-nums leading-none text-[#111827]">{wowDelta}</p>
-              </div>
-              <div className="rounded-md border border-[#e8e2d6] bg-white px-2 py-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#4b5563]">Strongest</p>
-                <p className="mt-0.5 truncate text-[11px] font-semibold text-[#111827]">{strongestSource?.label ?? "-"}</p>
-                <p className="text-[10px] tabular-nums text-[#4b5563]">{strongestSource?.value ?? 0} sig</p>
-              </div>
-              <div className="rounded-md border border-[#e8e2d6] bg-white px-2 py-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-[#4b5563]">Fastest</p>
-                <p className="mt-0.5 truncate text-[11px] font-semibold text-[#166534]">{fastestSource?.label ?? "-"}</p>
-                <p className="text-[10px] tabular-nums text-[#4b5563]">{fastestSource?.delta ?? "+0%"}</p>
-              </div>
+            <div className="border-t border-[#e5dfd0] px-2.5 py-2">
+              <ul className="space-y-1.5 text-[11px] leading-snug text-[#374151]">
+                <li>
+                  <span className="text-[#64748b]">WoW:</span>{" "}
+                  <span className="font-semibold tabular-nums text-[#111827]">{wowDelta}</span>
+                  <span className="text-[#94a3b8]"> · </span>
+                  <span className="text-[#64748b]">signals momentum</span>
+                </li>
+                <li className="min-w-0">
+                  <span className="text-[#64748b]">Strongest source:</span>{" "}
+                  <span className="font-semibold text-[#111827]">{strongestSource?.label ?? "—"}</span>
+                  {strongestSource ? (
+                    <span className="whitespace-nowrap tabular-nums text-[#5c6570]"> · {strongestSource.value} signals</span>
+                  ) : null}
+                </li>
+                <li className="min-w-0">
+                  <span className="text-[#64748b]">Fastest source:</span>{" "}
+                  <span className="font-semibold text-[#14532d]">{fastestSource?.label ?? "—"}</span>
+                  {fastestSource ? (
+                    <span className="whitespace-nowrap tabular-nums text-[#5c6570]"> · {fastestSource.delta}</span>
+                  ) : null}
+                </li>
+              </ul>
             </div>
           </div>
-          <p className="mt-1.5 text-[11px] leading-snug text-[#4b5563]">
+          <p className="mt-2 text-[11px] leading-relaxed text-[#5c6570]">
             Source deltas and trendline history are currently modeled from available snapshots where historical day-series is not persisted yet.
           </p>
         </Card>
@@ -1429,184 +1440,27 @@ export default async function AdminAnalyticsPage() {
           subtitle="Neighborhood-level trend concentration with source-category context."
           className="min-h-0 xl:col-span-8 !p-3 border-[#cfc4b0] shadow-[0_2px_12px_rgba(20,31,43,0.07)] [&>div:first-child]:mb-2"
         >
-          <div className="mb-1.5 flex flex-wrap items-center gap-2 text-[11px]">
-            <span
-              className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${
-                liveGeoDataActive
-                  ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-                  : "border-amber-200 bg-amber-50 text-amber-800"
-              }`}
-            >
-              {liveGeoDataActive ? "Live geo data active" : "Live geo data inactive"}
-            </span>
-            <span className="text-[#4b5563]">
-              {liveGeoDataActive
-                ? `${projectedRestaurantPoints.length} real restaurant points mapped`
-                : "Using centroid fallback until live points are available"}
-            </span>
-          </div>
-          <div className="mb-2 rounded-md border border-[#e7dfcf] bg-[#f8f5ef] px-2.5 py-1.5 text-[11px] leading-snug text-[#4b5563]">
-            <p className="font-semibold uppercase tracking-[0.06em] text-[#4b5563]">Map data · hybrid</p>
-            <p className="mt-0.5">
-              Trends + editorial metadata; {hasRealPlaceCoordinates ? "Places lat/lng when available." : "centroid fallbacks otherwise."}{" "}
-              <span className="font-medium text-[#374151]">No invented precision.</span>
-            </p>
-          </div>
-          <div className="rounded-xl border-2 border-[#cfc3aa] bg-[#e8dcc8] p-1.5 shadow-inner">
-            <svg viewBox="0 0 640 360" className="h-[min(52vh,520px)] w-full min-h-[360px]">
-              <defs>
-                <filter id="markerShadow" x="-40%" y="-40%" width="180%" height="180%">
-                  <feDropShadow dx="0" dy="1.5" stdDeviation="1.6" floodColor="#000000" floodOpacity="0.2" />
-                </filter>
-              </defs>
-              <rect x="0" y="0" width="640" height="360" rx="16" fill="#e8ded0" />
-              <path d="M50 20 C28 118, 27 248, 54 342" fill="none" stroke="#d8cdb8" strokeWidth="2.2" />
-              <path d="M78 106 C218 82, 384 80, 612 114" fill="none" stroke="#d8cdb8" strokeWidth="1.15" />
-              <path d="M78 170 C220 148, 392 148, 612 184" fill="none" stroke="#d8cdb8" strokeWidth="1.15" />
-              <path d="M78 236 C222 214, 402 216, 612 250" fill="none" stroke="#d8cdb8" strokeWidth="1.15" />
-              <path d="M78 302 C224 281, 406 282, 612 316" fill="none" stroke="#d8cdb8" strokeWidth="1.15" />
-              <path d="M172 40 C162 118, 164 246, 176 328" fill="none" stroke="#d8cdb8" strokeWidth="1.05" />
-              <path d="M286 40 C276 120, 278 246, 290 328" fill="none" stroke="#d8cdb8" strokeWidth="1.05" />
-              <path d="M398 40 C390 120, 392 246, 404 328" fill="none" stroke="#d8cdb8" strokeWidth="1.05" />
-              <path d="M506 40 C499 121, 501 246, 512 328" fill="none" stroke="#d8cdb8" strokeWidth="1.05" />
-              <path d="M100 266 C204 168, 326 120, 456 130 C530 135, 586 164, 620 204" fill="none" stroke="#ccbfa9" strokeWidth="2.4" />
-              <path d="M72 118 C108 120, 145 150, 176 184 C196 208, 205 232, 202 262" fill="none" stroke="#d1c4af" strokeWidth="1.4" />
-              <path d="M84 152 C120 148, 164 166, 198 204 C220 229, 232 260, 228 291" fill="none" stroke="#d1c4af" strokeWidth="1.2" />
-              <rect x="72" y="132" width="210" height="168" rx="32" fill="#9ca3af" opacity="0.05" />
-              <rect x="250" y="96" width="208" height="182" rx="32" fill="#9ca3af" opacity="0.05" />
-              <rect x="382" y="94" width="172" height="152" rx="28" fill="#9ca3af" opacity="0.05" />
-              <rect x="242" y="232" width="174" height="98" rx="24" fill="#9ca3af" opacity="0.05" />
-              <rect x="468" y="252" width="132" height="78" rx="24" fill="#9ca3af" opacity="0.05" />
-              <circle cx="430" cy="236" r="56" fill="none" stroke="#d8cdb8" strokeWidth="1.5" opacity="0.5" />
-              {mappedNeighborhoods.map((n) => {
-                const tone = n.activity === "green" ? "#047857" : n.activity === "yellow" ? "#c2410c" : "#b91c1c";
-                const markerSize = n.count > 1 ? 17 : 14;
-                return (
-                  <g key={n.name}>
-                    <text
-                      x={n.labelX}
-                      y={n.labelY}
-                      fontSize="14.5"
-                      fill="#0f172a"
-                      fontWeight="700"
-                      paintOrder="stroke fill"
-                      stroke="#fffefb"
-                      strokeWidth="3.2"
-                      strokeLinejoin="round"
-                    >
-                      {n.name}
-                    </text>
-                    {n.activity === "green" ? (
-                      <circle cx={n.x} cy={n.y} r={markerSize + 6} fill="none" stroke={tone} strokeOpacity="0.45" strokeWidth="2">
-                        <animate attributeName="r" values={`${markerSize + 4};${markerSize + 9};${markerSize + 4}`} dur="2.8s" repeatCount="indefinite" />
-                        <animate attributeName="opacity" values="0.55;0.2;0.55" dur="2.8s" repeatCount="indefinite" />
-                      </circle>
-                    ) : null}
-                    <circle cx={n.x} cy={n.y} r={markerSize} fill={tone} stroke="#fffcf7" strokeWidth="5.5" filter="url(#markerShadow)" />
-                    <text x={n.x} y={n.y + 4} textAnchor="middle" fontSize="12.5" fill="white" fontWeight="800">
-                      {Math.min(9, n.count)}
-                    </text>
-                    {n.count > 1 ? (
-                      <g>
-                        <circle cx={n.x + markerSize - 3} cy={n.y - markerSize + 3} r="6.5" fill="#f8f4ea" stroke="#d8cdb8" strokeWidth="1.2" />
-                        <text x={n.x + markerSize - 3} y={n.y - markerSize + 5} textAnchor="middle" fontSize="8.5" fill="#6b7280" fontWeight="700">
-                          +{n.count - 1}
-                        </text>
-                      </g>
-                    ) : null}
-                  </g>
-                );
-              })}
-              {pointClusters.map((cluster) => {
-                const clusterRadius = cluster.count >= 4 ? 11 : cluster.count >= 2 ? 9 : 7;
-                const topPoint = cluster.anchor;
-                const tooltip =
-                  cluster.count === 1
-                    ? `${topPoint.name}\nNeighborhood: ${topPoint.neighborhood ?? "n/a"}\nSource: ${topPoint.source}\nCuisine: ${(topPoint.cuisines ?? []).join(", ") || "n/a"}\nRating: ${topPoint.rating ?? "n/a"}`
-                    : `${cluster.count} restaurants\nStrongest cuisine: ${cluster.strongestCuisine}\nNeighborhood sample: ${topPoint.neighborhood ?? "n/a"}\nSource: google_places`;
-                return (
-                  <g key={`cluster-${cluster.key}`}>
-                    {cluster.count >= 2 ? (
-                      <circle cx={cluster.x} cy={cluster.y} r={clusterRadius + 5} fill="none" stroke="#1e3a8a" strokeOpacity="0.42" strokeWidth="2.2" />
-                    ) : null}
-                    <circle
-                      cx={cluster.x}
-                      cy={cluster.y}
-                      r={clusterRadius}
-                      fill={cluster.count >= 2 ? "#1d4ed8" : "#0f766e"}
-                      fillOpacity={0.97}
-                      stroke="#fffef9"
-                      strokeWidth="2.8"
-                    >
-                      <title>{tooltip}</title>
-                    </circle>
-                    {cluster.count >= 2 ? (
-                      <text
-                        x={cluster.x}
-                        y={cluster.y + 3}
-                        textAnchor="middle"
-                        fontSize="9.5"
-                        fill="white"
-                        fontWeight="700"
-                      >
-                        {cluster.count}
-                      </text>
-                    ) : null}
-                  </g>
-                );
-              })}
-            </svg>
-          </div>
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-[#e8e0d2] pt-2 text-[10px] font-medium text-[#4b5563]">
-            <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-green-600" /> High</span>
-            <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-amber-500" /> Emerging</span>
-            <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-red-600" /> Low conf.</span>
-            <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-blue-700" /> Clusters</span>
-            <span className="text-[#6b6570]">
-              Fastest: {fastestGrowth}
-            </span>
-          </div>
-          <div className="mt-2 grid max-h-[152px] grid-cols-2 gap-2 overflow-hidden rounded-md border border-[#e3dcd0] bg-[#faf7f0] text-[11px] md:max-h-[160px]">
-            <div className="max-h-full overflow-auto p-2">
-              {mappedNeighborhoods
-                .filter((n) => n.count > 0)
-                .sort((a, b) => b.count - a.count)
-                .slice(0, 7)
-                .map((n) => (
-                  <div key={`${n.name}-meta`} className="grid grid-cols-[1fr_auto] items-center gap-2 border-b border-[#ebe4d8] py-1 last:border-b-0">
-                    <span className="truncate font-semibold text-[#1a202c]">{n.name}</span>
-                    <span className="tabular-nums text-[#111827]">{n.count}</span>
-                  </div>
-                ))}
-            </div>
-            <div className="max-h-full overflow-auto border-l border-[#ebe4d8] p-2 text-[#475569]">
-              {pointClusters
-                .sort((a, b) => b.count - a.count)
-                .slice(0, 6)
-                .map((cluster) => (
-                  <div key={`cluster-row-${cluster.key}`} className="grid grid-cols-[auto_1fr] items-center gap-1 border-b border-[#efe7da] py-0.5 last:border-b-0">
-                    <span className="font-bold text-[#1e3a8a]">{cluster.count}×</span>
-                    <span className="truncate capitalize">{cluster.strongestCuisine}</span>
-                  </div>
-                ))}
-            </div>
-          </div>
-          <div className="mt-2 grid grid-cols-2 gap-1.5 text-[11px] md:grid-cols-4">
-            <div className="rounded-md border border-[#e7dfcf] bg-[#fbfaf7] px-2 py-1.5">
-              <p className="font-medium text-[#5c6570]">Trend hits</p>
-              <p className="text-sm font-semibold tabular-nums text-[#111827]">{totalNeighborhoodHits}</p>
-            </div>
-            <div className="rounded-md border border-[#e7dfcf] bg-[#fbfaf7] px-2 py-1.5">
-              <p className="font-medium text-[#5c6570]">Clusters</p>
-              <p className="text-sm font-semibold tabular-nums text-[#111827]">{pointClusters.length}</p>
-            </div>
-            <div className="col-span-2 rounded-md border border-[#e7dfcf] bg-[#fbfaf7] px-2 py-1.5">
-              <p className="font-medium text-[#5c6570]">Pulse</p>
-              <p className="truncate font-semibold leading-tight text-[#374151]">
-                {topCluster} · {overlapHotspots || "—"}
-              </p>
-            </div>
-          </div>
+          <LaSignalMap
+            liveGeoActive={liveGeoDataActive}
+            hasRealCoordinates={hasRealPlaceCoordinates}
+            placePointCount={restaurantPoints.length}
+            neighborhoods={mappedNeighborhoods}
+            placeClusters={pointClusters}
+            placePoints={restaurantPoints.map((p) => ({
+              lat: p.lat,
+              lng: p.lng,
+              name: p.name,
+              neighborhood: p.neighborhood,
+              source: p.source,
+              cuisines: p.cuisines,
+              rating: p.rating,
+            }))}
+            totalNeighborhoodHits={totalNeighborhoodHits}
+            clusterCount={pointClusters.length}
+            topCluster={topCluster}
+            overlapHotspots={overlapHotspots}
+            fastestGrowth={fastestGrowth}
+          />
         </Card>
 
         <Card
@@ -1677,6 +1531,7 @@ export default async function AdminAnalyticsPage() {
             subtitle="Composite trust, connector posture, and freshness pressure."
             className="min-h-0 flex-1 border-[#e4ddcf] !p-3"
           >
+            <p className="mb-2 text-[11px] leading-snug text-[#4b5563]">Quality score blends readiness, source health, and job health.</p>
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <p className="text-[1.65rem] font-bold leading-none tabular-nums text-[#0f172a]">{qualityScore}</p>

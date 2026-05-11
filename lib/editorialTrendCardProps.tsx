@@ -6,6 +6,7 @@ import { editorialMealScanLabel } from "@/lib/mealScanLabel";
 import { editorialMoveCopy } from "@/lib/moveCopy";
 import { batchDisplayMomentumPopularity } from "@/lib/trendCardScores";
 import { sanitizePublicConvergenceCopy } from "@/lib/signals/convergence";
+import { editorialHeroPropsForTrend } from "@/lib/publicTrendHeroImage";
 import { whyLinesForEditorialCard } from "@/lib/trendText";
 import type { Trend } from "@/types/laFoodTrend";
 
@@ -51,6 +52,7 @@ export function trendToEditorialCardProps(trend: Trend, rank: number, allInBatch
   const mealScan = editorialMealScanLabel(trend);
   const { cuisineOrigin, mealType, mealMoment } = getCuisineAndMeal(trend, mealScan);
   const scores = batchDisplayMomentumPopularity(trend.id, allInBatch);
+  const hero = editorialHeroPropsForTrend(trend);
 
   return {
     trendId: trend.id,
@@ -71,9 +73,9 @@ export function trendToEditorialCardProps(trend: Trend, rank: number, allInBatch
     momentumScore: scores.momentumScore,
     popularityScore: scores.popularityScore,
     moveCopy: editorialMoveCopy(trend.id, mealScan, trend.moveCopy),
-    ...(trend.heroImageUrl ? { heroImageUrl: trend.heroImageUrl } : {}),
-    ...(trend.heroImageSource ? { heroImageSource: trend.heroImageSource } : {}),
-    ...(trend.heroImageSourceUrl ? { heroImageSourceUrl: trend.heroImageSourceUrl } : {}),
-    ...(trend.heroImageCredit ? { heroImageCredit: trend.heroImageCredit } : {}),
+    ...(hero.heroImageUrl ? { heroImageUrl: hero.heroImageUrl } : {}),
+    ...(hero.heroImageSource ? { heroImageSource: hero.heroImageSource } : {}),
+    ...(hero.heroImageSourceUrl ? { heroImageSourceUrl: hero.heroImageSourceUrl } : {}),
+    ...(hero.heroImageCredit ? { heroImageCredit: hero.heroImageCredit } : {}),
   };
 }
