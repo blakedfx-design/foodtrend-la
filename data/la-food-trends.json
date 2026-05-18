@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-15T15:21:06.860Z",
+  "lastUpdated": "2026-05-18T15:28:41.277Z",
   "trends": [
     {
       "id": "korean-ssam-bar-snacks",
@@ -7,7 +7,7 @@
       "short descriptor": "Lettuce, ssamjang, sizzling picks — the table refuses to quiet down.",
       "WHY IT'S HITTING": "Built for grazing and group ordering.\nEvery bite feels customizable.\nLettuce wraps make rich food feel lighter.\nBig flavor without full KBBQ commitment.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-15T15:21:06.860Z",
+      "lastUpdated": "2026-05-18T15:28:41.277Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -474,7 +474,7 @@
       "short descriptor": "Thin flour tortillas, machaca, eggs, potatoes, and griddled edges.",
       "WHY IT'S HITTING": "Handmade flour tortillas are becoming the star.\nMachaca adds deeper savory texture than bacon.\nRegional Mexican breakfast styles are replacing generic burritos.\nCrisp griddled edges create texture without heaviness.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-15T15:21:06.860Z",
+      "lastUpdated": "2026-05-18T15:28:41.277Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -936,7 +936,7 @@
       "short descriptor": "Poached bird, schmaltz-y rice, sauce trio — counter-speed SGV lunch.",
       "WHY IT'S HITTING": "The chicken is quiet; the rice does the talking.\nIt feels clean, but still fully lunch.\nSauces turn one plate into three moods.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-15T15:21:06.860Z",
+      "lastUpdated": "2026-05-18T15:28:41.277Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -1458,7 +1458,7 @@
       "short descriptor": "Shrimp in an electric lime-chile bath — colder than your beer, louder than small talk.",
       "WHY IT'S HITTING": "It hits before the table even settles.\nCitrus, chile, ice — LA's holy trinity.\nLight enough to keep the night moving.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-15T15:21:06.860Z",
+      "lastUpdated": "2026-05-18T15:28:41.277Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -2011,7 +2011,7 @@
       "short descriptor": "Orange wine in a stem, martini brain, golden hour spilling onto the sidewalk.",
       "WHY IT'S HITTING": "It scratches the cocktail itch without going full cocktail.\nSalty, cold, bitter — very pre-dinner.\nMakes 6 p.m. feel like a plan.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-15T15:21:06.860Z",
+      "lastUpdated": "2026-05-18T15:28:41.277Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -2485,7 +2485,7 @@
       "short descriptor": "Whipped mascarpone, citrus, and grassy olive oil looping onto cakes and soft-serve on dessert-only cards.",
       "WHY IT'S HITTING": "Guests still want ‘clean’ finales. Olive oil reads luxury without chocolate heaviness—easy to test as a special.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-15T15:21:06.860Z",
+      "lastUpdated": "2026-05-18T15:28:41.277Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -3004,8 +3004,8 @@
       "name": "Filipino BBQ Nights",
       "short descriptor": "Calamansi, smoke, vinegar, and charcoal-grilled skewers.",
       "WHY IT'S HITTING": "Skewer culture turns dinner into an activity.\nSmoke and vinegar keep rich flavors balanced.\nFilipino BBQ is becoming LA's next great late-night food scene.\nCharcoal grilling creates instant visual craving.",
-      "signalScore": 100,
-      "lastUpdated": "2026-05-15T15:21:06.860Z",
+      "signalScore": 99,
+      "lastUpdated": "2026-05-18T15:28:41.277Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -3525,7 +3525,7 @@
       "short descriptor": "Creamy purple yam cheesecake slices showing up across Filipino bakeries and modern dessert spots.",
       "WHY IT'S HITTING": "Handmade ube desserts moved from neighborhood staple to citywide craving.\nCreamy, dense slices feel nostalgic and modern at the same time.\nBakery cases are leaning hard into vivid purple texture shots.\nFilipino pastry flavors are now part of LA's mainstream dessert conversation.",
       "signalScore": 100,
-      "lastUpdated": "2026-05-15T15:21:06.860Z",
+      "lastUpdated": "2026-05-18T15:28:41.277Z",
       "sources": [
         "Google Maps",
         "Restaurant Menu",
@@ -4075,6 +4075,6 @@
       ]
     }
   ],
-  "refreshType": "weekend",
+  "refreshType": "weekly",
   "sourceCount": 6
 }
